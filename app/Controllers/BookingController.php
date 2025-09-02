@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
 class BookingController extends BaseController
 {
 
+    protected $BookingModel;
     public function __construct()
     {
         $this->BookingModel = new BookingModel();
@@ -21,11 +22,15 @@ class BookingController extends BaseController
     {
         //
         $data['bookings'] = $this->BookingModel->findAll();
-        return view('bookings/index', $data);
+        return view('booking/index', $data);
     }
 
     public function store()
     {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
         $motorId = $this->request->getPost('motor_id');
         $startDate = $this->request->getPost('start_date');
         $endDate = $this->request->getPost('end_date');
@@ -41,6 +46,10 @@ class BookingController extends BaseController
 
         if (!$motor) {
             return redirect()->back()->with('error', 'Motor tidak ditemukan');
+        }
+
+        if ($endDate < $startDate) {
+            return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai');
         }
 
         // calculate total price
