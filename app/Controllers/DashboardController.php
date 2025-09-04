@@ -24,6 +24,6 @@ class DashboardController extends BaseController
             'bookings' => (new \App\Models\BookingModel())->countAllResults(),
             'customers' => (new \App\Models\UserModel())->where('role', 'customer')->countAllResults(),
         ];
-        return view('dashboard', $data);
+        return view('dashboard/index', $data);
     }
 }

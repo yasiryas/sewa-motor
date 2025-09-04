@@ -68,8 +68,11 @@ class AuthController extends BaseController
             'logged_in' => true,
         ]);
         // dd(session()->get());
-
-        return redirect()->to('motors');
+        if (session()->get('role') == 'admin') {
+            return redirect()->to('dashboard');
+        } else {
+            return redirect()->to('motors');
+        }
     }
 
     public function registerProcess()

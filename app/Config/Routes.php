@@ -17,4 +17,4 @@ $routes->get('register', 'AuthController::register');
 $routes->post('register/process', 'AuthController::registerProcess');
 $routes->get('logout', 'AuthController::logout');
 
-$routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
+$routes->get('dashboard', 'DashboardController::index');
