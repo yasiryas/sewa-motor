@@ -12,6 +12,13 @@ class AuthController extends BaseController
         //
     }
 
+    /*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Display login page
+     *
+     * @return mixed
+     */
+    /*******  cc778546-b54b-4a72-ba71-d419b160c522  *******/
     public function login()
     {
         return view('auth/login');
@@ -67,13 +74,13 @@ class AuthController extends BaseController
 
     public function registerProcess()
     {
-        $name = $this->request->getPost('username');
+        $username = $this->request->getPost('username');
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         $confirmPassword = $this->request->getPost('confirm_password');
 
         // validation
-        if (!$name || !$email || !$password || !$confirmPassword) {
+        if (!$username || !$email || !$password || !$confirmPassword) {
             return redirect()->back()->with('error', 'Ups! Data harus lengkap');
         }
 
@@ -83,15 +90,18 @@ class AuthController extends BaseController
 
         // check if email already exists
         $userModel = new \App\Models\UserModel();
-        $existingUser = $userModel->where('email', $email)->first();
+        $existingEmail = $userModel->where('email', $email)->first();
+        $existingUsername = $userModel->where('username', $username)->first();
 
-        if ($existingUser) {
+        if ($existingEmail) {
             return redirect()->back()->with('error', 'Email sudah terdaftar');
+        } else if ($existingUsername) {
+            return redirect()->back()->with('error', 'Username sudah terdaftar');
         }
 
         // insert user
         $userModel->insert([
-            'username' => $name,
+            'username' => $username,
             'email' => $email,
             'password_hash' => password_hash($password, PASSWORD_BCRYPT),
             'role' => 'user',
