@@ -54,16 +54,16 @@
                                                 Me</label>
                                         </div>
                                     </div> -->
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    <button type="submit" class="btn btn-orange fs-4 btn-user btn-block">
                                         Login
                                     </button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    <a class="text-orange" href="forgot-password.html">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="<?= base_url('register'); ?>">Create an Account!</a>
+                                    <a class="text-orange" href="<?= base_url('register'); ?>">Create an Account!</a>
                                 </div>
                             </div>
                         </div>

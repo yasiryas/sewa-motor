@@ -70,16 +70,16 @@
                                                 Me</label>
                                         </div>
                                     </div> -->
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    <button type="submit" class="btn btn-orange btn-user btn-block">
                                         Sign Up
                                     </button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="<?= base_url('login'); ?>">Already have an account? Login!</a>
+                                    <a class="text-orange" href="<?= base_url('login'); ?>">Already have an account? Login!</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="<?= base_url('forgot-password'); ?>">Forgot Password?</a>
+                                    <a class="text-orange" href="<?= base_url('forgot-password'); ?>">Forgot Password?</a>
                                 </div>
                             </div>
                         </div>

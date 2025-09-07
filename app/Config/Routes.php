@@ -18,3 +18,5 @@ $routes->post('register/process', 'AuthController::registerProcess');
 $routes->get('logout', 'AuthController::logout');
 
 $routes->get('dashboard', 'DashboardController::index');
+
+$routes->get('home', 'FrontendController::index');

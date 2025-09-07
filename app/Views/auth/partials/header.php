@@ -19,7 +19,9 @@
 
     <!-- Custom styles for this template-->
     <link href="<?php echo base_url('dashboard/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?php echo base_url('dashboard/'); ?>css/sb-admin-2.css" rel="stylesheet">
+
 
 </head>
 
-<body class="bg-gradient-light">
+<body class="bg-gradient-orange">

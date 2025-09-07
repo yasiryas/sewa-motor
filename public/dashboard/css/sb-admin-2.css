@@ -2392,6 +2392,41 @@ fieldset:disabled a.btn {
   box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
 }
 
+.btn-orange{
+  color: #fff;
+  background-color: #D96F32 ;
+  border-color: #D96F32;
+}
+
+.btn-orange:hover {
+  color: #fff;
+  background-color: #f39c12;
+  border-color: #e08e0b;
+}
+
+.btn-orange:focus, .btn-orange.focus {
+  color: #fff;
+  background-color: #f39c12;
+  border-color: #e08e0b;
+  box-shadow: 0 0 0 0.2rem rgba(246, 185, 59, 0.5);
+}
+
+.btn-orange.disabled, .btn-orange:disabled {
+  color: #fff;
+  background-color: #f6b93b;
+  border-color: #f6b93b;
+}
+.btn-orange:not(:disabled):not(.disabled):active, .btn-orange:not(:disabled):not(.disabled).active,
+.show > .btn-orange.dropdown-toggle {
+  color: #fff;
+  background-color: #e08e0b;
+  border-color: #d07e0a;
+}
+.btn-orange:not(:disabled):not(.disabled):active:focus, .btn-orange:not(:disabled):not(.disabled).active:focus,
+.show > .btn-orange.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(246, 185, 59, 0.5);
+}
+
 .btn-secondary {
   color: #fff;
   background-color: #858796;
@@ -6420,6 +6455,16 @@ button.bg-primary:focus {
   background-color: #2653d4 !important;
 }
 
+.bg-orange {
+  background-color: #f6c23e !important;
+}
+
+a.bg-orange:hover, a.bg-orange:focus,
+button.bg-orange:hover,
+button.bg-orange:focus {
+  background-color: #f4b30d !important;
+}
+
 .bg-secondary {
   background-color: #858796 !important;
 }
@@ -9503,6 +9548,10 @@ button.bg-dark:focus {
   text-align: center !important;
 }
 
+.text-orange {
+  color: #D96F32 !important;
+}
+
 @media (min-width: 576px) {
   .text-sm-left {
     text-align: left !important;
@@ -9944,6 +9993,12 @@ a:focus {
 .bg-gradient-dark {
   background-color: #5a5c69;
   background-image: linear-gradient(180deg, #5a5c69 10%, #373840 100%);
+  background-size: cover;
+}
+
+.bg-gradient-orange {
+  background-color: #D96F32;
+  background-image: linear-gradient(180deg, #D96F32 10%, #e67e22  100%);
   background-size: cover;
 }
 
@@ -10883,13 +10938,13 @@ form.user .custom-checkbox.small label {
 }
 
 form.user .form-control-user {
-  font-size: 0.8rem;
+  font-size: 1rem;
   border-radius: 10rem;
   padding: 1.5rem 1rem;
 }
 
 form.user .btn-user {
-  font-size: 0.8rem;
+  font-size: 1rem;
   border-radius: 10rem;
   padding: 0.75rem 1rem;
 }
