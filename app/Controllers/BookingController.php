@@ -88,4 +88,36 @@ class BookingController extends BaseController
         }
         return view('bookings/view', $data);
     }
+
+    public function dashboard()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        if (session()->get('role') != 'admin') {
+            return redirect()->to('/')->with('error', 'Akses ditolak.');
+        }
+
+        $data = [
+            'title' => 'Booking',
+            'submenu_title' => '',
+            'user' => (new \App\Models\UserModel())->find(session()->get('id')),
+            'motors' => (new \App\Models\MotorModel())->countAllResults(),
+            'bookings' => (new \App\Models\BookingModel())->countAllResults(),
+            'customers' => (new \App\Models\UserModel())->where('role', 'customer')->countAllResults(),
+        ];
+        return view('dashboard/booking', $data);
+    }
+
+    public function reportBooking()
+    {
+        $data = [
+            'title' => 'Report',
+            'submenu_title' => 'Report Booking',
+            'user' => (new \App\Models\UserModel())->find(session()->get('id')),
+            'bookings' => $this->BookingModel->findAll(),
+        ];
+        return view('dashboard/booking-report', $data);
+    }
 }

@@ -32,7 +32,7 @@ class AuthController extends BaseController
     public function logout()
     {
         session()->destroy();
-        return redirect()->to('/login');
+        return redirect()->to('login')->with('success', 'Ups, Anda telah logout.');
     }
 
     public function loginProcess()
@@ -69,7 +69,7 @@ class AuthController extends BaseController
         ]);
         // dd(session()->get());
         if (session()->get('role') == 'admin') {
-            return redirect()->to('dashboard');
+            return redirect()->to('dashboard/index');
         } else {
             return redirect()->to('home');
         }

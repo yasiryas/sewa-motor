@@ -18,8 +18,8 @@ class MotorController extends BaseController
     public function index()
     {
         //
-        $motors = $this->MotorModel->getAvailableMotors();
-        return view('motors/index', ['motors' => $motors]);
+        $data = ['title' => 'Inventaris', 'submenu_title' => 'Motor', 'Motor' => $this->MotorModel->getAvailableMotors()];
+        return view('dashboard/motor-index', $data);
     }
 
     public function show($id)
@@ -40,5 +40,35 @@ class MotorController extends BaseController
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Motor not found');
         }
         return view('motors/view', $data);
+    }
+
+    public function list()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        if (session()->get('role') != 'admin') {
+            return redirect()->to('/')->with('error', 'Akses ditolak.');
+        }
+        $data['motors'] = $this->MotorModel->findAll();
+        $data['title'] = 'Inventaris';
+        $data['submenu_title'] = 'Motor';
+        return view('dashboard/motor', $data);
+    }
+
+    public function reportMotors()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        if (session()->get('role') != 'admin') {
+            return redirect()->to('/')->with('error', 'Akses ditolak.');
+        }
+        $data['motors'] = $this->MotorModel->findAll();
+        $data['title'] = 'Report';
+        $data['submenu_title'] = 'Report Motor';
+        return view('dashboard/motor-report', $data);
     }
 }

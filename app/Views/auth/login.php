@@ -17,12 +17,10 @@
                                     <h1 class="h4 text-gray-900 mb-4">Hello, Welcome Back</h1>
                                 </div>
                                 <?php if (session()->getFlashdata('error')) : ?>
-                                    <!-- <div class="alert alert-danger" role="alert"> -->
                                     <div class="justify-content-center text-center p-2" style="color:red;">
                                         <?= session()->getFlashdata('error') ?>
                                     </div>
                                 <?php endif; ?>
-
                                 <?php if (session()->getFlashdata('success')) : ?>
                                     <div class="justify-content-center text-center p-2" style="color:green;">
                                         <?= session()->getFlashdata('success') ?>

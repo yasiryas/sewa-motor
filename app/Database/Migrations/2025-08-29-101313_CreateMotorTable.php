@@ -19,9 +19,15 @@ class CreateMotorTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
             ],
-            'brand' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '100',
+            'id_brand' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
+            'id_type' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
             ],
             'price_per_day' => [
                 'type'       => 'DECIMAL',
@@ -48,6 +54,8 @@ class CreateMotorTable extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->createTable('motors');
+        $this->forge->addForeignKey('id_brand', 'brands', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('id_type', 'types', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()

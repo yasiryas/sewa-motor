@@ -19,6 +19,7 @@ class DashboardController extends BaseController
 
         $data = [
             'title' => 'Dashboard',
+            'submenu_title' => '',
             'user' => (new \App\Models\UserModel())->find(session()->get('id')),
             'motors' => (new \App\Models\MotorModel())->countAllResults(),
             'bookings' => (new \App\Models\BookingModel())->countAllResults(),

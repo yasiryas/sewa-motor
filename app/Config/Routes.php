@@ -17,6 +17,17 @@ $routes->get('register', 'AuthController::register');
 $routes->post('register/process', 'AuthController::registerProcess');
 $routes->get('logout', 'AuthController::logout');
 
-$routes->get('dashboard', 'DashboardController::index');
+$routes->get('dashboard/index', 'DashboardController::index');
+$routes->get('dashboard/booking', 'BookingController::dashboard');
+$routes->get('dashboard/users', 'UserController::dashboard');
+$routes->get('dashboard/inventaris/merk', 'BrandController::index');
+$routes->get('dashboard/inventaris/type', 'TypeController::index');
+$routes->get('dashboard/inventaris/motor', 'MotorController::index');
+$routes->get('dashboard/report/booking', 'BookingController::reportBooking');
+$routes->get('dashboard/report/motor', 'MotorController::reportMotors');
+$routes->get('dashboard/report/users', 'UserController::reportUsers');
 
 $routes->get('home', 'FrontendController::index');
+$routes->get('about', 'FrontendController::about');
+$routes->get('contact', 'FrontendController::contact');
+$routes->get('services', 'FrontendController::services');
