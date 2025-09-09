@@ -17,9 +17,14 @@ class UserController extends BaseController
         if (session()->get('role') != 'admin') {
             return redirect()->to('/')->with('error', 'Akses ditolak.');
         }
-        $data['users'] = (new \App\Models\UserModel())->where('role', 'customer')->findAll();
-        $data['title'] = 'Users';
-        $data['submenu_title'] = 'Penyewa';
+
+        $userModel = new \App\Models\UserModel();
+        $data = [
+            'title' => 'Users',
+            'submenu_title' => 'Penyewa',
+            'user' => $userModel->find(session()->get('id')),
+            'users' => $userModel->where('role', 'user')->findAll(),
+        ];
         return view('dashboard/users', $data);
     }
 

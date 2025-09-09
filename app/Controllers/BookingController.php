@@ -99,13 +99,17 @@ class BookingController extends BaseController
             return redirect()->to('/')->with('error', 'Akses ditolak.');
         }
 
+        $bookingModel = new BookingModel();
         $data = [
             'title' => 'Booking',
             'submenu_title' => '',
             'user' => (new \App\Models\UserModel())->find(session()->get('id')),
             'motors' => (new \App\Models\MotorModel())->countAllResults(),
-            'bookings' => (new \App\Models\BookingModel())->countAllResults(),
-            'customers' => (new \App\Models\UserModel())->where('role', 'customer')->countAllResults(),
+            'bookings' => $bookingModel
+                ->select('bookings.*, users.username, motors.name as motor_name')
+                ->join('users', 'users.id = bookings.user_id')
+                ->join('motors', 'motors.id = bookings.motor_id')
+                ->findAll(),
         ];
         return view('dashboard/booking', $data);
     }
