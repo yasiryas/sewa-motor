@@ -7,6 +7,11 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class BrandController extends BaseController
 {
+    protected $brandModel;
+    public function __construct()
+    {
+        $this->brandModel = new \App\Models\BrandModel();
+    }
     public function index()
     {
         if (!session()->get('id')) {
@@ -20,12 +25,77 @@ class BrandController extends BaseController
         $data = [
             'title' => 'Inventaris',
             'submenu_title' => 'Brand',
+            'brands' => $this->brandModel->findAll(),
         ];
+        // dd($data);
         return view('dashboard/brands-index', $data);
     }
 
     public function create()
     {
         return view('brands/create');
+    }
+
+    public function list()
+    {
+        $brands = $this->brandModel->findAll();
+        return $this->response->setJSON($brands);
+    }
+
+    public function store()
+    {
+        // validasi
+        $name = $this->request->getPost('name');
+        $nameExists = $this->brandModel->where('brand', $name)->first();
+        if (!$name) {
+            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.');
+        } else if ($nameExists && $name == $nameExists['brand']) {
+            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.');
+        }
+
+        $this->brandModel->insert(['brand' => $this->request->getPost('name')]);
+        session()->setFlashdata('success', 'Brand berhasil ditambahkan.');
+        return redirect()->to('dashboard/inventaris/brand');
+    }
+
+    public function edit($id)
+    {
+        $brand = $this->brandModel->find($id);
+        if (!$brand) {
+            return redirect()->to('dashboard/inventaris/brand')->with('error', 'Brand tidak ditemukan.');
+        }
+        return view('brands/edit', ['brand' => $brand]);
+    }
+
+    public function update()
+    {
+        $id = $this->request->getPost('id');
+        $brand = $this->brandModel->find($id);
+        $nameExists = $this->brandModel->where('brand', $this->request->getPost('name'))->first();
+        if (!$brand) {
+            return redirect()->to('dashboard/inventaris/brand')->with('error', 'Brand tidak ditemukan.');
+        }
+        if (!$this->request->getPost('name')) {
+            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.')->with('modal', 'addBrandModal');
+        }
+        if ($nameExists && $this->request->getPost('name') == $nameExists['brand']) {
+            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'updateBrandModal');
+        }
+
+        $this->brandModel->update($id, ['brand' => $this->request->getPost('name')]);
+        session()->setFlashdata('success', 'Brand berhasil diupdate.');
+        return redirect()->to('dashboard/inventaris/brand');
+    }
+
+    public function delete()
+    {
+        $id = $this->request->getPost('id');
+        $brand = $this->brandModel->find($id);
+        if (!$brand) {
+            return redirect()->to('dashboard/inventaris/brand')->with('error', 'Brand tidak ditemukan.');
+        }
+        $this->brandModel->delete($id);
+        session()->setFlashdata('success', 'Brand berhasil dihapus.');
+        return redirect()->to('dashboard/inventaris/brand');
     }
 }

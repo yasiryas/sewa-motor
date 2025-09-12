@@ -1,3 +1,40 @@
+ <!-- Toast Container -->
+ <div aria-live="polite" aria-atomic="true" style="position: relative; z-index: 9999;">
+     <div style="position: fixed; top: 20px; right: 20px; min-width: 300px;">
+
+         <?php if (session()->getFlashdata('success')): ?>
+             <div class="toast bg-success text-white alert-success" data-delay="3000">
+                 <div class="toast-header bg-success text-white">
+                     <strong class="mr-auto">Sukses</strong>
+                     <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast">&times;</button>
+                 </div>
+                 <div class="toast-body">
+                     <?= session()->getFlashdata('success'); ?>
+                 </div>
+             </div>
+         <?php endif; ?>
+
+         <?php if (session()->getFlashdata('error')): ?>
+             <div class="toast bg-danger text-white alert-danger" data-delay="3000">
+                 <div class="toast-header bg-danger text-white">
+                     <strong class="mr-auto">Gagal</strong>
+                     <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast">&times;</button>
+                 </div>
+                 <div class="toast-body">
+                     <?= session()->getFlashdata('error'); ?>
+                 </div>
+             </div>
+         <?php endif; ?>
+
+     </div>
+ </div>
+
+ <!-- open modal if error message -->
+ <script>
+     let openModal = "<?= session()->getFlashdata('modal'); ?>";
+ </script>
+
+
  <!-- Footer -->
  <!-- <footer class="sticky-footer bg-white">
      <div class="container my-auto">
@@ -38,6 +75,7 @@
          </div>
      </div>
  </div>
+
  <!-- jQuery (load sekali saja, paling atas sebelum plugin lain) -->
  <script src="<?= base_url('dashboard/vendor/jquery/jquery.min.js'); ?>"></script>
 
@@ -62,6 +100,6 @@
  <script src="<?= base_url('dashboard/js/demo/chart-pie-demo.js'); ?>"></script>
 
  <script src="<?= base_url('dashboard/vendor/datatables/dataTables.custom.js'); ?>"></script>
- </body>
+ <script src="<?= base_url('dashboard/js/custom.js'); ?>"></script>
 
  </html>

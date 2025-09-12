@@ -65,7 +65,7 @@ class AuthController extends BaseController
             'username' => $user['username'],
             'email' => $user['email'],
             'role' => $user['role'],
-            'logged_in' => true,
+            'isLoggedIn' => true,
         ]);
         // dd(session()->get());
         if (session()->get('role') == 'admin') {

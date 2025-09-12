@@ -22,10 +22,12 @@ class CreateBrandTable extends Migration
             'created_at' => [
                 'type'    => 'DATETIME',
                 'null'    => true,
+                'default' => 'CURRRENT_TIMESTAMP',
             ],
             'updated_at' => [
                 'type'    => 'DATETIME',
                 'null'    => true,
+                'default' => 'DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
             ],
         ]);
         $this->forge->addKey('id', true);
