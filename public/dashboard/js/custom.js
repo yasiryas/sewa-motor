@@ -2,9 +2,6 @@ $(document).ready(function () {
   //alert message
   $('.toast').toast('show');
 
-  //modal open is error
-  // let openModal = "<?= session()->getFlashdata('modal'); ?>";
-
   if (openModal === 'addBrandModal') {
       $('#addBrandModal').modal('show');
   }
@@ -13,7 +10,7 @@ $(document).ready(function () {
       $('#editBrandModal').modal('show');
   }
 
-    //modal add brand
+  //modal add brand
   $('#addBrandModal').on('shown.bs.modal', function () {
     $('#brand_name_add').trigger('focus');
   });
@@ -39,6 +36,32 @@ $(document).ready(function () {
 
   $('#editBrandModal').on('shown.bs.modal', function () {
     $('#update_brand_name').trigger('focus');
+  });
+
+  // modal type
+  $('.btn-edit-type-modal').on('click', function () {
+    $('#editTypeModal').modal('show');
+
+    let id_update = $(this).data('id-update');
+    let type_update = $(this).data('type-update');
+    // console.log(type_update, id_update);
+    $('#update_type_id').val(id_update);
+    $('#update_type_name').val(type_update);
+  });
+
+  $('#editTypeModal').on('shown.bs.modal', function () {
+    $('#update_type_name').trigger('focus');
+  });
+
+  // btn delete modal type
+   $('.btn-delete-type-modal').on('click', function () {
+    $('#deleteTypeModal').modal('show')
+
+    let id_delete = $(this).data('id-delete');
+    let type_delete = $(this).data('type-delete');
+
+    $('#type_id_delete').val(id_delete);
+    $('#type_name_delete').text(type_delete);
   });
 
 });

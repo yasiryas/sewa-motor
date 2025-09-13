@@ -32,10 +32,17 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
 // Manajemen brand
 $routes->group('dashboard/inventaris/brand', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'BrandController::index');
-    $routes->get('create', 'BrandController::create');
     $routes->post('store', 'BrandController::store');
     $routes->post('update', 'BrandController::update');
     $routes->post('delete', 'BrandController::delete');
+});
+
+// Manajemen brand
+$routes->group('dashboard/inventaris/type', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'TypeController::index');
+    $routes->post('store', 'TypeController::store');
+    $routes->post('update', 'TypeController::update');
+    $routes->post('delete', 'TypeController::delete');
 });
 
 

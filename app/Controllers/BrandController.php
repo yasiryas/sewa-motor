@@ -31,10 +31,6 @@ class BrandController extends BaseController
         return view('dashboard/brands-index', $data);
     }
 
-    public function create()
-    {
-        return view('brands/create');
-    }
 
     public function list()
     {
@@ -48,9 +44,9 @@ class BrandController extends BaseController
         $name = $this->request->getPost('name');
         $nameExists = $this->brandModel->where('brand', $name)->first();
         if (!$name) {
-            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.');
+            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.')->with('modal', 'addBrandModal');
         } else if ($nameExists && $name == $nameExists['brand']) {
-            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.');
+            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'addBrandModal');
         }
 
         $this->brandModel->insert(['brand' => $this->request->getPost('name')]);

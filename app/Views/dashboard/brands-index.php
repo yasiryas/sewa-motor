@@ -54,6 +54,7 @@
                     </div>
                 </div>
 
+                <!-- modal section -->
                 <!-- Modal Add Brand -->
                 <div class="modal fade" id="addBrandModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -129,6 +130,7 @@
                             </div>
                         </form>
                     </div>
+                    <!-- end modal -->
                 </div>
                 <!-- Content Row -->
             </div>
