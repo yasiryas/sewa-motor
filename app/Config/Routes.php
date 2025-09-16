@@ -37,12 +37,20 @@ $routes->group('dashboard/inventaris/brand', ['filter' => 'auth'], function ($ro
     $routes->post('delete', 'BrandController::delete');
 });
 
-// Manajemen brand
+// Manajemen type
 $routes->group('dashboard/inventaris/type', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'TypeController::index');
     $routes->post('store', 'TypeController::store');
     $routes->post('update', 'TypeController::update');
     $routes->post('delete', 'TypeController::delete');
+});
+
+// Manajemen motor
+$routes->group('dashboard/inventaris/motor', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'MotorController::index');
+    $routes->post('store', 'MotorController::store');
+    $routes->post('update', 'MotorController::update');
+    $routes->post('delete', 'MotorController::delete');
 });
 
 

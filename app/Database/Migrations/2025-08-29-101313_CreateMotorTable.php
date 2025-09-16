@@ -19,6 +19,11 @@ class CreateMotorTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
             ],
+            'number_plate' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '20',
+                'unsigned'   => true,
+            ],
             'id_brand' => [
                 'type'       => 'INT',
                 'constraint' => 11,
