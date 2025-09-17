@@ -209,53 +209,54 @@ class MotorController extends BaseController
             return redirect()->to('dashboard/inventaris/motor')->with('error', 'Motor tidak ditemukan.');
         }
 
+        // dd($this->request->getPost());
+
         $validationRules = [
-            'name' => [
+            'update_name_motor' => [
                 'rules' => 'required|min_length[3]',
                 'errors' => [
                     'required'   => 'Nama motor harus diisi.',
                     'min_length' => 'Nama motor minimal 3 karakter.'
                 ]
             ],
-            'number_plate' => [
+            'update_plate_motor' => [
                 'rules' => 'required|min_length[3]',
                 'errors' => [
                     'required'   => 'No Plat motor harus diisi.',
                     'min_length' => 'No Plat motor minimal 3 karakter.'
                 ]
             ],
-            'id_brand' => [
+            'update_id_brand' => [
                 'rules' => 'required|integer',
                 'errors' => [
                     'required' => 'Brand harus dipilih.',
                     'integer'  => 'Brand tidak valid.'
                 ]
             ],
-            'id_type' => [
+            'id_type_update' => [
                 'rules' => 'required|integer',
                 'errors' => [
                     'required' => 'Type harus dipilih.',
                     'integer'  => 'Type tidak valid.'
                 ]
             ],
-            'price_per_day' => [
+            'price_per_day_update' => [
                 'rules' => 'required|decimal',
                 'errors' => [
                     'required' => 'Harga per hari harus diisi.',
                     'decimal'  => 'Harga per hari harus angka.'
                 ]
             ],
-            'availability_status' => [
-                'rules' => 'required|in_list[available,unavailable]',
+            'availability_status_update' => [
+                'rules' => 'required|in_list[available,rented,maintenance]',
                 'errors' => [
                     'required' => 'Status harus dipilih.',
                     'in_list'  => 'Status tidak valid.'
                 ]
             ],
-            'photo' => [
+            'photo_update' => [
                 'rules' => 'if_exist|uploaded[photo]|is_image[photo]|max_size[photo,2048]',
                 'errors' => [
-                    'uploaded' => 'Foto harus diupload.',
                     'is_image' => 'File harus berupa gambar.',
                     'max_size' => 'Ukuran foto maksimal 2MB.'
                 ]
@@ -270,7 +271,7 @@ class MotorController extends BaseController
         }
 
         // handle upload foto
-        $photoFile = $this->request->getFile('update_photo_motor');
+        $photoFile = $this->request->getFile('photo_update');
         $photoName = null;
 
         if ($photoFile && $photoFile->isValid() && !$photoFile->hasMoved()) {
@@ -281,12 +282,12 @@ class MotorController extends BaseController
         // update data motor
         $this->MotorModel->update($id, [
             'name'                => $this->request->getPost('update_name_motor'),
-            'number_plate'        => $this->request->getPost('number_plate_update'),
+            'number_plate'        => $this->request->getPost('update_plate_motor'),
             'id_brand'            => $this->request->getPost('update_id_brand'),
-            'id_type'             => $this->request->getPost('update_id_type'),
-            'price_per_day'       => $this->request->getPost('upadte_price_per_day'),
-            'availability_status' => $this->request->getPost('update_availability_status'),
-            'photo'               => $photoName,
+            'id_type'             => $this->request->getPost('id_type_update'),
+            'price_per_day'       => $this->request->getPost('price_per_day_update'),
+            'availability_status' => $this->request->getPost('availability_status_update'),
+            'photo'               => $photoName ?? $motor['photo'],
         ]);
 
         session()->setFlashdata('success', 'Motor berhasil diperbarui.');

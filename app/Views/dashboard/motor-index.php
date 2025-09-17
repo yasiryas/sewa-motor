@@ -248,7 +248,7 @@
                                         <label for="availability_status">Status</label>
                                         <select name="availability_status_update" id="update_status_motor" class="form-control">
                                             <option value="available" <?= old('availability_status') == 'available' ? 'selected' : ''; ?>>Tersedia</option>
-                                            <option value="unavailable" <?= old('availability_status') == 'unavailable' ? 'selected' : ''; ?>>Tidak Tersedia</option>
+                                            <option value="rented" <?= old('availability_status') == 'rented' ? 'selected' : ''; ?>>Disewa</option>
                                             <option value="maintenance" <?= old('availability_status') == 'maintenance' ? 'selected' : ''; ?>>Dalam Perawatan</option>
                                         </select>
                                     </div>
