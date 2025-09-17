@@ -66,6 +66,11 @@
                                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                                 </div>
                                 <div class="modal-body">
+                                    <?php if (session()->getFlashdata('error')): ?>
+                                        <div class="alert alert-danger">
+                                            <?= session()->getFlashdata('error'); ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <input type="hidden" id="brand_id" name="id">
                                     <div class="form-group">
                                         <label for="name">Nama Brand</label>
@@ -117,6 +122,11 @@
                                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                                 </div>
                                 <div class="modal-body">
+                                    <?php if (session()->getFlashdata('error')): ?>
+                                        <div class="alert alert-danger">
+                                            <?= session()->getFlashdata('error'); ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="form-group">
                                         <label for="name">Nama Brand</label>
                                         <input type="text" name="name" id="update_brand_name" class="form-control" value="<?= old('name') ?? ''; ?>" required>

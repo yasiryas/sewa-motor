@@ -95,6 +95,11 @@
                                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                                 </div>
                                 <div class="modal-body">
+                                    <?php if (session()->getFlashdata('error')): ?>
+                                        <div class="alert alert-danger">
+                                            <?= session()->getFlashdata('error'); ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <!-- <input type="hidden" id="motor_id" name="id"> -->
                                     <!-- Nama motor -->
                                     <div class="form-group">
@@ -200,16 +205,22 @@
                                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="hidden" id="update_id_motor" name="update_id_motor">
+                                    <?php if (session()->getFlashdata('error')): ?>
+                                        <div class="alert alert-danger">
+                                            <?= session()->getFlashdata('error'); ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <input type="hidden" id="update_id_motor" name="update_id_motor" value="<?= old('update_id_motor') ?? ''; ?>">
                                     <!-- Nama motor -->
                                     <div class="form-group">
                                         <label for="motor_name_update">Nama Motor</label>
-                                        <input type="text" name="update_name_motor" id="update_name_motor" class="form-control" value="<?= old('name') ?? ''; ?>" required>
+                                        <input type="text" name="update_name_motor" id="update_name_motor" class="form-control" value="<?= old('update_name_motor') ?? ''; ?>" required>
                                     </div>
                                     <!-- No Plat -->
                                     <div class="form-group">
                                         <label for="number_plate_update">No Plat</label>
-                                        <input type="text" name="update_plate_motor" id="update_plate_motor" class="form-control" value="<?= old('number_plate') ?? ''; ?>" required>
+                                        <input type="text" name="update_plate_motor" id="update_plate_motor" class="form-control" value="<?= old('update_plate_motor') ?? ''; ?>" required>
                                     </div>
                                     <!-- Brand -->
                                     <div class="form-group">
@@ -217,7 +228,7 @@
                                         <select name="update_id_brand" id="update_brand_motor" class="form-control" required>
                                             <option value="">-- Pilih Brand --</option>
                                             <?php foreach ($brands as $b): ?>
-                                                <option value="<?= $b->id; ?>" <?= old('id_brand_update') == $b->id  ? 'selected' : ''; ?>>
+                                                <option value="<?= $b->id; ?>" <?= old('update_id_brand') == $b->id  ? 'selected' : ''; ?>>
                                                     <?= $b->brand; ?>
                                                 </option>
                                             <?php endforeach; ?>
@@ -240,16 +251,16 @@
                                     <!-- Harga per hari -->
                                     <div class="form-group">
                                         <label for="price_per_day">Harga per Hari</label>
-                                        <input type="number" name="price_per_day_update" id="update_price_motor" class="form-control" value="<?= old('price_per_day') ?? ''; ?>" required>
+                                        <input type="number" name="price_per_day_update" id="update_price_motor" class="form-control" value="<?= old('price_per_day_update') ?? ''; ?>" required>
                                     </div>
 
                                     <!-- Status -->
                                     <div class="form-group">
                                         <label for="availability_status">Status</label>
                                         <select name="availability_status_update" id="update_status_motor" class="form-control">
-                                            <option value="available" <?= old('availability_status') == 'available' ? 'selected' : ''; ?>>Tersedia</option>
-                                            <option value="rented" <?= old('availability_status') == 'rented' ? 'selected' : ''; ?>>Disewa</option>
-                                            <option value="maintenance" <?= old('availability_status') == 'maintenance' ? 'selected' : ''; ?>>Dalam Perawatan</option>
+                                            <option value="available" <?= old('availability_status_update') == 'available' ? 'selected' : ''; ?>>Tersedia</option>
+                                            <option value="rented" <?= old('availability_status_update') == 'rented' ? 'selected' : ''; ?>>Disewa</option>
+                                            <option value="maintenance" <?= old('availability_status_update') == 'maintenance' ? 'selected' : ''; ?>>Dalam Perawatan</option>
                                         </select>
                                     </div>
 
@@ -274,7 +285,5 @@
 
         </div>
         <!-- End of Main Content -->
-
-
 
         <?= $this->include('dashboard/partials/footer'); ?>

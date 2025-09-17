@@ -255,7 +255,7 @@ class MotorController extends BaseController
                 ]
             ],
             'photo_update' => [
-                'rules' => 'if_exist|uploaded[photo]|is_image[photo]|max_size[photo,2048]',
+                'rules' => 'if_exist|is_image[photo_update]|max_size[photo,2048]',
                 'errors' => [
                     'is_image' => 'File harus berupa gambar.',
                     'max_size' => 'Ukuran foto maksimal 2MB.'

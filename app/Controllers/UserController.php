@@ -42,4 +42,31 @@ class UserController extends BaseController
         $data['submenu_title'] = 'Report Users';
         return view('dashboard/user-report', $data);
     }
+
+    public function store()
+    {
+        // Validasi input
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'username' => 'required|min_length[3]|max_length[50]',
+            'email' => 'required|valid_email|is_unique[users.email]',
+            'password' => 'required|min_length[6]',
+            'role' => 'required|in_list[admin,user]',
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        }
+
+        $userModel = new \App\Models\UserModel();
+        $userData = [
+            'username' => $this->request->getPost('username'),
+            'email' => $this->request->getPost('email'),
+            'password' => password_hash($this->request->getPost('password'), PASSWORD_BCRYPT),
+            'role' => $this->request->getPost('role'),
+        ];
+
+        $userModel->insert($userData);
+        return redirect()->back()->with('success', 'User berhasil ditambahkan.');
+    }
 }

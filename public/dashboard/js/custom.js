@@ -3,12 +3,29 @@ $(document).ready(function () {
   //alert message
   $('.toast').toast('show');
 
-    if (openModal === 'addBrandModal') {
+  // jika ada error maka modal akan terbuka
+  if (openModal === 'addBrandModal') {
       $('#addBrandModal').modal('show');
   }
 
   if (openModal === 'updateBrandModal') {
       $('#editBrandModal').modal('show');
+  }
+
+  if (openModal === 'addTypeModal') {
+      $('#addTypeModal').modal('show');
+  }
+
+  if (openModal === 'editTypeModal') {
+      $('#editTypeModal').modal('show');
+  }
+
+  if (openModal === 'addMotorModal') {
+      $('#addMotorModal').modal('show');
+  }
+
+  if (openModal === 'editMotorModal') {
+      $('#editMotorModal').modal('show');
   }
 
   //modal add brand

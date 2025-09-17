@@ -26,6 +26,11 @@ class CreateUserTable extends Migration
                 'constraint' => '100',
                 'unique'     => true,
             ],
+            'phone' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '16',
+                'null'       => true,
+            ],
             'password_hash' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',
