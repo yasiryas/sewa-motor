@@ -7,6 +7,14 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class UserController extends BaseController
 {
+    protected $userModel;
+
+    public function __construct()
+    {
+        helper(['form', 'url']);
+        $this->userModel = new \App\Models\UserModel();
+    }
+
     public function index() {}
     public function dashboard()
     {
@@ -37,7 +45,7 @@ class UserController extends BaseController
         if (session()->get('role') != 'admin') {
             return redirect()->to('/')->with('error', 'Akses ditolak.');
         }
-        $data['users'] = (new \App\Models\UserModel())->where('role', 'customer')->findAll();
+        $data['users'] = $this->userModel->where('role', 'customer')->findAll();
         $data['title'] = 'Report';
         $data['submenu_title'] = 'Report Users';
         return view('dashboard/user-report', $data);
@@ -46,27 +54,90 @@ class UserController extends BaseController
     public function store()
     {
         // Validasi input
-        $validation = \Config\Services::validation();
-        $validation->setRules([
-            'username' => 'required|min_length[3]|max_length[50]',
-            'email' => 'required|valid_email|is_unique[users.email]',
-            'password' => 'required|min_length[6]',
-            'role' => 'required|in_list[admin,user]',
-        ]);
-
-        if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+        $validationRules = [
+            'username' => [
+                'rules' => 'required|is_unique[users.username]|min_length[3]|max_length[20]',
+                'errors' => [
+                    'required' => 'Username wajib diisi.',
+                    'is_unique' => 'Username sudah digunakan.',
+                    'min_length' => 'Username minimal 3 karakter.',
+                    'max_length' => 'Username maksimal 20 karakter.',
+                ]
+            ],
+            'full_name' => [
+                'rules' => 'required|min_length[3]|max_length[100]',
+                'errors' => [
+                    'required' => 'Nama lengkap wajib diisi.',
+                    'min_length' => 'Nama lengkap minimal 3 karakter.',
+                    'max_length' => 'Nama lengkap maksimal 100 karakter.',
+                ]
+            ],
+            'email' => [
+                'rules' => 'required|valid_email|is_unique[users.email]',
+                'errors' => [
+                    'required' => 'Email wajib diisi.',
+                    'valid_email' => 'Format email tidak valid.',
+                    'is_unique' => 'Email sudah digunakan.',
+                ]
+            ],
+            'phone' => [
+                'rules' => 'required|is_unique[users.phone]|min_length[10]|max_length[15]',
+                'errors' => [
+                    'required' => 'Nomor telepon wajib diisi.',
+                    'is_unique' => 'Nomor telepon sudah digunakan.',
+                    'min_length' => 'Nomor telepon minimal 10 digit.',
+                    'max_length' => 'Nomor telepon maksimal 15 digit.',
+                ]
+            ],
+            'password' => [
+                'rules' => 'required|min_length[6]',
+                'errors' => [
+                    'required' => 'Password wajib diisi.',
+                    'min_length' => 'Password minimal 6 karakter.',
+                ]
+            ],
+            'repeat_password' => [
+                'rules' => 'required|matches[password]',
+                'errors' => [
+                    'required' => 'Ulangi Password wajib diisi.',
+                    'matches' => 'Ulangi Password belum cocok.',
+                ]
+            ],
+            'role' => [
+                'rules' => 'required|in_list[admin,user]',
+                'errors' => [
+                    'required' => 'Role wajib diisi.',
+                    'in_list' => 'Role tidak valid.',
+                ],
+            ]
+        ];
+        if (!$this->validate($validationRules)) {
+            return redirect()->to('dashboard/users')->withInput()->with('error', $this->validator->listErrors())->with('modal', 'addUserModal');
         }
 
+
         $userModel = new \App\Models\UserModel();
-        $userData = [
+        $userModel->save([
             'username' => $this->request->getPost('username'),
+            'full_name' => $this->request->getPost('full_name'),
             'email' => $this->request->getPost('email'),
+            'phone' => $this->request->getPost('phone'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_BCRYPT),
             'role' => $this->request->getPost('role'),
-        ];
+        ]);
+        return redirect()->to('dashboard/users')->with('success', 'User berhasil ditambahkan.');
+    }
 
-        $userModel->insert($userData);
-        return redirect()->back()->with('success', 'User berhasil ditambahkan.');
+    public function delete()
+    {
+        $id = $this->request->getPost('user_id_delete');
+        $user = $this->userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('dashboard/users')->with('error', 'User tidak ditemukan.');
+        }
+
+        $this->userModel->delete($id);
+        return redirect()->to('dashboard/users')->with('success', 'User berhasil dihapus.');
     }
 }

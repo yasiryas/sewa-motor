@@ -27,6 +27,13 @@ $(document).ready(function () {
   if (openModal === 'editMotorModal') {
       $('#editMotorModal').modal('show');
   }
+  if (openModal === 'addUserModal') {
+      $('#addUserModal').modal('show');
+  }
+
+  if (openModal === 'editUserModal') {
+      $('#editUserModal').modal('show');
+  }
 
   //modal add brand
   $('#addBrandModal').on('shown.bs.modal', function () {
@@ -119,6 +126,32 @@ $(document).ready(function () {
     $('#motor_id_delete').val(id_delete_motor);
     $('#motor_name_delete').text(delete_motor);
    });
+
+
+  //show password toggle
+  $('.toggle-password').click(function() {
+      let input = $($(this).data('target'));
+      let icon = $(this).find('i');
+
+      if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+      } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+      }
+  });
+
+  // modal delete user
+  $('.btn-delete-user-modal').on('click', function () {
+    $('#deleteUserModal').modal('show')
+
+    let id_delete_user = $(this).data('delete-id-user');
+    let name_delete_user = $(this).data('delete-name-user');
+    // let type_delete = $(this).data('type-delete');
+    $('#user_id_delete').val(id_delete_user);
+    $('#user_name_delete').text(name_delete_user);
+  });
 
 });
 

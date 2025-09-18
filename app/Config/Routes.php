@@ -53,6 +53,14 @@ $routes->group('dashboard/inventaris/motor', ['filter' => 'auth'], function ($ro
     $routes->post('delete', 'MotorController::delete');
 });
 
+// Manajemen motor
+$routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'UserController::index');
+    $routes->post('store', 'UserController::store');
+    $routes->post('update', 'UserController::update');
+    $routes->post('delete', 'UserController::delete');
+});
+
 
 
 // $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
