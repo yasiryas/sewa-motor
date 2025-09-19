@@ -18,8 +18,8 @@
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Booking</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i
-                            class="fas fa-plus fa-sm text-white-50"> </i> Booking Baru</a>
+                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-target="#addBookingModal" data-toggle="modal">
+                        <i class="fas fa-plus fa-sm text-white-50"> </i> Booking Baru</a>
                 </div>
                 <div class="card shadow mb-4">
 
@@ -75,7 +75,58 @@
                 <!-- Content Row -->
             </div>
             <!-- /.container-fluid -->
+            <!-- Modal area  -->
+            <div class="modal fade" id="addBookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Booking</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="<?= base_url('dashboard/booking/update'); ?>" method="post">
+                            <?= csrf_field(); ?>
+                            <div class="modal-body">
+                                <input type="hidden" name="id" id="edit_id">
+                                <div class="form-group">/div>
+                                    <label for="edit_user_id">User</label>
+                                    <select class="form-control" id="edit_user_id" name="user_id" required>
+                                        <option value="">-- Pilih User --</option>
+                                        <?php foreach ($users as $user): ?>
+                                            <option value="<?= $user['id']; ?>"><?= esc($user['username']); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_motor_id">Motor</label>
+                                    <select class="form-control" id="edit_motor_id" name="motor_id" required></select>
+                                    <option value="">-- Pilih Motor --</option>
+                                    <?php foreach ($motors as $motor): ?>
+                                        <option value="<?= $motor['id']; ?>"><?= esc($motor['name']); ?></option>
+                                    <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_rental_start_date">Tanggal Mulai</label>
+                                    <input type="date" class="form-control" id="edit_rental_start_date" name="rental_start_date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_rental_end_date">Tanggal Selesai</label>
+                                    <input type="date" class="form-control" id="edit_rental_end_date" name="rental_end_date" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Modal area end -->
         </div>
         <!-- End of Main Content -->
         <!-- DataTables JS -->

@@ -13,15 +13,26 @@ class BookingController extends BaseController
 {
 
     protected $BookingModel;
+    protected $UserModel;
+    protected $MotorModel;
     public function __construct()
     {
         $this->BookingModel = new BookingModel();
+        $this->UserModel = new \App\Models\UserModel();
+        $this->MotorModel = new MotorModel();
     }
 
     public function index()
     {
         //
-        $data['bookings'] = $this->BookingModel->findAll();
+        $data = [
+            'title' => 'Booking',
+            'submenu_title' => '',
+            'motors' => (new \App\Models\MotorModel())->findAll(),
+            'user' => $this->UserModel->find(session()->get('id')),
+            'bookings' => $this->BookingModel->where('user_id', session()->get('id'))->findAll(),
+            'users' => $this->UserModel->where('role', 'user')->findAll(),
+        ];
         return view('booking/index', $data);
     }
 
@@ -103,8 +114,9 @@ class BookingController extends BaseController
         $data = [
             'title' => 'Booking',
             'submenu_title' => '',
-            'user' => (new \App\Models\UserModel())->find(session()->get('id')),
-            'motors' => (new \App\Models\MotorModel())->countAllResults(),
+            'user' => $this->UserModel->find(session()->get('id')),
+            'users' => $this->UserModel->where('role', 'user')->findAll(),
+            'motors' => $this->MotorModel->findAll(),
             'bookings' => $bookingModel
                 ->select('bookings.*, users.username, motors.name as motor_name')
                 ->join('users', 'users.id = bookings.user_id')
