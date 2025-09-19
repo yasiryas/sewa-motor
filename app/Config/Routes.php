@@ -59,6 +59,7 @@ $routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
     $routes->post('store', 'UserController::store');
     $routes->post('update', 'UserController::update');
     $routes->post('delete', 'UserController::delete');
+    $routes->post('reset', 'UserController::resetPassword');
 });
 
 

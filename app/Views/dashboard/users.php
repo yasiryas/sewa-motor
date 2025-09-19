@@ -48,9 +48,10 @@
                                             <td><?= esc($user['email']); ?></td>
                                             <td><?= esc(date("d M Y", strtotime($user['created_at']))); ?></td>
                                             <td>
-                                                <a href="#" class="btn btn-sm btn-warning btn-edit-user-modal"
-                                                    data-id-edit-user="<?= $user['id']; ?>">
-                                                    <i class="fas fa-edit"></i> Edit</a>
+                                                <a href="#" class="btn btn-sm btn-warning btn-reset-password-user-modal"
+                                                    data-id-reset-password-user="<?= $user['id']; ?>"
+                                                    data-name-reset-password-user="<?= $user['username']; ?>">
+                                                    <i class="fas fa-undo"></i> Reset</a>
                                                 <a href="#" class="btn btn-sm btn-danger btn-delete-user-modal"
                                                     data-delete-id-user="<?= $user['id']; ?>"
                                                     data-delete-name-user="<?= $user['username']; ?>"
@@ -166,77 +167,54 @@
                     </div>
                 </div>
                 <!-- End modal delete user -->
-                <!-- Modal edit user -->
-                <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
+                <!-- Modal reset password user -->
+                <div class="modal fade" id="resetPasswordUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="addUserModalLabel">Tambah User Baru</h5>
+                                <h5 class="modal-title" id="editUserModalLabel">Reset Password User - <strong id="name_reset_password_user"></strong></h5>
+
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
-                                <?php if (session()->getFlashdata('error')): ?>
-                                    <div class="alert alert-danger pt-2">
-                                        <?= session()->getFlashdata('error'); ?>
-                                    </div>
-                                <?php endif; ?>
-                                <form action="<?= base_url('dashboard/user/store'); ?>" method="post">
-                                    <?= csrf_field(); ?>
-                                    <div class="form-group">
-                                        <label for="username">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username" required value="<?= old('username') ?? ''; ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="fullname">Full Name</label>
-                                        <input type="text" class="form-control" id="full_name" name="full_name" required value="<?= old('full_name') ?? ''; ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" required value="<?= old('email') ?? ''; ?>">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="phone">No Telepon</label>
-                                        <input type="number" class="form-control" id="phone" name="phone" required value="<?= old('phone') ?? ''; ?>">
-                                    </div>
-                                    <div class="form-group">
+                            <form action="<?= base_url('dashboard/user/reset'); ?>" method="post">
+                                <?= csrf_field(); ?>
+                                <div class="modal-body">
+                                    <?php if (session()->getFlashdata('error_edit')): ?>
+                                        <div class="alert alert-danger pt-2">
+                                            <?= session()->getFlashdata('error_edit'); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <input type="hidden" name="id_reset_password_user" id="id_reset_password_user" value="<?= old('id_reset_password_user'); ?>">
+                                    <div class="form-group  mb-3">
                                         <label for="password">Kata Sandi</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" id="password" name="password" required value="<?= old('password') ?? ''; ?>">
+                                            <input type="password" class="form-control" id="password_reset" name="password_reset" required value="<?= old('password_reset') ?? ''; ?>">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
+                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password_reset">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="repeat_password">Ulangi Kata Sandi</label>
+                                    <div class="form-group mb-3">
+                                        <label for="repeat_password_reset">Ulangi Kata Sandi</label>
                                         <div class="input-group">
-                                            <input type="password" class="form-control" id="repeat_password" name="repeat_password" required value="<?= old('repeat_password') ?? ''; ?>">
+                                            <input type="password" class="form-control" id="repeat_password_reset" name="repeat_password_reset" required value="<?= old('repeat_password_reset') ?? ''; ?>">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#repeat_password">
+                                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#repeat_password_reset">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="role">Peran</label>
-                                        <select class="form-control" id="role" name="role" required>
-                                            <option value="user" <?= old('role') == 'user' ? 'selected' : ''; ?>>User</option>
-                                            <option value="admin" <?= old('role') == 'admin' ? 'selected' : ''; ?>>Admin</option>
-                                            <option value="owner" <?= old('role') == 'owner' ? 'selected' : ''; ?>>Owner</option>
-                                        </select>
-                                    </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                                </div>
                             </form>
                         </div>
                     </div>

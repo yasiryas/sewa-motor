@@ -81,10 +81,9 @@ class UserController extends BaseController
                 ]
             ],
             'phone' => [
-                'rules' => 'required|is_unique[users.phone]|min_length[10]|max_length[15]',
+                'rules' => 'required|min_length[10]|max_length[15]',
                 'errors' => [
                     'required' => 'Nomor telepon wajib diisi.',
-                    'is_unique' => 'Nomor telepon sudah digunakan.',
                     'min_length' => 'Nomor telepon minimal 10 digit.',
                     'max_length' => 'Nomor telepon maksimal 15 digit.',
                 ]
@@ -104,7 +103,7 @@ class UserController extends BaseController
                 ]
             ],
             'role' => [
-                'rules' => 'required|in_list[admin,user]',
+                'rules' => 'required|in_list[admin,user, owner]',
                 'errors' => [
                     'required' => 'Role wajib diisi.',
                     'in_list' => 'Role tidak valid.',
@@ -122,7 +121,7 @@ class UserController extends BaseController
             'full_name' => $this->request->getPost('full_name'),
             'email' => $this->request->getPost('email'),
             'phone' => $this->request->getPost('phone'),
-            'password' => password_hash($this->request->getPost('password'), PASSWORD_BCRYPT),
+            'password_hash' => password_hash($this->request->getPost('password'), PASSWORD_BCRYPT),
             'role' => $this->request->getPost('role'),
         ]);
         return redirect()->to('dashboard/users')->with('success', 'User berhasil ditambahkan.');
@@ -139,5 +138,43 @@ class UserController extends BaseController
 
         $this->userModel->delete($id);
         return redirect()->to('dashboard/users')->with('success', 'User berhasil dihapus.');
+    }
+
+    public function resetPassword()
+    {
+        $id = $this->request->getPost('id_reset_password_user');
+        $user = $this->userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('dashboard/users')->with('error', 'User tidak ditemukan.');
+        }
+
+        // Validasi input
+        $validationRules = [
+            'password_reset' => [
+                'rules' => 'required|min_length[6]',
+                'errors' => [
+                    'required' => 'Password wajib diisi.',
+                    'min_length' => 'Password minimal 6 karakter.',
+                ]
+            ],
+            'repeat_password_reset' => [
+                'rules' => 'required|matches[password_reset]',
+                'errors' => [
+                    'required' => 'Ulangi Password wajib diisi.',
+                    'matches' => 'Ulangi Password belum cocok.',
+                ]
+            ],
+        ];
+
+        if (!$this->validate($validationRules)) {
+            return redirect()->to('dashboard/users')->withInput()->with('error', $this->validator->listErrors())->with('modal', 'resetPasswordUserModal')->with('id_reset_password_user', $id);
+        }
+
+        $this->userModel->update($id, [
+            'password_hash' => password_hash($this->request->getPost('password_reset'), PASSWORD_BCRYPT),
+        ]);
+
+        return redirect()->to('dashboard/users')->with('success', 'Password user berhasil direset.');
     }
 }

@@ -31,8 +31,8 @@ $(document).ready(function () {
       $('#addUserModal').modal('show');
   }
 
-  if (openModal === 'editUserModal') {
-      $('#editUserModal').modal('show');
+  if (openModal === 'resetPasswordUserModal') {
+      $('#resetPasswordUserModal').modal('show');
   }
 
   //modal add brand
@@ -151,6 +151,17 @@ $(document).ready(function () {
     // let type_delete = $(this).data('type-delete');
     $('#user_id_delete').val(id_delete_user);
     $('#user_name_delete').text(name_delete_user);
+  });
+
+  // modal reset password user
+  $('.btn-reset-password-user-modal').on('click', function () {
+    $('#resetPasswordUserModal').modal('show')
+
+    let id_reset_password_user = $(this).data('id-reset-password-user');
+    let name_reset_password_user = $(this).data('name-reset-password-user');
+
+    $('#id_reset_password_user').val(id_reset_password_user);
+    $('#name_reset_password_user').text(name_reset_password_user);
   });
 
 });
