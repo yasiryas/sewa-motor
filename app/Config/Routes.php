@@ -53,7 +53,7 @@ $routes->group('dashboard/inventaris/motor', ['filter' => 'auth'], function ($ro
     $routes->post('delete', 'MotorController::delete');
 });
 
-// Manajemen motor
+// Manajemen user
 $routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', 'UserController::index');
     $routes->post('store', 'UserController::store');
@@ -61,6 +61,14 @@ $routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
     $routes->post('delete', 'UserController::delete');
     $routes->post('reset', 'UserController::resetPassword');
     $routes->get('search', 'UserController::search');
+});
+
+// Manajemen booking
+$routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
+    $routes->post('store', 'BookingController::store');
+    $routes->post('update', 'MotorController::update');
+    $routes->post('delete', 'MotorController::delete');
+    $routes->post('storeUser', 'UserController::storeUserInBooking');
 });
 
 

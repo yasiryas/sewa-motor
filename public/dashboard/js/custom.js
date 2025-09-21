@@ -35,6 +35,10 @@ $(document).ready(function () {
       $('#resetPasswordUserModal').modal('show');
   }
 
+  if (openModal === 'addBookingModal') {
+      $('#addBookingModal').modal('show');
+  }
+
   //modal add brand
   $('#addBrandModal').on('shown.bs.modal', function () {
     $('#brand_name_add').trigger('focus');

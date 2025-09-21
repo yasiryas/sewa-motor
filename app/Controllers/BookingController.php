@@ -136,4 +136,10 @@ class BookingController extends BaseController
         ];
         return view('dashboard/booking-report', $data);
     }
+
+    public function adminStore()
+    {
+        // code to store booking by admin
+        return redirect()->to('dashboard/booking')->with('success', 'Booking berhasil ditambahkan oleh admin.');
+    }
 }

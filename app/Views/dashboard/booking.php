@@ -87,7 +87,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="<?= base_url('dashboard/booking/update'); ?>" method="post">
+                        <form action="<?= base_url('dashboard/booking/store'); ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="modal-body">
                                 <input type="hidden" name="id_user_booking" id="id_user_booking">
@@ -100,7 +100,7 @@
                                             <input type="hidden" id="user_id" name="user_id">
                                         </div>
                                         <div class="col-auto">
-                                            <a class="btn btn-sm btn-primary w-100" id="add_user" href="#" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-user-plus"></i> Add user</a>
+                                            <a class="btn btn-primary w-100" id="add_user" href="#" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-user-plus"></i> Add user</a>
                                         </div>
                                     </div>
                                     <!-- container hasil pencarian -->
@@ -134,7 +134,84 @@
                     </div>
                 </div>
             </div>
+            <!-- end modal ne booking  -->
+            <!-- Modal Add User -->
+            <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addUserModalLabel">Tambah User Baru</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <?php if (session()->getFlashdata('error')): ?>
+                                <div class="alert alert-danger pt-2">
+                                    <?= session()->getFlashdata('error'); ?>
+                                </div>
+                            <?php endif; ?>
+                            <form action="<?= base_url('dashboard/booking/storeUser'); ?>" method="post">
+                                <?= csrf_field(); ?>
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required value="<?= old('username') ?? ''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="fullname">Full Name</label>
+                                    <input type="text" class="form-control" id="full_name" name="full_name" required value="<?= old('full_name') ?? ''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required value="<?= old('email') ?? ''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">No Telepon</label>
+                                    <input type="number" class="form-control" id="phone" name="phone" required value="<?= old('phone') ?? ''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Kata Sandi</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" required value="<?= old('password') ?? ''; ?>">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="repeat_password">Ulangi Kata Sandi</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="repeat_password" name="repeat_password" required value="<?= old('repeat_password') ?? ''; ?>">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#repeat_password">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="role">Peran</label>
+                                    <select class="form-control" id="role" name="role" required>
+                                        <option value="user" <?= old('role') == 'user' ? 'selected' : ''; ?>>User</option>
+                                        <option value="admin" <?= old('role') == 'admin' ? 'selected' : ''; ?>>Admin</option>
+                                        <option value="owner" <?= old('role') == 'owner' ? 'selected' : ''; ?>>Owner</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal Add User -->
+            <!-- end modal add user -->
             <!-- Modal area end -->
         </div>
         <!-- End of Main Content -->
