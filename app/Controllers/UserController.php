@@ -177,4 +177,25 @@ class UserController extends BaseController
 
         return redirect()->to('dashboard/users')->with('success', 'Password user berhasil direset.');
     }
+
+    public function search()
+    {
+        $keyword = $this->request->getGet('q');
+
+        $users = $this->userModel
+            ->like('username', $keyword)
+            ->orLike('email', $keyword)
+            ->findAll(10);
+
+        // hanya return field penting
+        $result = array_map(function ($user) {
+            return [
+                'id'       => $user['id'],
+                'username' => $user['username'],
+                'email'    => $user['email'],
+            ];
+        }, $users);
+
+        return $this->response->setJSON($result);
+    }
 }

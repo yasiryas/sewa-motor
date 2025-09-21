@@ -32,6 +32,7 @@
  <!-- open modal if error message -->
  <script>
      let openModal = "<?= session()->getFlashdata('modal'); ?>";
+     const BASE_URL = "<?= rtrim(base_url(), '/'); ?>";
  </script>
 
 

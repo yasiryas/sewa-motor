@@ -60,6 +60,7 @@ $routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
     $routes->post('update', 'UserController::update');
     $routes->post('delete', 'UserController::delete');
     $routes->post('reset', 'UserController::resetPassword');
+    $routes->get('search', 'UserController::search');
 });
 
 

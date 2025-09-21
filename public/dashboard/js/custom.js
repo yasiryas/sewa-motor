@@ -164,6 +164,59 @@ $(document).ready(function () {
     $('#name_reset_password_user').text(name_reset_password_user);
   });
 
+// search user for booking
+
+    const searchInput = document.getElementById("search_user");
+    const userIdInput = document.getElementById("user_id");
+    const resultsBox = document.getElementById("user_results");
+
+    let timeout = null;
+
+    searchInput.addEventListener("keyup", function () {
+        const keyword = this.value.trim();
+
+        if (keyword.length < 2) {
+            resultsBox.style.display = "none";
+            return;
+        }
+
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            fetch(`${BASE_URL}/dashboard/user/search?q=${encodeURIComponent(keyword)}`)
+    .then(res => res.json())
+    .then(data => {
+        if (!Array.isArray(data)) {
+            console.error("Bukan array:", data);
+            return;
+        }
+
+        resultsBox.innerHTML = "";
+        data.forEach(user => {
+            const item = document.createElement("a");
+            item.href = "#";
+            item.className = "list-group-item list-group-item-action";
+            item.textContent = `${user.username} (${user.email})`;
+            item.addEventListener("click", e => {
+                e.preventDefault();
+                searchInput.value = user.username;
+                userIdInput.value = user.id;
+                resultsBox.style.display = "none";
+            });
+            resultsBox.appendChild(item);
+        });
+        resultsBox.style.display = "block";
+    })
+    .catch(err => console.error("Error:", err));
+        }, 300);
+    });
+
+    // klik di luar → sembunyikan dropdown
+    document.addEventListener("click", function (e) {
+        if (!resultsBox.contains(e.target) && e.target !== searchInput) {
+            resultsBox.style.display = "none";
+        }
+    });
+
 });
 
 

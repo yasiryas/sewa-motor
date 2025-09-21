@@ -76,12 +76,13 @@
             </div>
             <!-- /.container-fluid -->
             <!-- Modal area  -->
+            <!-- Modal new booking -->
             <div class="modal fade" id="addBookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Booking</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Booking Baru</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -89,23 +90,31 @@
                         <form action="<?= base_url('dashboard/booking/update'); ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="modal-body">
-                                <input type="hidden" name="id" id="edit_id">
-                                <div class="form-group">/div>
-                                    <label for="edit_user_id">User</label>
-                                    <select class="form-control" id="edit_user_id" name="user_id" required>
-                                        <option value="">-- Pilih User --</option>
-                                        <?php foreach ($users as $user): ?>
-                                            <option value="<?= $user['id']; ?>"><?= esc($user['username']); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                <input type="hidden" name="id_user_booking" id="id_user_booking">
+                                <div class="form-group position-relative">
+                                    <label for="search_user">Cari User</label>
+                                    <div class="form-row">
+                                        <div class="col w-100">
+                                            <input type="text" id="search_user" class="form-control w-100 align-left" placeholder="Ketik username atau email...">
+                                            <!-- hidden untuk simpan id user -->
+                                            <input type="hidden" id="user_id" name="user_id">
+                                        </div>
+                                        <div class="col-auto">
+                                            <a class="btn btn-sm btn-primary w-100" id="add_user" href="#" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-user-plus"></i> Add user</a>
+                                        </div>
+                                    </div>
+                                    <!-- container hasil pencarian -->
+                                    <div id="user_results" class="list-group position-absolute w-100"
+                                        style="z-index: 1000; max-height: 200px; overflow-y: auto; display: none;">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_motor_id">Motor</label>
-                                    <select class="form-control" id="edit_motor_id" name="motor_id" required></select>
-                                    <option value="">-- Pilih Motor --</option>
-                                    <?php foreach ($motors as $motor): ?>
-                                        <option value="<?= $motor['id']; ?>"><?= esc($motor['name']); ?></option>
-                                    <?php endforeach; ?>
+                                    <select class="form-control" id="edit_motor_id" name="motor_id" required>
+                                        <option value="">-- Pilih Motor --</option>
+                                        <?php foreach ($motors as $motor): ?>
+                                            <option value="<?= $motor['id']; ?>"><?= esc($motor['name']); ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -129,8 +138,5 @@
             <!-- Modal area end -->
         </div>
         <!-- End of Main Content -->
-        <!-- DataTables JS -->
-        <script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js'); ?>"></script>
-        <script src="<?= base_url('vendor/datatables/dataTables.bootstrap4.min.js'); ?>"></script>
 
         <?= $this->include('dashboard/partials/footer'); ?>
