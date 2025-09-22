@@ -249,6 +249,13 @@ $(document).ready(function () {
     });
   });
 
+  //set value motor_id saat form disubmit
+  $(document).on("click", ".select-motor", function () {
+    let motorId = $(this).data("id-motor");
+        // set ke hidden input
+    $("#motor_id").val(motorId);
+  });
+
 });
 
 

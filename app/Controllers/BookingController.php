@@ -143,49 +143,50 @@ class BookingController extends BaseController
         $validationRules = [
             'user_id' => 'required',
             'motor_id' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'rental_start_date' => 'required',
+            'rental_end_date' => 'required',
         ];
-        $userId = $this->request->getPost('user_id');
-        $motorId = $this->request->getPost('motor_id');
-        $startDate = $this->request->getPost('start_date');
-        $endDate = $this->request->getPost('end_date');
+        $user_id = $this->request->getPost('user_id');
+        $motor_id = $this->request->getPost('motor_id');
+        $start_date = $this->request->getPost('rental_start_date');
+        $end_date = $this->request->getPost('rental_end_date');
 
+        // dd($this->request->getPost());
         // validation
-        if (!$motorId || !$startDate || !$endDate) {
-            return redirect()->back()->with('error', 'Ups! Data harus lengkap');
+        if (!$user_id || !$motor_id || !$start_date || !$end_date) {
+            return redirect()->back()->with('error', 'Ups! Data harus lengkap')->withInput()->with('modal', 'addBookingModal');
         }
 
         // get data motor
         $motorModel = new MotorModel();
-        $motor = $motorModel->find($motorId);
+        $motor = $motorModel->find($motor_id);
 
         if (!$motor) {
-            return redirect()->back()->with('error', 'Motor tidak ditemukan');
+            return redirect()->back()->with('error', 'Motor tidak ditemukan')->withInput()->with('modal', 'addBookingModal');
         }
 
-        if ($endDate < $startDate) {
-            return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai');
+        if ($end_date < $start_date) {
+            return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai')->withInput()->with('modal', 'addBookingModal');
         }
 
         // calculate total price
-        $start = new \DateTime($startDate);
-        $end = new \DateTime($endDate);
+        $start = new \DateTime($start_date);
+        $end = new \DateTime($end_date);
         $interval = $start->diff($end);
         $days = $interval->days + 1; // include start day
-        $totalPrice = $days * $motor['price_per_day'];
+        $total_price = $days * $motor['price_per_day'];
 
         // insert to database
-        $bookingModel = new BookingModel();
-        $bookingModel->insert([
-            'user_id' => session()->get('id'),
-            'motor_id' => $motorId,
-            'rental_start_date' => $startDate,
-            'rental_end_date' => $endDate,
-            'total_price' => $totalPrice,
+
+        $this->BookingModel->insert([
+            'user_id' => $user_id,
+            'motor_id' => $motor_id,
+            'rental_start_date' => $start_date,
+            'rental_end_date' => $end_date,
+            'total_price' => $total_price,
             'status' => 'pending',
         ]);
 
-        return redirect()->to('booking/success')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($totalPrice));
+        return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
 }

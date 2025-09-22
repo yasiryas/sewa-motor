@@ -63,12 +63,12 @@ $routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
     $routes->get('search', 'UserController::search');
 });
 
-// Manajemen booking
+// Manajemen booking for admin
 $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
-    $routes->post('store', 'BookingController::store');
+    $routes->post('storeUser', 'UserController::storeUserInBooking');
+    $routes->post('adminStore', 'BookingController::adminStore');
     $routes->post('update', 'MotorController::update');
     $routes->post('delete', 'MotorController::delete');
-    $routes->post('storeUser', 'UserController::storeUserInBooking');
 });
 
 

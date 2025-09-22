@@ -87,10 +87,10 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="<?= base_url('dashboard/booking/store'); ?>" method="post">
+                        <form action="<?= base_url('dashboard/booking/adminStore'); ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="modal-body">
-                                <input type="hidden" name="id_user_booking" id="id_user_booking">
+                                <!-- <input type="hidden" name="id_user_booking" id="id_user_booking"> -->
                                 <div class="form-group position-relative">
                                     <label for="search_user">Cari User</label>
                                     <div class="form-row">
@@ -111,12 +111,13 @@
                                 <!-- <div class="form-group"> -->
                                 <!-- Slider Motor -->
                                 <label>Pilih Motor</label>
+                                <input type="hidden" name="motor_id" id="motor_id">
                                 <div class="swiper mySwiper p-3">
                                     <div class="swiper-wrapper">
                                         <?php foreach ($motors as $motor): ?>
                                             <div class="swiper-slide">
-                                                <div class="card motor-card h-100 flex-column d-flex justify-content-between"
-                                                    data-id="<?= $motor['id']; ?>"
+                                                <div class="select-motor card motor-card h-100 flex-column d-flex justify-content-between"
+                                                    data-id-motor="<?= $motor['id']; ?>"
                                                     data-name="<?= esc($motor['name']); ?>"
                                                     data-price="<?= $motor['price_per_day']; ?>">
                                                     <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" style="height: 180px; object-fit: cover;" alt="<?= esc($motor['name']); ?>">
@@ -136,11 +137,11 @@
                                 <!-- </div> -->
                                 <div class="form-group">
                                     <label for="edit_rental_start_date">Tanggal Mulai</label>
-                                    <input type="date" class="form-control" id="edit_rental_start_date" name="rental_start_date" required>
+                                    <input type="date" class="form-control" id="rental_start_date" name="rental_start_date" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_rental_end_date">Tanggal Selesai</label>
-                                    <input type="date" class="form-control" id="edit_rental_end_date" name="rental_end_date" required>
+                                    <input type="date" class="form-control" id="rental_end_date" name="rental_end_date" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
