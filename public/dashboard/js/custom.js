@@ -221,6 +221,34 @@ $(document).ready(function () {
         }
     });
 
+// Swiper init
+  var swiper = new Swiper(".mySwiper", {
+    slidesPerView: 3,
+    spaceBetween: 15,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    breakpoints: {
+      0: { slidesPerView: 1 },
+      576: { slidesPerView: 2 },
+      992: { slidesPerView: 3 }
+    }
+  });
+
+  // Klik pilih motor
+  document.querySelectorAll(".motor-card").forEach(card => {
+    card.addEventListener("click", function() {
+      document.querySelectorAll(".motor-card").forEach(c => c.classList.remove("active"));
+      this.classList.add("active");
+      document.getElementById("selected_motor_id").value = this.dataset.id;
+    });
+  });
+
 });
 
 

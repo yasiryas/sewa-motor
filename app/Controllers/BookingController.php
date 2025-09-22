@@ -140,6 +140,52 @@ class BookingController extends BaseController
     public function adminStore()
     {
         // code to store booking by admin
-        return redirect()->to('dashboard/booking')->with('success', 'Booking berhasil ditambahkan oleh admin.');
+        $validationRules = [
+            'user_id' => 'required',
+            'motor_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ];
+        $userId = $this->request->getPost('user_id');
+        $motorId = $this->request->getPost('motor_id');
+        $startDate = $this->request->getPost('start_date');
+        $endDate = $this->request->getPost('end_date');
+
+        // validation
+        if (!$motorId || !$startDate || !$endDate) {
+            return redirect()->back()->with('error', 'Ups! Data harus lengkap');
+        }
+
+        // get data motor
+        $motorModel = new MotorModel();
+        $motor = $motorModel->find($motorId);
+
+        if (!$motor) {
+            return redirect()->back()->with('error', 'Motor tidak ditemukan');
+        }
+
+        if ($endDate < $startDate) {
+            return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai');
+        }
+
+        // calculate total price
+        $start = new \DateTime($startDate);
+        $end = new \DateTime($endDate);
+        $interval = $start->diff($end);
+        $days = $interval->days + 1; // include start day
+        $totalPrice = $days * $motor['price_per_day'];
+
+        // insert to database
+        $bookingModel = new BookingModel();
+        $bookingModel->insert([
+            'user_id' => session()->get('id'),
+            'motor_id' => $motorId,
+            'rental_start_date' => $startDate,
+            'rental_end_date' => $endDate,
+            'total_price' => $totalPrice,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->to('booking/success')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($totalPrice));
     }
 }

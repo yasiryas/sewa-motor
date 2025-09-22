@@ -17,6 +17,13 @@
     <link href="<?= base_url('dashboard/vendor/datatables/dataTables.bootstrap4.min.css'); ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('dashboard/vendor/bootstrap/css/bootstrap.min.css'); ?>">
     <link href="<?= base_url('dashboard'); ?>/css/sb-admin-2.css" rel="stylesheet">
+    <link href="<?= base_url('dashboard'); ?>/css/style.css" rel="stylesheet">
+
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 
     <!-- Custom fonts for this template-->

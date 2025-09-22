@@ -104,19 +104,36 @@
                                         </div>
                                     </div>
                                     <!-- container hasil pencarian -->
-                                    <div id="user_results" class="list-group position-absolute w-100"
+                                    <div id="user_results" class="list-group position-absolute w-100 background-shadow"
                                         style="z-index: 1000; max-height: 200px; overflow-y: auto; display: none;">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="edit_motor_id">Motor</label>
-                                    <select class="form-control" id="edit_motor_id" name="motor_id" required>
-                                        <option value="">-- Pilih Motor --</option>
+                                <!-- <div class="form-group"> -->
+                                <!-- Slider Motor -->
+                                <label>Pilih Motor</label>
+                                <div class="swiper mySwiper p-3">
+                                    <div class="swiper-wrapper">
                                         <?php foreach ($motors as $motor): ?>
-                                            <option value="<?= $motor['id']; ?>"><?= esc($motor['name']); ?></option>
+                                            <div class="swiper-slide">
+                                                <div class="card motor-card h-100 flex-column d-flex justify-content-between"
+                                                    data-id="<?= $motor['id']; ?>"
+                                                    data-name="<?= esc($motor['name']); ?>"
+                                                    data-price="<?= $motor['price_per_day']; ?>">
+                                                    <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" style="height: 180px; object-fit: cover;" alt="<?= esc($motor['name']); ?>">
+                                                    <div class="card-body text-center mt-auto">
+                                                        <h6 class="card-title"><b><?= esc($motor['name']); ?></b></h6>
+                                                        <p class="">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?><br>/hari</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         <?php endforeach; ?>
-                                    </select>
+                                    </div>
+                                    <!-- Navigasi -->
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                    <div class="swiper-pagination"></div>
                                 </div>
+                                <!-- </div> -->
                                 <div class="form-group">
                                     <label for="edit_rental_start_date">Tanggal Mulai</label>
                                     <input type="date" class="form-control" id="edit_rental_start_date" name="rental_start_date" required>
