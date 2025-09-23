@@ -141,32 +141,60 @@ class BookingController extends BaseController
     {
         // code to store booking by admin
         $validationRules = [
-            'user_id' => 'required',
-            'motor_id' => 'required',
-            'rental_start_date' => 'required',
-            'rental_end_date' => 'required',
+            'user_id' => [
+                'label' => 'User',
+                'rules' => 'required|is_not_unique[users.id]',
+                'errors' => [
+                    'required' => '{field} harus diisi.',
+                    'is_not_unique' => '{field} tidak ditemukan.'
+                ]
+            ],
+            'motor_id' => [
+                'label' => 'Motor',
+                'rules' => 'required|is_not_unique[motors.id]',
+                'errors' => [
+                    'required' => '{field} harus diisi.',
+                    'is_not_unique' => '{field} tidak ditemukan.'
+                ]
+            ],
+            'rental_start_date' => [
+                'label' => 'Tanggal Mulai',
+                'rules' => 'required|valid_date',
+                'errors' => [
+                    'required' => '{field} harus diisi.',
+                    'valid_date' => '{field} bukan tanggal yang valid.'
+                ]
+            ],
+            'rental_end_date' => [
+                'label' => 'Tanggal Selesai',
+                'rules' => 'required|valid_date',
+                'errors' => [
+                    'required' => '{field} harus diisi.',
+                    'valid_date' => '{field} bukan tanggal yang valid.'
+                ]
+            ],
         ];
+
+        if (!$this->validate($validationRules)) {
+            return redirect()->back()->with('error', $this->validator->listErrors())->withInput()->with('modal', 'addBookingModal');
+        }
+
         $user_id = $this->request->getPost('user_id');
         $motor_id = $this->request->getPost('motor_id');
         $start_date = $this->request->getPost('rental_start_date');
         $end_date = $this->request->getPost('rental_end_date');
-
-        // dd($this->request->getPost());
-        // validation
-        if (!$user_id || !$motor_id || !$start_date || !$end_date) {
-            return redirect()->back()->with('error', 'Ups! Data harus lengkap')->withInput()->with('modal', 'addBookingModal');
-        }
+        $search_user = $this->request->getPost('search_user');
 
         // get data motor
         $motorModel = new MotorModel();
         $motor = $motorModel->find($motor_id);
 
-        if (!$motor) {
-            return redirect()->back()->with('error', 'Motor tidak ditemukan')->withInput()->with('modal', 'addBookingModal');
-        }
-
         if ($end_date < $start_date) {
             return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai')->withInput()->with('modal', 'addBookingModal');
+        }
+
+        if ($start_date < date('Y-m-d')) {
+            return redirect()->back()->with('error', 'Tanggal mulai tidak boleh sebelum hari ini')->withInput()->with('modal', 'addBookingModal');
         }
 
         // calculate total price
@@ -177,7 +205,6 @@ class BookingController extends BaseController
         $total_price = $days * $motor['price_per_day'];
 
         // insert to database
-
         $this->BookingModel->insert([
             'user_id' => $user_id,
             'motor_id' => $motor_id,

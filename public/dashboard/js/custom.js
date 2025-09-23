@@ -36,7 +36,18 @@ $(document).ready(function () {
   }
 
   if (openModal === 'addBookingModal') {
-      $('#addBookingModal').modal('show');
+    $('#addBookingModal').modal('show');
+
+  let oldMotorId = $('#motor_id').val();
+        if (oldMotorId) {
+            $(".select-motor").each(function () {
+                if ($(this).data("id-motor") == oldMotorId) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+        }
   }
 
   //modal add brand
@@ -255,6 +266,14 @@ $(document).ready(function () {
         // set ke hidden input
     $("#motor_id").val(motorId);
   });
+
+  //chose date custom
+  document.getElementsByClassName("date").addEventListener("change", function () {
+    let date = new Date(this.value);
+    let options = { day: '2-digit', month: 'long', year: 'numeric' };
+    let formatted = new Intl.DateTimeFormat('id-ID', options).format(date);
+    document.getElementById("tanggal_indo").textContent = formatted;
+});
 
 });
 

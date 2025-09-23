@@ -95,9 +95,9 @@
                                     <label for="search_user">Cari User</label>
                                     <div class="form-row">
                                         <div class="col w-100">
-                                            <input type="text" id="search_user" class="form-control w-100 align-left" placeholder="Ketik username atau email...">
+                                            <input type="text" name="search_user" id="search_user" class="form-control w-100 align-left" placeholder="Ketik username atau email..." value="<?= old('search_user') ?? ''; ?>">
                                             <!-- hidden untuk simpan id user -->
-                                            <input type="hidden" id="user_id" name="user_id">
+                                            <input type="hidden" id="user_id" name="user_id" value="<?= old('user_id') ?? ''; ?>">
                                         </div>
                                         <div class="col-auto">
                                             <a class="btn btn-primary w-100" id="add_user" href="#" data-toggle="modal" data-target="#addUserModal"><i class="fas fa-user-plus"></i> Add user</a>
@@ -111,7 +111,7 @@
                                 <!-- <div class="form-group"> -->
                                 <!-- Slider Motor -->
                                 <label>Pilih Motor</label>
-                                <input type="hidden" name="motor_id" id="motor_id">
+                                <input type="hidden" name="motor_id" id="motor_id" value="<?= old('motor_id') ?? ''; ?>">
                                 <div class="swiper mySwiper p-3">
                                     <div class="swiper-wrapper">
                                         <?php foreach ($motors as $motor): ?>
@@ -137,11 +137,11 @@
                                 <!-- </div> -->
                                 <div class="form-group">
                                     <label for="edit_rental_start_date">Tanggal Mulai</label>
-                                    <input type="date" class="form-control" id="rental_start_date" name="rental_start_date" required>
+                                    <input type="date" class="form-control date" id="rental_start_date" name="rental_start_date" required value="<?= old('rental_start_date') ?? ''; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="edit_rental_end_date">Tanggal Selesai</label>
-                                    <input type="date" class="form-control" id="rental_end_date" name="rental_end_date" required>
+                                    <input type="date" class="form-control date" id="rental_end_date" name="rental_end_date" required value="<?= old('rental_end_date') ?? ''; ?>">
                                 </div>
                             </div>
                             <div class="modal-footer">
