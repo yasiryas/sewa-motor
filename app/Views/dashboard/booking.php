@@ -43,6 +43,7 @@
                                             <th>Tanggal Selesai</th>
                                             <th>Total Harga</th>
                                             <th>Status</th>
+                                            <th>Opsi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -63,6 +64,19 @@
                                                     <?php else: ?>
                                                         <span class="badge badge-danger">Canceled</span>
                                                     <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <a href="<?= base_url('dashboard/booking/view/' . $booking['id']); ?>" class="btn btn-sm
+                                                       btn-info m-1" title="Lihat Detail"><i class="fas fa-folder-open"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-danger m-1"
+                                                        data-delete-id-booking="<?= $booking['id']; ?>"
+                                                        data-delete-user-booking="<?= esc($booking['username']); ?>"
+                                                        data-delete-motor-booking="<?= esc($booking['motor_name']); ?>"
+                                                        data-delete-start-date="<?= esc($booking['rental_start_date']); ?>"
+                                                        data-delete-end-date="<?= esc($booking['rental_end_date']); ?>"
+                                                        data-delete-total-price="<?= 'Rp ' . number_format($booking['total_price']); ?>"
+                                                        data-delete-status="<?= esc(ucfirst($booking['status'])); ?>"
+                                                        data-delete-toggle="modal" data-target="#deleteBookingAdminModal" title="Hapus Booking"><i class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -229,7 +243,65 @@
                 </div>
             </div>
             <!-- End Modal Add User -->
-            <!-- end modal add user -->
+
+            <!-- Modal Delete Booking -->
+            <div class="modal fade" id="deleteBookingAdminModal" tabindex="-1" role="dialog" aria-labelledby="deleteBookingModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteBookingModalLabel">Apakah Anda yakin ingin menghapus booking ini?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="<?= base_url('dashboard/booking/deleteAdmin'); ?>" method="post">
+                            <?= csrf_field(); ?>
+                            <div class="modal-body">
+                                <input type="hidden" name="id" id="delete_booking_id">
+                                <table>
+                                    <tr>
+                                        <td><strong>Nama User</strong></td>
+                                        <td class="px-2">:</td>
+                                        <td id="delete_booking_user"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Motor</strong></td>
+                                        <td class="px-2">:</td>
+                                        <td id="delete_booking_motor"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tanggal Mulai</strong></td>
+                                        <td class="px-2">:</td>
+                                        <td id="delete_booking_start_date"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tanggal Selesai</strong></td>
+                                        <td class="px-2">:</td>
+                                        <td id="delete_booking_end_date"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Harga</strong></td>
+                                        <td class="px-2">:</td>
+                                        <td id="delete_booking_total_price"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status</strong></td>
+                                        <td class="px-2">:</td>
+                                        <td id="delete_booking_status"></td>
+                                    </tr>
+                                </table>
+                                <p>Note: Data booking yang dihapus tidak dapat dikembalikan.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- end modal delete booking -->
             <!-- Modal area end -->
         </div>
         <!-- End of Main Content -->

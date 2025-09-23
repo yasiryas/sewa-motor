@@ -216,4 +216,16 @@ class BookingController extends BaseController
 
         return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
+
+    public function deleteAdmin()
+    {
+        $id = $this->request->getPost('id');
+        $booking = $this->BookingModel->find($id);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking tidak ditemukan.')->with('modal', 'deleteBookingAdminModal');
+        }
+
+        $this->BookingModel->delete($id);
+        return redirect()->back()->with('success', 'Booking berhasil dihapus.');
+    }
 }

@@ -273,7 +273,18 @@ $(document).ready(function () {
     let options = { day: '2-digit', month: 'long', year: 'numeric' };
     let formatted = new Intl.DateTimeFormat('id-ID', options).format(date);
     document.getElementById("tanggal_indo").textContent = formatted;
-});
+  });
+
+  // isi data hapus booking
+  $('.btn-delete-booking-modal').on('click', function () {
+    $('#deleteBookingModal').modal('show')
+
+    let id_delete_booking = $(this).data('delete-id-booking');
+    let user_delete_booking = $(this).data('delete-user-booking');
+
+    $('#booking_id_delete').val(id_delete_booking);
+    $('#booking_name_delete').text(name_delete_booking);
+  });
 
 });
 
