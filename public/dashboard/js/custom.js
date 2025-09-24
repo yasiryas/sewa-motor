@@ -267,23 +267,28 @@ $(document).ready(function () {
     $("#motor_id").val(motorId);
   });
 
-  //chose date custom
-  document.getElementsByClassName("date").addEventListener("change", function () {
-    let date = new Date(this.value);
-    let options = { day: '2-digit', month: 'long', year: 'numeric' };
-    let formatted = new Intl.DateTimeFormat('id-ID', options).format(date);
-    document.getElementById("tanggal_indo").textContent = formatted;
-  });
-
   // isi data hapus booking
   $('.btn-delete-booking-modal').on('click', function () {
-    $('#deleteBookingModal').modal('show')
+    let id_delete_booking     = $(this).data('delete-id-booking');
+    let user_delete_booking   = $(this).data('delete-user-booking');
+    let motor_delete_booking  = $(this).data('delete-motor-booking');
+    let start_delete_booking  = $(this).data('delete-start-date-booking');
+    let end_delete_booking    = $(this).data('delete-end-date-booking');
+    let total_delete_booking  = $(this).data('delete-total-price-booking');
+    let status_delete_booking = $(this).data('delete-status-booking');
 
-    let id_delete_booking = $(this).data('delete-id-booking');
-    let user_delete_booking = $(this).data('delete-user-booking');
+    // Set nilai ke input/td
+    $('#delete_booking_id').val(id_delete_booking);
+    $('#delete_booking_user').text(user_delete_booking);
+    $('#delete_booking_motor').text(motor_delete_booking);
+    $('#delete_booking_start_date').text(start_delete_booking);
+    $('#delete_booking_end_date').text(end_delete_booking);
+    $('#delete_booking_total_price').text(total_delete_booking);
+    $('#delete_booking_status').text(status_delete_booking);
 
-    $('#booking_id_delete').val(id_delete_booking);
-    $('#booking_name_delete').text(name_delete_booking);
+    // buka modal
+    $('#deleteBookingAdminModal').modal('show');
+    console.log("Klik");
   });
 
 });

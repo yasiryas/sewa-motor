@@ -68,8 +68,9 @@ $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
     $routes->post('storeUser', 'UserController::storeUserInBooking');
     $routes->post('adminStore', 'BookingController::adminStore');
     $routes->post('update', 'MotorController::update');
-    $routes->post('delete', 'MotorController::delete');
+    $routes->post('deleteAdmin', 'BookingController::deleteAdmin');
 });
+
 
 
 

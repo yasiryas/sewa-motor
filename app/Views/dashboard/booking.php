@@ -68,15 +68,14 @@
                                                 <td>
                                                     <a href="<?= base_url('dashboard/booking/view/' . $booking['id']); ?>" class="btn btn-sm
                                                        btn-info m-1" title="Lihat Detail"><i class="fas fa-folder-open"></i></a>
-                                                    <a href="#" class="btn btn-sm btn-danger m-1"
+                                                    <a href="#" class="btn btn-sm btn-danger m-1 btn-delete-booking-modal"
                                                         data-delete-id-booking="<?= $booking['id']; ?>"
                                                         data-delete-user-booking="<?= esc($booking['username']); ?>"
                                                         data-delete-motor-booking="<?= esc($booking['motor_name']); ?>"
-                                                        data-delete-start-date="<?= esc($booking['rental_start_date']); ?>"
-                                                        data-delete-end-date="<?= esc($booking['rental_end_date']); ?>"
-                                                        data-delete-total-price="<?= 'Rp ' . number_format($booking['total_price']); ?>"
-                                                        data-delete-status="<?= esc(ucfirst($booking['status'])); ?>"
-                                                        data-delete-toggle="modal" data-target="#deleteBookingAdminModal" title="Hapus Booking"><i class="fas fa-trash"></i></a>
+                                                        data-delete-start-date-booking="<?= esc($booking['rental_start_date']); ?>"
+                                                        data-delete-end-date-booking="<?= esc($booking['rental_end_date']); ?>"
+                                                        data-delete-total-price-booking="<?= 'Rp ' . number_format($booking['total_price']); ?>"
+                                                        data-delete-status-booking="<?= esc($booking['status']); ?>"><i class="fas fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -122,6 +121,14 @@
                                         style="z-index: 1000; max-height: 200px; overflow-y: auto; display: none;">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="edit_rental_start_date">Tanggal Mulai</label>
+                                    <input type="date" class="form-control date" id="rental_start_date" name="rental_start_date" required value="<?= old('rental_start_date') ?? ''; ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_rental_end_date">Tanggal Selesai</label>
+                                    <input type="date" class="form-control date" id="rental_end_date" name="rental_end_date" required value="<?= old('rental_end_date') ?? ''; ?>">
+                                </div>
                                 <!-- <div class="form-group"> -->
                                 <!-- Slider Motor -->
                                 <label>Pilih Motor</label>
@@ -149,14 +156,7 @@
                                     <div class="swiper-pagination"></div>
                                 </div>
                                 <!-- </div> -->
-                                <div class="form-group">
-                                    <label for="edit_rental_start_date">Tanggal Mulai</label>
-                                    <input type="date" class="form-control date" id="rental_start_date" name="rental_start_date" required value="<?= old('rental_start_date') ?? ''; ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit_rental_end_date">Tanggal Selesai</label>
-                                    <input type="date" class="form-control date" id="rental_end_date" name="rental_end_date" required value="<?= old('rental_end_date') ?? ''; ?>">
-                                </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>

@@ -197,6 +197,16 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Tanggal mulai tidak boleh sebelum hari ini')->withInput()->with('modal', 'addBookingModal');
         }
 
+        $conflict = $this->BookingModel->where('motor_id', $motor_id)
+            ->where('status !=', 'canceled')
+            ->where('rental_start_date <=', $end_date)
+            ->where('rental_end_date >=', $start_date)
+            ->first();
+
+        if ($conflict) {
+            return redirect()->back()->with('error', 'Motor sudah dibooking pada tanggal tersebut.')->withInput()->with('modal', 'addBookingModal');
+        }
+
         // calculate total price
         $start = new \DateTime($start_date);
         $end = new \DateTime($end_date);
