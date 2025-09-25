@@ -291,6 +291,88 @@ $(document).ready(function () {
     console.log("Klik");
   });
 
+  //ketika tanggal mulai atau tanggal akhir diubah tampilkan motor yang tersedia
+  // $('#rental_start_date, #rental_end_date').on('change', function() {
+  //   let startDate = $('#edit_rental_start_date').val();
+  //   let endDate = $('#edit_rental_end_date').val();
+  //   let motorId = $('#motor_id').val();
+  //   if (startDate && endDate) {
+  //     $.ajax({
+  //       url: `${BASE_URL}/dashboard/booking/getAvailableMotorsBooking`,
+  //       type: 'GET',
+  //       data: { start_date: startDate, end_date: endDate },
+  //       dataType: 'json',
+  //       success: function(motors) {
+  //         // let motorContainer = $('#motor_selection_container');
+  //         let motorContainer = $('.swiper-wrapper');
+  //         motorContainer.empty(); // kosongkan container
+  //         if (motors.length === 0) {
+  //           motorContainer.append('<p class="text-danger">Tidak ada motor tersedia untuk tanggal tersebut.</p>');
+  //           $('#motor_id').val(''); // kosongkan motor_id
+  //           return;
+  //         }
+  //         motors.forEach(function(motor) {
+  //           let isActive = motor.id == motorId ? 'active' : '';
+  //           let motorCard = `
+  //             <div class="col-md-4 mb-3">
+  //               <div class="card motor-card ${isActive}" data-id-motor="${motor.id}" style="cursor:pointer;">
+  //                 <img src="${BASE_URL}/uploads/motors/${motor.photo}" class="card-img-top" alt="${motor.name}">
+  //                 <div class="card-body">
+  //                   <h5 class="card-title">${motor.name}</h5>
+  //                   <p class="card-text">Plat: ${motor.plate_number}</p>
+  //                   <p class="card-text">Harga: Rp ${motor.price_per_day.toLocaleString()}</p>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           `;
+  //           motorContainer.append(motorCard);
+  //         });
+  //       }
+  //         });
+  //   } else {
+  //     $('#motor_selection_container').empty();
+  //     $('#motor_id').val(''); // kosongkan motor_id
+  //   }
+  // });
+
+  $('#rental_start_date, #rental_end_date').on('change', function () {
+    let start = $('#rental_start_date').val();
+    let end   = $('#rental_end_date').val();
+
+    if (start && end) {
+        $.getJSON(`/dashboard/booking/getAvailableMotorsBooking?start=${start}&end=${end}`, function(data) {
+            let container = $('.swiper-wrapper');
+            container.empty();
+
+            if (data.length === 0) {
+                container.append('<p class="text-center">Tidak ada motor tersedia</p>');
+                return;
+            }
+
+            data.forEach(motor => {
+                container.append(`
+                    <div class="swiper-slide">
+                        <div class="select-motor card motor-card h-100"
+                             data-id-motor="${motor.id}">
+                            <img src="/uploads/motors/${motor.photo}" class="card-img-top" style="height:180px;object-fit:cover;">
+                            <div class="card-body text-center">
+                                <h6 class="card-title"><b>${motor.name}</b></h6>
+                                <p>Rp ${new Intl.NumberFormat('id-ID').format(motor.price_per_day)} /hari</p>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            // re-init swiper
+            swiper.update();
+        });
+    }
+});
+
+
+
+
 });
 
 

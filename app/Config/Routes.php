@@ -69,6 +69,7 @@ $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
     $routes->post('adminStore', 'BookingController::adminStore');
     $routes->post('update', 'MotorController::update');
     $routes->post('deleteAdmin', 'BookingController::deleteAdmin');
+    $routes->get('getAvailableMotorsBooking', 'BookingController::getAvialableMotorsBooking');
 });
 
 

@@ -238,4 +238,13 @@ class BookingController extends BaseController
         $this->BookingModel->delete($id);
         return redirect()->back()->with('success', 'Booking berhasil dihapus.');
     }
+
+    public function getAvialableMotorsBooking()
+    {
+        $start_date = $this->request->getGet('rentalstart_date');
+        $end_date = $this->request->getGet('rental_end_date');
+        $motors = $this->MotorModel->getAvialableMotorsBooking($start_date, $end_date);
+
+        return $this->response->setJSON($motors);
+    }
 }

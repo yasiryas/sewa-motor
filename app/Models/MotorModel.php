@@ -48,4 +48,36 @@ class MotorModel extends Model
     {
         return $this->where('availability_status', 'available')->findAll();
     }
+
+    public function getAvialableMotorsBooking($start_date, $end_date)
+    {
+        // $subquery = $this->db->table('bookings')
+        //     ->select('motor_id')
+        //     ->where('status !=', 'canceled')
+        //     ->groupStart()
+        //     ->where('rental_start_date <=', $end_date)
+        //     ->where('rental_end_date >=', $start_date)
+        //     ->groupEnd()
+        //     ->getCompiledSelect();
+
+        // return $this->db->table('motors')
+        //     ->where('availability_status', 'available')
+        //     ->where("id NOT IN ($subquery)")
+        //     ->get()
+        //     ->getResultArray();
+
+        return $this->db->table('motors')
+            ->where('availability_status', 'available')
+            ->whereNotIn('id', function ($builder) use ($start_date, $end_date) {
+                return $builder->select('motor_id')
+                    ->from('bookings')
+                    ->where('status !=', 'canceled')
+                    ->groupStart()
+                    ->where('rental_start_date <=', $end_date)
+                    ->where('rental_end_date >=', $start_date)
+                    ->groupEnd();
+            })
+            ->get()
+            ->getResultArray();
+    }
 }
