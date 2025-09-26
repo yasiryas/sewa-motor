@@ -180,7 +180,6 @@ $(document).ready(function () {
   });
 
 // search user for booking
-
     const searchInput = document.getElementById("search_user");
     const userIdInput = document.getElementById("user_id");
     const resultsBox = document.getElementById("user_results");
@@ -260,6 +259,15 @@ $(document).ready(function () {
     });
   });
 
+  $(document).on('click', '.select-motor', function () {
+    $('.select-motor').removeClass('active');
+    $(this).addClass('active');
+
+    // optional kalau ada hidden input untuk form
+    let motorId = $(this).data('id-motor');
+    $('#selected_motor_id').val(motorId);
+});
+
   //set value motor_id saat form disubmit
   $(document).on("click", ".select-motor", function () {
     let motorId = $(this).data("id-motor");
@@ -292,59 +300,17 @@ $(document).ready(function () {
   });
 
   //ketika tanggal mulai atau tanggal akhir diubah tampilkan motor yang tersedia
-  // $('#rental_start_date, #rental_end_date').on('change', function() {
-  //   let startDate = $('#edit_rental_start_date').val();
-  //   let endDate = $('#edit_rental_end_date').val();
-  //   let motorId = $('#motor_id').val();
-  //   if (startDate && endDate) {
-  //     $.ajax({
-  //       url: `${BASE_URL}/dashboard/booking/getAvailableMotorsBooking`,
-  //       type: 'GET',
-  //       data: { start_date: startDate, end_date: endDate },
-  //       dataType: 'json',
-  //       success: function(motors) {
-  //         // let motorContainer = $('#motor_selection_container');
-  //         let motorContainer = $('.swiper-wrapper');
-  //         motorContainer.empty(); // kosongkan container
-  //         if (motors.length === 0) {
-  //           motorContainer.append('<p class="text-danger">Tidak ada motor tersedia untuk tanggal tersebut.</p>');
-  //           $('#motor_id').val(''); // kosongkan motor_id
-  //           return;
-  //         }
-  //         motors.forEach(function(motor) {
-  //           let isActive = motor.id == motorId ? 'active' : '';
-  //           let motorCard = `
-  //             <div class="col-md-4 mb-3">
-  //               <div class="card motor-card ${isActive}" data-id-motor="${motor.id}" style="cursor:pointer;">
-  //                 <img src="${BASE_URL}/uploads/motors/${motor.photo}" class="card-img-top" alt="${motor.name}">
-  //                 <div class="card-body">
-  //                   <h5 class="card-title">${motor.name}</h5>
-  //                   <p class="card-text">Plat: ${motor.plate_number}</p>
-  //                   <p class="card-text">Harga: Rp ${motor.price_per_day.toLocaleString()}</p>
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           `;
-  //           motorContainer.append(motorCard);
-  //         });
-  //       }
-  //         });
-  //   } else {
-  //     $('#motor_selection_container').empty();
-  //     $('#motor_id').val(''); // kosongkan motor_id
-  //   }
-  // });
-
   $('#rental_start_date, #rental_end_date').on('change', function () {
     let start = $('#rental_start_date').val();
     let end   = $('#rental_end_date').val();
 
     if (start && end) {
         $.getJSON(`/dashboard/booking/getAvailableMotorsBooking?start=${start}&end=${end}`, function(data) {
+
             let container = $('.swiper-wrapper');
             container.empty();
 
-            if (data.length === 0) {
+            if (!data || data.length === 0) {
                 container.append('<p class="text-center">Tidak ada motor tersedia</p>');
                 return;
             }
@@ -352,24 +318,75 @@ $(document).ready(function () {
             data.forEach(motor => {
                 container.append(`
                     <div class="swiper-slide">
-                        <div class="select-motor card motor-card h-100"
-                             data-id-motor="${motor.id}">
+                        <div class="select-motor card motor-card h-100 flex-column d-flex justify-content-between"
+                             data-id-motor="${motor.id}"
+                             data-name-motor="${motor.name}"
+                             data-price-motor="${motor.price_per_day}">
                             <img src="/uploads/motors/${motor.photo}" class="card-img-top" style="height:180px;object-fit:cover;">
                             <div class="card-body text-center">
-                                <h6 class="card-title"><b>${motor.name}</b></h6>
-                                <p>Rp ${new Intl.NumberFormat('id-ID').format(motor.price_per_day)} /hari</p>
+                                <h5 class="card-title"><b>${motor.name}</b></h5>
+                                <p>${motor.number_plate}</p>
+                                <p>Rp ${new Intl.NumberFormat('id-ID').format(motor.price_per_day)}<br>/hari</p>
                             </div>
                         </div>
                     </div>
                 `);
             });
 
-            // re-init swiper
             swiper.update();
         });
     }
+  });
+
+  //serarch motor booking
+  function fetchMotors(start, end, keyword = '') {
+    $.getJSON(`/dashboard/booking/getAvailableMotorsBooking?start=${start}&end=${end}&q=${keyword}`, function(data) {
+        let container = $('.swiper-wrapper');
+        container.empty();
+
+        if (data.length === 0) {
+            container.append('<p class="text-center">Tidak ada motor tersedia</p>');
+            swiper.update();
+            return;
+        }
+
+        data.forEach(motor => {
+            container.append(`
+                <div class="swiper-slide">
+                    <div class="select-motor card motor-card h-100"
+                         data-id-motor="${motor.id}">
+                        <img src="/uploads/motors/${motor.photo}" class="card-img-top" style="height:180px;object-fit:cover;">
+                        <div class="card-body text-center">
+                            <h6 class="card-title"><b>${motor.name}</b></h6>
+                            <p>Rp ${new Intl.NumberFormat('id-ID').format(motor.price_per_day)} /hari</p>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        swiper.update();
+    });
+}
+
+// Trigger saat pilih tanggal
+$('#rental_start_date, #rental_end_date').on('change', function () {
+    let start = $('#rental_start_date').val();
+    let end   = $('#rental_end_date').val();
+    if (start && end) {
+        fetchMotors(start, end);
+    }
 });
 
+// Trigger saat user ketik di search
+$('#searchMotor').on('keyup', function () {
+    let start   = $('#rental_start_date').val();
+    let end     = $('#rental_end_date').val();
+    let keyword = $(this).val();
+    if (start && end) {
+        fetchMotors(start, end, keyword);
+    }
+});
 
 
 

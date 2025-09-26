@@ -133,6 +133,13 @@
                                 <!-- Slider Motor -->
                                 <label>Pilih Motor</label>
                                 <input type="hidden" name="motor_id" id="motor_id" value="<?= old('motor_id') ?? ''; ?>">
+                                <!-- <div class="mb-3">
+                                    <input type="text" id="searchMotor" class="form-control" placeholder="Cari motor...">
+                                </div>
+
+                                <div class="swiper mySwiper">
+                                    <div class="swiper-wrapper"></div>
+                                </div> -->
                                 <div class="swiper mySwiper p-3">
                                     <div class="swiper-wrapper">
                                         <?php foreach ($motors as $motor): ?>
@@ -143,7 +150,8 @@
                                                     data-price="<?= $motor['price_per_day']; ?>">
                                                     <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" style="height: 180px; object-fit: cover;" alt="<?= esc($motor['name']); ?>">
                                                     <div class="card-body text-center mt-auto">
-                                                        <h6 class="card-title"><b><?= esc($motor['name']); ?></b></h6>
+                                                        <h5 class="card-title"><b><?= esc($motor['name']); ?></b></h5>
+                                                        <p><?= esc($motor['number_plate']); ?></p>
                                                         <p class="">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?><br>/hari</p>
                                                     </div>
                                                 </div>

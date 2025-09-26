@@ -51,33 +51,52 @@ class MotorModel extends Model
 
     public function getAvialableMotorsBooking($start_date, $end_date)
     {
-        // $subquery = $this->db->table('bookings')
-        //     ->select('motor_id')
-        //     ->where('status !=', 'canceled')
-        //     ->groupStart()
-        //     ->where('rental_start_date <=', $end_date)
-        //     ->where('rental_end_date >=', $start_date)
-        //     ->groupEnd()
-        //     ->getCompiledSelect();
+        if (empty($start_date) || empty($end_date)) {
+            return []; // jangan query kalau tanggal kosong
+        }
 
-        // return $this->db->table('motors')
-        //     ->where('availability_status', 'available')
-        //     ->where("id NOT IN ($subquery)")
-        //     ->get()
-        //     ->getResultArray();
-
-        return $this->db->table('motors')
-            ->where('availability_status', 'available')
-            ->whereNotIn('id', function ($builder) use ($start_date, $end_date) {
-                return $builder->select('motor_id')
-                    ->from('bookings')
-                    ->where('status !=', 'canceled')
-                    ->groupStart()
-                    ->where('rental_start_date <=', $end_date)
-                    ->where('rental_end_date >=', $start_date)
-                    ->groupEnd();
-            })
+        return $this->db->table('motors m')
+            ->select('m.*')
+            ->where('m.availability_status', 'available')
+            ->join(
+                'bookings b',
+                "b.motor_id = m.id
+         AND b.status != 'canceled'
+         AND b.rental_start_date <= " . $this->db->escape($end_date) . "
+         AND b.rental_end_date >= " . $this->db->escape($start_date),
+                'left'
+            )
+            ->where('b.motor_id IS NULL')
             ->get()
             ->getResultArray();
+    }
+
+    public function getAvialableMotorsBookingSearch($start_date, $end_date)
+    {
+        if (empty($start_date) || empty($end_date)) {
+            return $this->response->setJSON([]);
+        }
+
+        $keyword = $this->request->getGet('q'); // keyword dari client
+
+        $builder = $this->db->table('motors m')
+            ->select('m.*')
+            ->where('m.availability_status', 'available')
+            ->join(
+                'bookings b',
+                "b.motor_id = m.id
+             AND b.status != 'canceled'
+             AND b.rental_start_date <= " . $this->db->escape($end_date) . "
+             AND b.rental_end_date >= " . $this->db->escape($start_date),
+                'left'
+            )
+            ->where('b.motor_id IS NULL');
+
+        if (!empty($keyword)) {
+            $builder->like('m.name', $keyword); // filter berdasarkan nama motor
+        }
+
+        $motors = $builder->get()->getResultArray();
+        return $this->response->setJSON($motors);
     }
 }

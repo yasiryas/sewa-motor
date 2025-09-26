@@ -241,10 +241,9 @@ class BookingController extends BaseController
 
     public function getAvialableMotorsBooking()
     {
-        $start_date = $this->request->getGet('rentalstart_date');
-        $end_date = $this->request->getGet('rental_end_date');
+        $start_date = $this->request->getGet('start');
+        $end_date = $this->request->getGet('end');
         $motors = $this->MotorModel->getAvialableMotorsBooking($start_date, $end_date);
-
         return $this->response->setJSON($motors);
     }
 }
