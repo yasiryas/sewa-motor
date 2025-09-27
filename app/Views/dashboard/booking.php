@@ -67,7 +67,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="<?= base_url('dashboard/booking/view/' . $booking['id']); ?>" class="btn btn-sm
-                                                       btn-info m-1" title="Lihat Detail"><i class="fas fa-folder-open"></i></a>
+                                                       btn-info m-1" title="Lihat Detail"><i class="fas fa-file"></i></a>
                                                     <a href="#" class="btn btn-sm btn-danger m-1 btn-delete-booking-modal"
                                                         data-delete-id-booking="<?= $booking['id']; ?>"
                                                         data-delete-user-booking="<?= esc($booking['username']); ?>"
@@ -76,6 +76,7 @@
                                                         data-delete-end-date-booking="<?= esc($booking['rental_end_date']); ?>"
                                                         data-delete-total-price-booking="<?= 'Rp ' . number_format($booking['total_price']); ?>"
                                                         data-delete-status-booking="<?= esc($booking['status']); ?>"><i class="fas fa-trash"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-secondary m-1"><i class="fas fa-print"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
