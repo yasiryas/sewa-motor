@@ -66,9 +66,9 @@
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <a href="<?= base_url('dashboard/booking/view/' . $booking['id']); ?>" class="btn btn-sm
-                                                       btn-info m-1" title="Lihat Detail"><i class="fas fa-file"></i></a>
-                                                    <a href="#" class="btn btn-sm btn-danger m-1 btn-delete-booking-modal"
+                                                    <a href="#" class="btn btn-sm
+                                                       btn-info m-1" title="Lihat Detail Transaksi" aria-hidden="true" data-toggle="modal" data-target="#viewTransactionModal"><i class="fas fa-file"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-danger m-1 btn-delete-booking-modal" title="Hapus Booking"
                                                         data-delete-id-booking="<?= $booking['id']; ?>"
                                                         data-delete-user-booking="<?= esc($booking['username']); ?>"
                                                         data-delete-motor-booking="<?= esc($booking['motor_name']); ?>"
@@ -76,7 +76,7 @@
                                                         data-delete-end-date-booking="<?= esc($booking['rental_end_date']); ?>"
                                                         data-delete-total-price-booking="<?= 'Rp ' . number_format($booking['total_price']); ?>"
                                                         data-delete-status-booking="<?= esc($booking['status']); ?>"><i class="fas fa-trash"></i></a>
-                                                    <a href="#" class="btn btn-sm btn-secondary m-1"><i class="fas fa-print"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-secondary m-1" title="Print Invoice"><i class="fas fa-print"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -309,8 +309,29 @@
                     </div>
                 </div>
             </div>
-
             <!-- end modal delete booking -->
+            <!-- modal view transaction -->
+            <div class="modal fade" id="viewTransactionModal" tabindex="-1" role="dialog" aria-labelledby="viewTransactionModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewTransactionModalLabel">Detail Transaksi</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="transactionDetails">
+                                <!-- Detail transaksi akan dimuat di sini melalui AJAX -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end modal view transaction -->
             <!-- Modal area end -->
         </div>
         <!-- End of Main Content -->
