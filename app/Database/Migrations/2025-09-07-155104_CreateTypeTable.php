@@ -20,18 +20,16 @@ class CreateTypeTable extends Migration
                 'constraint' => '100',
             ],
             'created_at' => [
-                'type'    => 'DATETIME',
-                'null'    => true,
-                'default' => 'CURRRENT_TIMESTAMP',
+                'type' => 'DATETIME',
+                'null' => true,
             ],
             'updated_at' => [
-                'type'    => 'DATETIME',
-                'null'    => true,
-                'default' => 'DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+                'type' => 'DATETIME',
+                'null' => true,
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('types');
+        $this->forge->createTable('types', true);
     }
 
     public function down()

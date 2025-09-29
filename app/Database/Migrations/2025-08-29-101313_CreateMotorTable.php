@@ -22,7 +22,7 @@ class CreateMotorTable extends Migration
             'number_plate' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '20',
-                'unsigned'   => true,
+                'null'   => false,
             ],
             'id_brand' => [
                 'type'       => 'INT',
@@ -50,17 +50,17 @@ class CreateMotorTable extends Migration
             ],
             'created_at' => [
                 'type'    => 'DATETIME',
-                'null'    => true,
+                'null'    => false,
             ],
             'updated_at' => [
                 'type'    => 'DATETIME',
-                'null'    => true,
+                'null'    => false,
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('motors');
         $this->forge->addForeignKey('id_brand', 'brands', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('id_type', 'types', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('motors');
     }
 
     public function down()

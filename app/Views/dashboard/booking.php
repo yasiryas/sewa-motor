@@ -323,6 +323,42 @@
                         <div class="modal-body">
                             <div id="transactionDetails">
                                 <!-- Detail transaksi akan dimuat di sini melalui AJAX -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>User Details</h5>
+                                        <p><strong>Username:</strong> <span id="detail_username"></span></p>
+                                        <p><strong>Full Name:</strong> <span id="detail_full_name"></span></p>
+                                        <p><strong>Email:</strong> <span id="detail_email"></span></p>
+                                        <p><strong>Phone:</strong> <span id="detail_phone"></span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Motor Details</h5>
+                                        <p><strong>Motor Name:</strong> <span id="detail_motor_name"></span></p>
+                                        <p><strong>Number Plate:</strong> <span id="detail_number_plate"></span></p>
+                                        <p><strong>Brand:</strong> <span id="detail_brand"></span></p>
+                                        <p><strong>Price per Day:</strong> <span id="detail_price_per_day"></span></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Booking Details</h5>
+                                        <p><strong>Start Date:</strong> <span id="detail_start_date"></span></p>
+                                        <p><strong>End Date:</strong> <span id="detail_end_date"></span></p>
+                                        <p><strong>Total Price:</strong> <span id="detail_total_price"></span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Payment Details</h5>
+                                        <p><strong>Payment Method:</strong> <span id="detail_payment_method"></span></p>
+                                        <p><strong>Payment Status:</strong> <span id="detail_payment_status"></span></p>
+                                        <p><strong>Bukti Transaksi:</strong> <br><img src="<?= $detail['payment_proof']; ?>" alt=""></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Booking Status</h5>
+                                        <p><strong>Status:</strong> <span id="detail_booking_status"></span></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
