@@ -180,56 +180,110 @@ $(document).ready(function () {
   });
 
 // search user for booking
-    const searchInput = document.getElementById("search_user");
-    const userIdInput = document.getElementById("user_id");
-    const resultsBox = document.getElementById("user_results");
+    // const searchInput = document.getElementById("search_user");
+    // const userIdInput = document.getElementById("user_id");
+    // const resultsBox = document.getElementById("user_results");
 
+    // let timeout = null;
+
+    // searchInput.addEventListener("keyup", function () {
+    //     const keyword = this.value.trim();
+
+    //     if (keyword.length < 2) {
+    //         resultsBox.style.display = "none";
+    //         return;
+    //     }
+
+    //     clearTimeout(timeout);
+    //     timeout = setTimeout(() => {
+    //         fetch(`${BASE_URL}/dashboard/user/search?q=${encodeURIComponent(keyword)}`)
+    // .then(res => res.json())
+    // .then(data => {
+    //     if (!Array.isArray(data)) {
+    //         console.error("Bukan array:", data);
+    //         return;
+    //     }
+
+    //     resultsBox.innerHTML = "";
+    //     data.forEach(user => {
+    //         const item = document.createElement("a");
+    //         item.href = "#";
+    //         item.className = "list-group-item list-group-item-action";
+    //         item.textContent = `${user.username} (${user.email})`;
+    //         item.addEventListener("click", e => {
+    //             e.preventDefault();
+    //             searchInput.value = user.username;
+    //             userIdInput.value = user.id;
+    //             resultsBox.style.display = "none";
+    //         });
+    //         resultsBox.appendChild(item);
+    //     });
+    //     resultsBox.style.display = "block";
+    // })
+    // .catch(err => console.error("Error:", err));
+    //     }, 300);
+    // });
+
+    // // klik di luar → sembunyikan dropdown
+    // document.addEventListener("click", function (e) {
+    //     if (!resultsBox.contains(e.target) && e.target !== searchInput) {
+    //         resultsBox.style.display = "none";
+    //     }
+  // });
+
+  // search user for booking
+$(function () {
     let timeout = null;
 
-    searchInput.addEventListener("keyup", function () {
-        const keyword = this.value.trim();
+    $(document).on("keyup", "#search_user", function () {
+        const keyword = $(this).val().trim();
+        const $resultsBox = $("#user_results");
+        const $userIdInput = $("#user_id");
 
         if (keyword.length < 2) {
-            resultsBox.style.display = "none";
+            $resultsBox.hide();
             return;
         }
 
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            fetch(`${BASE_URL}/dashboard/user/search?q=${encodeURIComponent(keyword)}`)
-    .then(res => res.json())
-    .then(data => {
-        if (!Array.isArray(data)) {
-            console.error("Bukan array:", data);
-            return;
-        }
+            $.getJSON(`${BASE_URL}/dashboard/user/search`, { q: keyword })
+                .done(function (data) {
+                    if (!Array.isArray(data)) {
+                        console.error("Bukan array:", data);
+                        return;
+                    }
 
-        resultsBox.innerHTML = "";
-        data.forEach(user => {
-            const item = document.createElement("a");
-            item.href = "#";
-            item.className = "list-group-item list-group-item-action";
-            item.textContent = `${user.username} (${user.email})`;
-            item.addEventListener("click", e => {
-                e.preventDefault();
-                searchInput.value = user.username;
-                userIdInput.value = user.id;
-                resultsBox.style.display = "none";
-            });
-            resultsBox.appendChild(item);
-        });
-        resultsBox.style.display = "block";
-    })
-    .catch(err => console.error("Error:", err));
+                    $resultsBox.empty();
+                    $.each(data, function (_, user) {
+                        const $item = $("<a>")
+                            .attr("href", "#")
+                            .addClass("list-group-item list-group-item-action")
+                            .text(`${user.username} (${user.email})`)
+                            .on("click", function (e) {
+                                e.preventDefault();
+                                $("#search_user").val(user.username);
+                                $userIdInput.val(user.id);
+                                $resultsBox.hide();
+                            });
+                        $resultsBox.append($item);
+                    });
+                    $resultsBox.show();
+                })
+                .fail(function (err) {
+                    console.error("Error:", err);
+                });
         }, 300);
     });
 
     // klik di luar → sembunyikan dropdown
-    document.addEventListener("click", function (e) {
-        if (!resultsBox.contains(e.target) && e.target !== searchInput) {
-            resultsBox.style.display = "none";
+    $(document).on("click", function (e) {
+        if (!$(e.target).closest("#user_results, #search_user").length) {
+            $("#user_results").hide();
         }
     });
+});
+
 
 // Swiper init
   var swiper = new Swiper(".mySwiper", {
@@ -388,6 +442,20 @@ $('#searchMotor').on('keyup', function () {
     }
 });
 
+// preview gambar motor saat tambah dan edit
+$(document).on("change", ".photo-input", function () {
+    const preview = $(this).siblings(".photo-preview");
+
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.attr("src", e.target.result).show();
+        };
+        reader.readAsDataURL(this.files[0]);
+    } else {
+        preview.hide().attr("src", "#");
+    }
+});
 
 
 });

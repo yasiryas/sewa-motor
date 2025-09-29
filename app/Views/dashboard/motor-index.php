@@ -154,9 +154,14 @@
                                     </div>
 
                                     <!-- Foto -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="photo">Foto</label>
                                         <input type="file" name="photo" id="photo" class="form-control-file">
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="photo">Foto</label>
+                                        <input type="file" class="photo-input form-control-file" accept="image/*" name="photo">
+                                        <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
 
                                 </div>
@@ -263,11 +268,16 @@
                                             <option value="maintenance" <?= old('availability_status_update') == 'maintenance' ? 'selected' : ''; ?>>Dalam Perawatan</option>
                                         </select>
                                     </div>
-
                                     <!-- Foto -->
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="photo">Foto</label>
-                                        <input type="file" name="photo_update" id="photo_update" class="form-control-file">
+                                        <input type="file" id="photo" class="photo-input form-control-file" accept="image/*" name="photo">
+                                        <img src="#" alt="Preview Gambar" id="preview_motor" class="img-fluid mt-2" style="max-width:200px; display:none;">
+                                    </div> -->
+                                    <div class="form-group">
+                                        <label for="photo_input">Foto</label>
+                                        <input type="file" class="photo-input form-control-file" accept="image/*" name="photo">
+                                        <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
 
                                 </div>
