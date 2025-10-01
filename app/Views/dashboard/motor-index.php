@@ -152,12 +152,6 @@
                                             <option value="maintenance" <?= old('availability_status') == 'maintenance' ? 'selected' : ''; ?>>Dalam Perawatan</option>
                                         </select>
                                     </div>
-
-                                    <!-- Foto -->
-                                    <!-- <div class="form-group">
-                                        <label for="photo">Foto</label>
-                                        <input type="file" name="photo" id="photo" class="form-control-file">
-                                    </div> -->
                                     <div class="form-group">
                                         <label for="photo">Foto</label>
                                         <input type="file" class="photo-input form-control-file" accept="image/*" name="photo">
@@ -268,15 +262,9 @@
                                             <option value="maintenance" <?= old('availability_status_update') == 'maintenance' ? 'selected' : ''; ?>>Dalam Perawatan</option>
                                         </select>
                                     </div>
-                                    <!-- Foto -->
-                                    <!-- <div class="form-group">
-                                        <label for="photo">Foto</label>
-                                        <input type="file" id="photo" class="photo-input form-control-file" accept="image/*" name="photo">
-                                        <img src="#" alt="Preview Gambar" id="preview_motor" class="img-fluid mt-2" style="max-width:200px; display:none;">
-                                    </div> -->
                                     <div class="form-group">
-                                        <label for="photo_input">Foto</label>
-                                        <input type="file" class="photo-input form-control-file" accept="image/*" name="photo">
+                                        <label for="photo">Foto</label>
+                                        <input type="file" class="photo-input form-control-file" accept="image/*" name="photo_update">
                                         <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
 

@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PaymentMethod extends Model
+class PaymentModel extends Model
 {
-    protected $table            = 'paymentmethods';
+    protected $table            = 'payments';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'details', 'status'];
+    protected $allowedFields    = ['booking_id', 'user_id', 'amount', 'payment_date', 'payment_method', 'status', 'payment_proof'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,14 @@ class PaymentMethod extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getBooking($paymentId)
+    {
+        $bookingModel = new BookingModel();
+        $payment = $this->find($paymentId);
+        if ($payment) {
+            return $bookingModel->find($payment['booking_id']);
+        }
+        return null;
+    }
 }

@@ -21,6 +21,11 @@ class CreatePaymentTable extends Migration
                 'constraint' => 11,
                 'unsigned'   => true,
             ],
+            'user_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+            ],
             'amount' => [
                 'type'       => 'DECIMAL',
                 'constraint' => '10,2',
@@ -54,6 +59,7 @@ class CreatePaymentTable extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('booking_id', 'bookings', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('payments');
     }
 

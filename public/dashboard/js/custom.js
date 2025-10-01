@@ -457,6 +457,32 @@ $(document).on("change", ".photo-input", function () {
     }
 });
 
+    //detail transaksi pada tombol detail transaksi halaman booking
+    $(document).on("click", ".btn-detail-transaction", function () {
+    let id = $(this).data("id");
+
+    $.ajax({
+        url: BASE_URL + "/booking/detail/" + id,
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+            if (res.error) {
+                alert(res.error);
+                return;
+            }
+
+            // isi modal dengan data
+            $("#detail-name").text(res.booking.customer_name ?? "-");
+            $("#detail-date").text(res.booking.booking_date ?? "-");
+            $("#detail-payment-status").text(res.payment?.status ?? "Belum ada");
+            $("#detail-payment-amount").text(res.payment?.amount ?? "0");
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", error);
+            alert("Gagal mengambil data transaksi");
+        }
+    });
+});
 
 });
 

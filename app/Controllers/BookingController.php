@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\BookingModel;
 use App\Models\MotorModel;
+use App\Models\PaymentModel;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -15,11 +16,13 @@ class BookingController extends BaseController
     protected $BookingModel;
     protected $UserModel;
     protected $MotorModel;
+    protected $PaymentModel;
     public function __construct()
     {
         $this->BookingModel = new BookingModel();
         $this->UserModel = new \App\Models\UserModel();
         $this->MotorModel = new MotorModel();
+        $this->PaymentModel = new \App\Models\PaymentModel();
     }
 
     public function index()
@@ -79,8 +82,17 @@ class BookingController extends BaseController
             'rental_end_date' => $endDate,
             'total_price' => $totalPrice,
             'status' => 'pending',
-            // 'created_at' => date('Y-m-d H:i:s'),
-            // 'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        // insert to payment
+        $paymentModel = new \App\Models\PaymentModel();
+        $paymentModel->insert([
+            'user_id' => session()->get('id'),
+            'motor_id' => $motorId,
+            'rental_start_date' => $startDate,
+            'rental_end_date' => $endDate,
+            'total_price' => $totalPrice,
+            'status' => 'pending',
         ]);
 
         return redirect()->to('booking/success')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($totalPrice));
@@ -122,6 +134,7 @@ class BookingController extends BaseController
                 ->join('users', 'users.id = bookings.user_id')
                 ->join('motors', 'motors.id = bookings.motor_id')
                 ->findAll(),
+            'payments' => $this->PaymentModel->findAll(),
         ];
         return view('dashboard/booking', $data);
     }
@@ -173,6 +186,14 @@ class BookingController extends BaseController
                     'valid_date' => '{field} bukan tanggal yang valid.'
                 ]
             ],
+            'payment_method' => [
+                'label' => 'Metode Pembayaran',
+                'rules' => 'required|in_list[cash,transfer]',
+                'errors' => [
+                    'required' => '{field} harus diisi.',
+                    'in_list' => '{field} tidak valid.'
+                ]
+            ],
         ];
 
         if (!$this->validate($validationRules)) {
@@ -184,6 +205,7 @@ class BookingController extends BaseController
         $start_date = $this->request->getPost('rental_start_date');
         $end_date = $this->request->getPost('rental_end_date');
         $search_user = $this->request->getPost('search_user');
+        $payment_method = $this->request->getPost('payment_method');
 
         // get data motor
         $motorModel = new MotorModel();
@@ -214,14 +236,26 @@ class BookingController extends BaseController
         $days = $interval->days + 1; // include start day
         $total_price = $days * $motor['price_per_day'];
 
+        $bookingModel = new BookingModel();
+        $paymentModel = new PaymentModel();
         // insert to database
-        $this->BookingModel->insert([
+        $bookingID = $bookingModel->insert([
             'user_id' => $user_id,
             'motor_id' => $motor_id,
             'rental_start_date' => $start_date,
             'rental_end_date' => $end_date,
             'total_price' => $total_price,
             'status' => 'pending',
+        ]);
+
+        $paymentModel->insert([
+            'booking_id' => $bookingID,
+            'user_id' => $user_id,
+            'amount' => $total_price,
+            'payment_date' => date('Y-m-d H:i:s'),
+            'payment_method' => $payment_method,
+            'status' => 'pending',
+            'payment_proof' => null,
         ]);
 
         return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
@@ -245,5 +279,23 @@ class BookingController extends BaseController
         $end_date = $this->request->getGet('end');
         $motors = $this->MotorModel->getAvialableMotorsBooking($start_date, $end_date);
         return $this->response->setJSON($motors);
+    }
+
+    public function detail($id)
+    {
+        $bookingModel = new BookingModel();
+        $paymentModel = new PaymentModel();
+
+        $booking = $bookingModel->find($id);
+        if (!$booking) {
+            return $this->response->setJSON(['error' => 'Booking tidak ditemukan']);
+        }
+
+        $payment = $paymentModel->where('booking_id', $id)->first();
+
+        return $this->response->setJSON([
+            'booking' => $booking,
+            'payment' => $payment
+        ]);
     }
 }

@@ -66,8 +66,12 @@
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <a href="#" class="btn btn-sm
-                                                       btn-info m-1" title="Lihat Detail Transaksi" aria-hidden="true" data-toggle="modal" data-target="#viewTransactionModal"><i class="fas fa-file"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-detail-transaction
+                                                       btn-info m-1" title="Lihat Detail Transaksi"
+                                                        aria-hidden="true"
+                                                        data-toggle="modal"
+                                                        data-id="<?= $booking['id']; ?>"
+                                                        data-target="#viewTransactionModal"><i class="fas fa-file"></i></a>
                                                     <a href="#" class="btn btn-sm btn-danger m-1 btn-delete-booking-modal" title="Hapus Booking"
                                                         data-delete-id-booking="<?= $booking['id']; ?>"
                                                         data-delete-user-booking="<?= esc($booking['username']); ?>"
@@ -89,7 +93,6 @@
                 <!-- Content Row -->
             </div>
             <!-- /.container-fluid -->
-            <!-- Modal area  -->
             <!-- Modal new booking -->
             <div class="modal fade" id="addBookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
@@ -165,7 +168,14 @@
                                     <div class="swiper-pagination"></div>
                                 </div>
                                 <!-- </div> -->
-
+                                <div class="form-group">
+                                    <label for="payment_method">Metode Pembayaran</label>
+                                    <select class="form-control" id="payment_method" name="payment_method" required>
+                                        <option value="">-- Pilih Metode Pembayaran --</option>
+                                        <option value="cash" <?= old('payment_method') == 'cash' ? 'selected' : ''; ?>>Cash</option>
+                                        <option value="transfer" <?= old('payment_method') == 'transfer' ? 'selected' : ''; ?>>Transfer</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
@@ -350,7 +360,8 @@
                                         <h5>Payment Details</h5>
                                         <p><strong>Payment Method:</strong> <span id="detail_payment_method"></span></p>
                                         <p><strong>Payment Status:</strong> <span id="detail_payment_status"></span></p>
-                                        <p><strong>Bukti Transaksi:</strong> <br><img src="<?= $detail['payment_proof']; ?>" alt=""></p>
+                                        <p><strong>Proof of Payment:</strong> <br><img src="<?php //echo $detail['payment_proof'];
+                                                                                            ?>" alt=""></p>
                                     </div>
                                 </div>
                                 <div class="row">
