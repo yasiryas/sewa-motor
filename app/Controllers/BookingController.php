@@ -2,13 +2,14 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
-use App\Models\BookingModel;
+use App\Models\UserModel;
 use App\Models\MotorModel;
+use App\Models\BookingModel;
 use App\Models\PaymentModel;
+use Psr\Log\LoggerInterface;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
 class BookingController extends BaseController
 {
@@ -17,6 +18,7 @@ class BookingController extends BaseController
     protected $UserModel;
     protected $MotorModel;
     protected $PaymentModel;
+
     public function __construct()
     {
         $this->BookingModel = new BookingModel();
@@ -283,19 +285,48 @@ class BookingController extends BaseController
 
     public function detail($id)
     {
-        $bookingModel = new BookingModel();
-        $paymentModel = new PaymentModel();
+        // $bookingModel = new BookingModel();
+        // $paymentModel = new PaymentModel();
+        // $userModel = new UserModel();
+        // $motorModel = new MotorModel();
 
-        $booking = $bookingModel->find($id);
-        if (!$booking) {
+        // $booking = $bookingModel->find($id);
+        // if (!$booking) {
+        //     return $this->response->setJSON(['error' => 'Booking tidak ditemukan']);
+        // }
+
+        // $payment = $paymentModel->where('booking_id', $id)->first();
+
+        // return $this->response->setJSON([
+        //     'booking' => $booking,
+        //     'payment' => $payment
+        // ]);
+        $bookingModel = new \App\Models\BookingModel();
+
+        $data = $bookingModel
+            ->select('bookings.*,
+            payments.amount,
+            payments.status as payment_status,
+            users.username,
+            users.email,
+            motors.name as motor_name,
+            motors.number_plate,
+            motors.price_per_day,
+            brands.brand as brand_name,
+            types.type as type_name,
+            ')
+            ->join('payments', 'payments.booking_id = bookings.id', 'left')
+            ->join('users', 'users.id = bookings.user_id', 'left')
+            ->join('motors', 'motors.id = bookings.motor_id', 'left')
+            ->join('brands', 'brands.id = motors.id_brand', 'left')
+            ->join('types', 'types.id = motors.id_type', 'left')
+            ->where('bookings.id', $id)
+            ->first();
+
+        if (!$data) {
             return $this->response->setJSON(['error' => 'Booking tidak ditemukan']);
         }
 
-        $payment = $paymentModel->where('booking_id', $id)->first();
-
-        return $this->response->setJSON([
-            'booking' => $booking,
-            'payment' => $payment
-        ]);
+        return $this->response->setJSON($data);
     }
 }

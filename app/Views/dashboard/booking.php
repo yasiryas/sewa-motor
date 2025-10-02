@@ -360,8 +360,7 @@
                                         <h5>Payment Details</h5>
                                         <p><strong>Payment Method:</strong> <span id="detail_payment_method"></span></p>
                                         <p><strong>Payment Status:</strong> <span id="detail_payment_status"></span></p>
-                                        <p><strong>Proof of Payment:</strong> <br><img src="<?php //echo $detail['payment_proof'];
-                                                                                            ?>" alt=""></p>
+                                        <p><strong>Proof of Payment:</strong> <span id="detail_payment_proof"></span></p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -373,6 +372,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-primary btn-acc-payment" data-dismiss="modal">Verifikasi Pembayaran</button>
+                            <button type="button" class="btn btn-sm btn-danger btn-rej-payment" data-dismiss="modal">Batalkan</button>
                             <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
                         </div>
                     </div>

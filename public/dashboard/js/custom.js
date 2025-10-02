@@ -142,6 +142,16 @@ $(document).ready(function () {
     $('#motor_name_delete').text(delete_motor);
    });
 
+    //format rupiah
+    function formatRupiah(angka) {
+    if (!angka) return "Rp 0";
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0
+    }).format(angka);
+}
+
 
   //show password toggle
   $('.toggle-password').click(function() {
@@ -462,7 +472,7 @@ $(document).on("change", ".photo-input", function () {
     let id = $(this).data("id");
 
     $.ajax({
-        url: BASE_URL + "/booking/detail/" + id,
+        url: BASE_URL + "/dashboard/booking/detail/" + id,
         type: "GET",
         dataType: "json",
         success: function (res) {
@@ -471,11 +481,36 @@ $(document).on("change", ".photo-input", function () {
                 return;
             }
 
-            // isi modal dengan data
-            $("#detail-name").text(res.booking.customer_name ?? "-");
-            $("#detail-date").text(res.booking.booking_date ?? "-");
-            $("#detail-payment-status").text(res.payment?.status ?? "Belum ada");
-            $("#detail-payment-amount").text(res.payment?.amount ?? "0");
+           // User
+            $("#detail_username").text(res.username ?? "-");
+            $("#detail_email").text(res.email ?? "-");
+
+            // Motor
+            $("#detail_motor_name").text(res.motor_name ?? "-");
+            $("#detail_number_plate").text(res.number_plate ?? "-");
+            $("#detail_price_per_day").text(formatRupiah(res.price_per_day ?? "0"));
+
+            //brand and type
+            $("#detail_brand").text(res.brand_name ?? "-");
+            $("#detail_type").text(res.type_name ?? "-");
+
+            // Booking
+            $("#detail_start_date").text(res.rental_start_date ?? "-");
+            $("#detail_end_date").text(res.rental_end_date ?? "-");
+            $("#detail_total_price").text(formatRupiah(res.total_price ?? "0"));
+
+            // Payment
+            $("#detail_payment_amount").text(res.amount ?? "0");
+            $("#detail_payment_status").text(res.payment_status ?? "Belum ada");
+            $("#detail_payment_method").text(res.payment_method ?? "-");
+            if (res.payment_proof) {
+                $("#detail_payment_proof").html(`<br><a href="/uploads/payments/${res.payment_proof}" target="_blank">Lihat Bukti Pembayaran</a>`);
+            } else {
+                $("#detail_payment_proof").text("Belum ada");
+            }
+
+            // Booking status
+            $("#detail_booking_status").text(res.status ?? "-");
         },
         error: function (xhr, status, error) {
             console.error("AJAX Error:", error);
