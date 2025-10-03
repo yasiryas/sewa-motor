@@ -172,7 +172,7 @@
                                 <!-- </div> -->
                                 <div class="form-group">
                                     <label for="payment_method">Metode Pembayaran</label>
-                                    <select class="form-control" id="payment_method" name="payment_method" required>
+                                    <select class="form-control w-auto" id=" payment_method" name="payment_method" required>
                                         <option value="">-- Pilih Metode Pembayaran --</option>
                                         <option value="cash" <?= old('payment_method') == 'cash' ? 'selected' : ''; ?>>Cash</option>
                                         <option value="transfer" <?= old('payment_method') == 'transfer' ? 'selected' : ''; ?>>Transfer</option>
@@ -392,7 +392,7 @@
                 </div>
             </div>
             <!-- end modal view transaction -->
-            <!-- Modal area end -->
+
         </div>
         <!-- End of Main Content -->
 
