@@ -329,4 +329,34 @@ class BookingController extends BaseController
 
         return $this->response->setJSON($data);
     }
+
+    public function updateStatus($bookingId)
+    {
+        $status = $this->request->getPost('status');
+
+        $paymentModel = new \App\Models\PaymentModel();
+        $bookingModel = new \App\Models\BookingModel();
+
+        $payment = $paymentModel->where('booking_id', $bookingId)->first();
+        $booking = $bookingModel->find($bookingId);
+
+        if (!$payment || !$booking) {
+            return redirect()->back()->with('error', 'Booking tidak ditemukan.');
+        }
+
+        // Tentukan status booking
+        $bookingStatus = ($status === 'completed') ? 'confirmed' : 'cancelled';
+
+        // Update payment
+        $paymentModel->update($payment['id'], [
+            'status' => $status
+        ]);
+
+        // Update booking
+        $bookingModel->update($bookingId, [
+            'status' => $bookingStatus
+        ]);
+
+        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+    }
 }

@@ -59,8 +59,10 @@
                                                 <td>
                                                     <?php if ($booking['status'] == 'pending'): ?>
                                                         <span class="badge badge-warning">Pending</span>
-                                                    <?php elseif ($booking['status'] == 'approved'): ?>
-                                                        <span class="badge badge-success">Approved</span>
+                                                    <?php elseif ($booking['status'] == 'confirmed'): ?>
+                                                        <span class="badge badge-primary">Cofirmed</span>
+                                                    <?php elseif ($booking['status'] == 'completed'): ?>
+                                                        <span class="badge badge-success">Completed</span>
                                                     <?php else: ?>
                                                         <span class="badge badge-danger">Canceled</span>
                                                     <?php endif; ?>
@@ -372,8 +374,18 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-primary btn-acc-payment" data-dismiss="modal">Verifikasi Pembayaran</button>
-                            <button type="button" class="btn btn-sm btn-danger btn-rej-payment" data-dismiss="modal">Batalkan</button>
+                            <form id="formAccPayment" method="post">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="status" value="completed">
+                                <button type="submit" class="btn btn-sm btn-primary">Acc Payment</button>
+                            </form>
+
+                            <form id="formRejPayment" method="post" class="d-inline">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="status" value="failed">
+                                <button type="submit" class="btn btn-sm btn-danger">Reject Payment</button>
+                            </form>
+
                             <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Tutup</button>
                         </div>
                     </div>

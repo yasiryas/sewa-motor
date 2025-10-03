@@ -471,7 +471,8 @@ $(document).on("change", ".photo-input", function () {
     $(document).on("click", ".btn-detail-transaction", function () {
     let id = $(this).data("id");
 
-    $.ajax({
+
+        $.ajax({
         url: BASE_URL + "/dashboard/booking/detail/" + id,
         type: "GET",
         dataType: "json",
@@ -503,6 +504,7 @@ $(document).on("change", ".photo-input", function () {
             $("#detail_payment_amount").text(res.amount ?? "0");
             $("#detail_payment_status").text(res.payment_status ?? "Belum ada");
             $("#detail_payment_method").text(res.payment_method ?? "-");
+
             if (res.payment_proof) {
                 $("#detail_payment_proof").html(`<br><a href="/uploads/payments/${res.payment_proof}" target="_blank">Lihat Bukti Pembayaran</a>`);
             } else {
@@ -511,6 +513,10 @@ $(document).on("change", ".photo-input", function () {
 
             // Booking status
             $("#detail_booking_status").text(res.status ?? "-");
+
+            // Add Form Acc And Reject
+            $("#formAccPayment").attr("action", BASE_URL + "/dashboard/booking/updateStatus/" + id);
+            $("#formRejPayment").attr("action", BASE_URL + "/dashboard/booking/updateStatus/" + id);
         },
         error: function (xhr, status, error) {
             console.error("AJAX Error:", error);
