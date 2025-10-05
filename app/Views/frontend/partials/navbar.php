@@ -12,18 +12,20 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu -->
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav text-center">
+        <!-- Menu + Login -->
+        <div class="collapse navbar-collapse justify-content-center text-center" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
                 <li class="nav-item mx-2 active"><a class="nav-link text-warning font-weight-bold" href="#hero">Beranda</a></li>
                 <li class="nav-item mx-2"><a class="nav-link" href="#produk">Produk</a></li>
                 <li class="nav-item mx-2"><a class="nav-link" href="#tentang">Tentang Kami</a></li>
                 <li class="nav-item mx-2"><a class="nav-link" href="#faq">FAQ</a></li>
                 <li class="nav-item mx-2"><a class="nav-link" href="#kontak">Kontak</a></li>
             </ul>
-        </div>
 
-        <!-- Tombol Login -->
-        <a href="#" class="btn btn-warning rounded text-light d-none d-lg-block px-4">Login</a>
+            <!-- Tombol Login (desktop & mobile) -->
+            <div class="mt-3 mt-lg-0">
+                <a href="<?= base_url('login'); ?>" class="btn btn-warning rounded text-light px-4">Login</a>
+            </div>
+        </div>
     </div>
 </nav>

@@ -76,3 +76,34 @@ body {
     transform: translateY(0); /* biar smooth */
 }
 
+/* Style dasar link navbar */
+.navbar-nav .nav-link {
+    position: relative;
+    padding: 8px 12px;
+    transition: color 0.3s ease;
+    display: inline-block
+}
+
+/* Garis bawah animasi */
+.navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #f4a300; /* warna kuning tema */
+    transition: width 0.3s ease;
+}
+
+/* Saat hover */
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Saat active */
+.navbar-nav .nav-item.active .nav-link::after {
+    width: 100%;
+}
+
+

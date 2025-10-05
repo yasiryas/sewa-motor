@@ -46,7 +46,7 @@ class MotorModel extends Model
 
     public function getAvailableMotors()
     {
-        return $this->where('availability_status', 'available')->findAll();
+        return $this->where('availability_status', 'available')->findAll(8, 0);
     }
 
     public function getAvialableMotorsBooking($start_date, $end_date)
