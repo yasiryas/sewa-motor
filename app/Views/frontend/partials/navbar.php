@@ -1,42 +1,29 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
-    <div class="container">
-        <!-- Logo Kiri -->
-        <a class="navbar-brand fw-bold text-primary" href="<?= base_url('/') ?>">
-            🚲 Wigati Rental
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <div class="container d-flex justify-content-between align-items-center">
+
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+            <img src="<?= base_url('img/asset/logo.png'); ?>" alt="Logo" height="40">
         </a>
 
-        <!-- Toggle Button (Mobile) -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <!-- Toggle untuk mobile -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu Tengah -->
-        <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
-            <ul class="navbar-nav mb-2 mb-lg-0 gap-lg-4">
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold text-dark" href="#beranda">Beranda</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold text-dark" href="#layanan">Layanan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold text-dark" href="#tentang">Tentang Kami</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold text-dark" href="#kontak">Kontak</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-semibold text-dark" href="#faq">FAQ</a>
-                </li>
+        <!-- Menu -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav text-center">
+                <li class="nav-item mx-2 active"><a class="nav-link text-warning font-weight-bold" href="#hero">Beranda</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="#produk">Produk</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="#tentang">Tentang Kami</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="#faq">FAQ</a></li>
+                <li class="nav-item mx-2"><a class="nav-link" href="#kontak">Kontak</a></li>
             </ul>
         </div>
 
-        <!-- Tombol Login Kanan -->
-        <div class="d-flex">
-            <a href="<?= base_url('login') ?>" class="btn btn-primary fw-semibold px-4 shadow-sm">
-                Login
-            </a>
-        </div>
+        <!-- Tombol Login -->
+        <a href="#" class="btn btn-warning rounded text-light d-none d-lg-block px-4">Login</a>
     </div>
 </nav>

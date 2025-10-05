@@ -1,0 +1,78 @@
+body {
+    font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .btn-warning {
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background: #ff9d00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-nav .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ff9d00 !important;
+        }
+
+        .card {
+            border: none;
+            transition: all 0.3s ease;
+            border-radius: 15px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #f4a300;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            width: 60px;
+            height: 3px;
+            background: #f4a300;
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 3px;
+        }
+
+        footer {
+            background: #fdf5ec;
+            padding: 40px 0;
+        }
+
+        footer a {
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #f4a300;
+            text-decoration: none;
+        }
+
+        /* Navbar awal tanpa shadow */
+.navbar {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Saat discroll, tambahkan shadow */
+.navbar.scrolled {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(0); /* biar smooth */
+}
+
