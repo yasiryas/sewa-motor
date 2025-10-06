@@ -20,6 +20,7 @@ class FrontController extends BaseController
     {
         $MotorModel = new MotorModel();
         $data = [
+            'title' => 'Beranda',
             'motors' => $MotorModel
                 ->select('motors.*, brands.brand as brand, types.type as type')
                 ->join('brands', 'brands.id = motors.id_brand')
@@ -27,7 +28,19 @@ class FrontController extends BaseController
                 // ->asObject()
                 ->findAll(),
             'brands' => $this->BrandModel->asObject()->findAll(),
+
         ];
         return view('frontend/home', $data);
+    }
+
+    public function produk()
+    {
+        $data = [
+            'title' => 'Produk',
+            'motors' => $this->MotorModel->asObject()->findAll(),
+            'brands' => $this->BrandModel->asObject()->findAll(),
+        ];
+        return view('frontend/produk', $data);
+        // dd($data);
     }
 }

@@ -1,87 +1,42 @@
 body {
     font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
+    scroll-behavior: smooth;
+}
 
-        .btn-warning {
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+.btn-warning {
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
 
-        .btn-warning:hover {
-            background: #ff9d00;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
+.btn-warning:hover {
+    background: #ff9d00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
-        .navbar-nav .nav-link {
-            transition: color 0.3s ease;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #ff9d00 !important;
-        }
-
-        .card {
-            border: none;
-            transition: all 0.3s ease;
-            border-radius: 15px;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            font-weight: bold;
-            color: #f4a300;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: "";
-            width: 60px;
-            height: 3px;
-            background: #f4a300;
-            display: block;
-            margin: 10px auto 0;
-            border-radius: 3px;
-        }
-
-        footer {
-            background: #fdf5ec;
-            padding: 40px 0;
-        }
-
-        footer a {
-            color: #333;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #f4a300;
-            text-decoration: none;
-        }
-
-        /* Navbar awal tanpa shadow */
 .navbar {
     transition: all 0.3s ease-in-out;
 }
 
-/* Saat discroll, tambahkan shadow */
 .navbar.scrolled {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(0); /* biar smooth */
+    transform: translateY(0);
 }
 
-/* Style dasar link navbar */
+/* Navbar link dan efek hover + active */
 .navbar-nav .nav-link {
     position: relative;
     padding: 8px 12px;
+    color: #333;
+    font-weight: 500;
     transition: color 0.3s ease;
-    display: inline-block
+    display: inline-block;
+}
+
+/* Warna teks saat hover dan aktif */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-item.active .nav-link {
+    color: #ff9d00 !important;
 }
 
 /* Garis bawah animasi */
@@ -89,21 +44,58 @@ body {
     content: "";
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: -3px;
     width: 0;
     height: 2px;
-    background-color: #f4a300; /* warna kuning tema */
+    background-color: #ff9d00;
     transition: width 0.3s ease;
 }
 
-/* Saat hover */
-.navbar-nav .nav-link:hover::after {
-    width: 100%;
-}
-
-/* Saat active */
+/* Garis muncul saat hover atau active */
+.navbar-nav .nav-link:hover::after,
 .navbar-nav .nav-item.active .nav-link::after {
     width: 100%;
 }
 
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
 
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-weight: bold;
+    color: #f4a300;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    width: 60px;
+    height: 3px;
+    background: #f4a300;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 3px;
+}
+
+footer {
+    background: #fdf5ec;
+    padding: 40px 0;
+}
+
+footer a {
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #f4a300;
+    text-decoration: none;
+}

@@ -14,8 +14,13 @@ class FrontendController extends BaseController
     }
     public function index()
     {
-
         $motors = $this->MotorModel->getAvailableMotors();
         return view('frontend/home', ['motors' => $motors]);
+    }
+
+    public function produk()
+    {
+        $motors = $this->MotorModel->getAvailableMotors();
+        return view('frontend/produk', ['motors' => $motors]);
     }
 }

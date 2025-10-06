@@ -5,8 +5,8 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-// $routes->get('/', 'Home::index');
 $routes->get('/', 'FrontController::index');
+$routes->get('produk', 'FrontController::produk');
 $routes->get('motors', 'MotorController::index');
 $routes->get('motors/(:num)', 'MotorController::show/$1');
 $routes->get('booking', 'BookingController::view');
