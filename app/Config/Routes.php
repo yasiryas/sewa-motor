@@ -7,6 +7,9 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'FrontController::index');
 $routes->get('produk', 'FrontController::produk');
+$routes->get('tentang-kami', 'FrontController::tentang_kami');
+$routes->get('faq', 'FrontController::faq');
+$routes->get('kontak', 'FrontController::kontak');
 $routes->get('motors', 'MotorController::index');
 $routes->get('motors/(:num)', 'MotorController::show/$1');
 $routes->get('booking', 'BookingController::view');

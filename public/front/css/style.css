@@ -1,101 +1,109 @@
 body {
-    font-family: 'Inter', sans-serif;
-    scroll-behavior: smooth;
+font-family: 'Inter', sans-serif;
+scroll-behavior: smooth;
 }
 
+/* Tombol utama */
 .btn-warning {
-    font-weight: bold;
-    transition: all 0.3s ease;
+font-weight: bold;
+transition: all 0.3s ease;
 }
 
 .btn-warning:hover {
-    background: #ff9d00;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+background: #ff9d00;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Navbar dan efek scroll */
 .navbar {
-    transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
 }
 
 .navbar.scrolled {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(0);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+transform: translateY(0);
 }
 
-/* Navbar link dan efek hover + active */
+/* Link navbar */
 .navbar-nav .nav-link {
-    position: relative;
-    padding: 8px 12px;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    display: inline-block;
-}
-
-/* Warna teks saat hover dan aktif */
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-item.active .nav-link {
-    color: #ff9d00 !important;
+position: relative;
+padding: 8px 12px;
+color: #000;
+font-weight: 500;
+display: inline-block;
+transition: color 0.3s ease;
 }
 
 /* Garis bawah animasi */
 .navbar-nav .nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    width: 0;
-    height: 2px;
-    background-color: #ff9d00;
-    transition: width 0.3s ease;
+content: "";
+position: absolute;
+left: 0;
+bottom: -3px;
+width: 0;
+height: 2px;
+background-color: #ff9d00;
+transition: width 0.3s ease;
 }
 
-/* Garis muncul saat hover atau active */
+/* Efek hover dan aktif */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+color: #ff9d00 !important;
+}
+
 .navbar-nav .nav-link:hover::after,
-.navbar-nav .nav-item.active .nav-link::after {
-    width: 100%;
+.navbar-nav .nav-link.active::after {
+width: 100%;
 }
 
+/* Card */
 .card {
-    border: none;
-    border-radius: 15px;
-    transition: all 0.3s ease;
+border: none;
+border-radius: 15px;
+transition: all 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+transform: translateY(-5px);
+box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
+/* Judul section */
 .section-title {
-    font-weight: bold;
-    color: #f4a300;
-    margin-bottom: 30px;
-    position: relative;
+font-weight: bold;
+color: #f4a300;
+margin-bottom: 30px;
+position: relative;
 }
 
 .section-title::after {
-    content: "";
-    width: 60px;
-    height: 3px;
-    background: #f4a300;
-    display: block;
-    margin: 10px auto 0;
-    border-radius: 3px;
+content: "";
+width: 60px;
+height: 3px;
+background: #f4a300;
+display: block;
+margin: 10px auto 0;
+border-radius: 3px;
 }
 
+.bg-gradient-orange {
+    background: #fff2e5;
+}
+
+/* Footer */
 footer {
-    background: #fdf5ec;
-    padding: 40px 0;
+background: #fdf5ec;
+padding: 40px 0;
 }
 
 footer a {
-    color: #333;
-    transition: color 0.3s ease;
+color: #333;
+transition: color 0.3s ease;
 }
 
 footer a:hover {
-    color: #f4a300;
-    text-decoration: none;
+color: #f4a300;
+text-decoration: none;
 }

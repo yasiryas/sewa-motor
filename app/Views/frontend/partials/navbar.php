@@ -2,7 +2,7 @@
 
 use Faker\Provider\Base;
 ?>
-<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container d-flex justify-content-between align-items-center">
 
         <!-- Logo -->
@@ -19,11 +19,11 @@ use Faker\Provider\Base;
         <!-- Menu + Login -->
         <div class="collapse navbar-collapse justify-content-center text-center" id="navbarNav">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item mx-2 <?= $title == 'Beranda' ? 'active text-warning' : ''; ?>"><a class="nav-link" href="<?= base_url('/'); ?>">Beranda</a></li>
-                <li class="nav-item mx-2" <?= $title == 'Produk' ? 'active text-warning' : ''; ?>><a class="nav-link" href="<?= base_url('produk'); ?>">Produk</a></li>
-                <li class="nav-item mx-2" <?= $title == 'Tentang Kami' ? 'active text-warning' : ''; ?>><a class="nav-link" href="#tentang">Tentang Kami</a></li>
-                <li class="nav-item mx-2" <?= $title == 'FAQ' ? 'active text-warning' : ''; ?>><a class="nav-link" href="#faq">FAQ</a></li>
-                <li class="nav-item mx-2" <?= $title == 'Kontak' ? 'active text-warning' : ''; ?>><a class="nav-link" href="#kontak">Kontak</a></li>
+                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Beranda' ? 'active text-warning' : ''; ?>" href="<?= base_url('/'); ?>">Beranda</a></li>
+                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Produk' ? 'active text-warning' : ''; ?>" href="<?= base_url('produk'); ?>">Produk</a></li>
+                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Tentang Kami' ? 'active text-warning' : ''; ?>" href="<?= base_url('tentang-kami'); ?>">Tentang Kami</a></li>
+                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'FAQ' ? 'active text-warning' : ''; ?>" href="<?= base_url('faq'); ?>">FAQ</a></li>
+                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Kontak' ? 'active text-warning' : ''; ?>" href="<?= base_url('kontak'); ?>">Kontak</a></li>
             </ul>
 
             <!-- Tombol Login (desktop & mobile) -->

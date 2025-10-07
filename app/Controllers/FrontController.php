@@ -37,10 +37,31 @@ class FrontController extends BaseController
     {
         $data = [
             'title' => 'Produk',
-            'motors' => $this->MotorModel->asObject()->findAll(),
+            'motors' => $this->MotorModel->findAll(),
             'brands' => $this->BrandModel->asObject()->findAll(),
         ];
         return view('frontend/produk', $data);
-        // dd($data);
+    }
+
+    public function tentang_kami()
+    {
+        $data = [
+            'title' => 'Tentang Kami',
+        ];
+        return view('frontend/tentang-kami', $data);
+    }
+    public function faq()
+    {
+        $data = [
+            'title' => 'FAQ',
+        ];
+        return view('frontend/faq', $data);
+    }
+    public function kontak()
+    {
+        $data = [
+            'title' => 'Kontak',
+        ];
+        return view('frontend/kontak', $data);
     }
 }
