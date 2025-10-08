@@ -38,7 +38,7 @@
                 <div class="card shadow m-2 col">
                     <div class="card-body p-4">
                         <h3><b>2</b></h3>
-                        <p><strong>Isi Data & Selesaikan Pembayaran</strong><br> Lengkapi formulir pemesanan lalu lakukan pembayaran melalui metode yang tersedia.</p>
+                        <p><strong>Isi Data & Selesaikan Pembayaran</strong><br> Lengkapi formulir pemesanan lalu bayar melalui metode yang tersedia.</p>
                     </div>
                 </div>
             </div>

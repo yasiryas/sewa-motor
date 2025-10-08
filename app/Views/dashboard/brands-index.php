@@ -54,7 +54,6 @@
                     </div>
                 </div>
 
-                <!-- modal section -->
                 <!-- Modal Add Brand -->
                 <div class="modal fade" id="addBrandModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -75,6 +74,11 @@
                                     <div class="form-group">
                                         <label for="name">Nama Brand</label>
                                         <input type="text" name="name" id="brand_name_add" class="form-control" value="<?= old('name') ?? ''; ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="image">Foto</label>
+                                        <input type="file" class="photo-input form-control-file" accept="image/*" name="image">
+                                        <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
                                 </div>
                                 <div class="modal-footer">

@@ -12,7 +12,7 @@ class BrandModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['brand'];
+    protected $allowedFields    = ['brand', 'featured_image'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

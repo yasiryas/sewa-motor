@@ -3,7 +3,12 @@
 <?= $this->include('frontend/partials/navbar'); ?>
 
 <!-- Section Produk -->
-<section id="produk" class="py-5">
+<section id="produk" class="py-5" style="height: 40vh;
+        background: url('<?= base_url('img/asset/bg-produk.png'); ?>') center/cover no-repeat;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;">
     <div class="container">
         <h2 class="text-center mb-5 font-weight-bold text-dark">Produk</h2>
     </div>
@@ -11,6 +16,7 @@
 
 <!-- Kategori -->
 <section id="kategori" class="py-3 bg-gradient-orange">
+
     <div class="container ">
         <div class="text-center m-5">
             <h3 class="font-weight-bold mb-4 text-secondary ">Category</h3>

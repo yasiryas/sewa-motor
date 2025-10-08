@@ -19,6 +19,11 @@ class CreateBrandTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => '100',
             ],
+            'featured_image' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '100',
+                'null'       => true,
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => false,

@@ -23,6 +23,7 @@ transition: all 0.3s ease-in-out;
 .navbar.scrolled {
 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 transform: translateY(0);
+background-color: #fff;
 }
 
 /* Link navbar */

@@ -41,15 +41,61 @@ class BrandController extends BaseController
     public function store()
     {
         // validasi
+        // $name = $this->request->getPost('name');
+        // $image = $this->request->getPost('image');
+        // $nameExists = $this->brandModel->where('brand', $name)->first();
+        // if (!$name) {
+        //     return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.')->with('modal', 'addBrandModal');
+        // } else if ($nameExists && $name == $nameExists['brand']) {
+        //     return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'addBrandModal');
+        // }
+
+        // if ($image == null) {
+        //     $featured_image = 'brand_default.png';
+        // }
+
+        // $this->brandModel->insert([
+        //     'brand' => $name,
+        //     'featured_image' => $featured_image,
+        // ]);
+        // session()->setFlashdata('success', 'Brand berhasil ditambahkan.');
+        // return redirect()->to('dashboard/inventaris/brand');
+
+
         $name = $this->request->getPost('name');
+        $image = $this->request->getFile('image');
+
+        // Cek nama brand
         $nameExists = $this->brandModel->where('brand', $name)->first();
+
         if (!$name) {
-            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.')->with('modal', 'addBrandModal');
-        } else if ($nameExists && $name == $nameExists['brand']) {
-            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'addBrandModal');
+            return redirect()->to('dashboard/inventaris/brand')
+                ->withInput()
+                ->with('error', 'Nama brand harus diisi.')
+                ->with('modal', 'addBrandModal');
+        } elseif ($nameExists) {
+            return redirect()->to('dashboard/inventaris/brand')
+                ->withInput()
+                ->with('error', 'Nama brand sudah ada.')
+                ->with('modal', 'addBrandModal');
         }
 
-        $this->brandModel->insert(['brand' => $this->request->getPost('name')]);
+        // Default image
+        $featured_image = 'brand_default.png';
+
+        // Jika ada file diupload
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            $newName = $image->getRandomName();
+            $image->move('uploads/brand/', $newName);
+            $featured_image = $newName;
+        }
+
+        // Simpan ke database
+        $this->brandModel->insert([
+            'brand' => $name,
+            'featured_image' => $featured_image,
+        ]);
+
         session()->setFlashdata('success', 'Brand berhasil ditambahkan.');
         return redirect()->to('dashboard/inventaris/brand');
     }
@@ -67,6 +113,7 @@ class BrandController extends BaseController
     {
         $id = $this->request->getPost('id');
         $brand = $this->brandModel->find($id);
+        $image = $this->request->getPost('image');
         $nameExists = $this->brandModel->where('brand', $this->request->getPost('name'))->first();
         if (!$brand) {
             return redirect()->to('dashboard/inventaris/brand')->with('error', 'Brand tidak ditemukan.');
@@ -78,7 +125,10 @@ class BrandController extends BaseController
             return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'updateBrandModal');
         }
 
-        $this->brandModel->update($id, ['brand' => $this->request->getPost('name')]);
+        $this->brandModel->update($id, [
+            'brand' => $this->request->getPost('name'),
+            'featured_image' => $this->request->getPost('image'),
+        ]);
         session()->setFlashdata('success', 'Brand berhasil diupdate.');
         return redirect()->to('dashboard/inventaris/brand');
     }
