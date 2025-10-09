@@ -34,6 +34,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nama Brand</th>
+                                    <th>Featured Image</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -43,6 +44,7 @@
                                     <tr>
                                         <td><?= $no++; ?></td>
                                         <td><?= esc($brand['brand']); ?></td>
+                                        <td><img class="img-fulid" style="max-width: 100px; height: auto" src="<?= base_url('uploads/brands/' . $brand['featured_image']); ?>" alt=""></td>
                                         <td>
                                             <a href="#" class="btn btn-warning btn-sm btn-edit-brand-modal" data-id-update="<?= $brand['id']; ?>" data-brand-update="<?= $brand['brand']; ?>" data-toggle="modal"><i class="fas fa-edit"></i> Edit</a>
                                             <a href="#" class="btn btn-danger btn-sm btn-delete-brand-modal" data-id-delete="<?= $brand['id']; ?>" data-brand-delete="<?= $brand['brand']; ?>" data-target="#deleteBrandModal" data-toggle="modal"><i class="fas fa-trash"></i> Hapus</a>

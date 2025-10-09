@@ -16,35 +16,28 @@
 
 <!-- Kategori -->
 <section id="kategori" class="py-3 bg-gradient-orange">
-
     <div class="container ">
         <div class="text-center m-5">
-            <h3 class="font-weight-bold mb-4 text-secondary ">Category</h3>
+            <h3 class="font-weight-bold mb-4 text-secondary ">Brand</h3>
             <div class="row justify-content-center">
-                <div class="col-md-3 mb-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <img src="<?= base_url('img/category/yamaha.jpg'); ?>" class="card-img-top rounded" alt="Yamaha">
-                        <div class="card-body">
-                            <h6 class="font-weight-semibold text-dark mb-0">Yamaha →</h6>
-                        </div>
+                <?php foreach ($brands as $brand) : ?>
+                    <div class="col-md-3 mb-3">
+                        <a href="<?= base_url('produk/brand/' . $brand['id']); ?>">
+                            <div class="card border-0 shadow-sm text-white h-100" style="border-radius: 12px; overflow: hidden;">
+                                <img src="<?= base_url('uploads/brands/' . $brand['featured_image']); ?>"
+                                    class="card-img"
+                                    alt="<?= esc($brand['brand']); ?>"
+                                    style="object-fit: cover; height: 100%; filter: brightness(70%);">
+                                <div class="card-img-overlay d-flex align-items-end justify-content-center text-center p-3">
+                                    <h6 class="font-weight-bold mb-0 text-white">
+                                        <?= esc($brand['brand']); ?> <span class="ml-1">&rarr;</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <img src="<?= base_url('img/category/vespa.jpg'); ?>" class="card-img-top rounded" alt="Vespa">
-                        <div class="card-body">
-                            <h6 class="font-weight-semibold text-dark mb-0">Vespa →</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="card border-0 shadow-sm h-100">
-                        <img src="<?= base_url('img/category/honda.jpg'); ?>" class="card-img-top rounded" alt="Honda">
-                        <div class="card-body">
-                            <h6 class="font-weight-semibold text-dark mb-0">Honda →</h6>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach ?>
+
             </div>
         </div>
     </div>

@@ -81,12 +81,12 @@ class BrandController extends BaseController
         }
 
         // Default image
-        $featured_image = 'brand_default.png';
+        $featured_image = 'default_brand.jpg';
 
         // Jika ada file diupload
         if ($image && $image->isValid() && !$image->hasMoved()) {
             $newName = $image->getRandomName();
-            $image->move('uploads/brand/', $newName);
+            $image->move('uploads/brands/', $newName);
             $featured_image = $newName;
         }
 

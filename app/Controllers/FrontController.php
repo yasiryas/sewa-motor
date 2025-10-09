@@ -38,7 +38,7 @@ class FrontController extends BaseController
         $data = [
             'title' => 'Produk',
             'motors' => $this->MotorModel->findAll(),
-            'brands' => $this->BrandModel->asObject()->findAll(),
+            'brands' => $this->BrandModel->findAll(),
         ];
         return view('frontend/produk', $data);
     }
