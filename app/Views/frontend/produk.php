@@ -10,7 +10,7 @@
         align-items: center;
         text-align: center;">
     <div class="container">
-        <h2 class="text-center mb-5 font-weight-bold text-dark">Produk</h2>
+        <h2 class="text-center m-5 font-weight-bold text-dark">Produk</h2>
     </div>
 </section>
 
@@ -21,13 +21,12 @@
             <h3 class="font-weight-bold mb-4 text-secondary ">Brand</h3>
             <div class="row justify-content-center">
                 <?php foreach ($brands as $brand) : ?>
-                    <div class="col-md-3 mb-3">
-                        <a href="<?= base_url('produk/brand/' . $brand['id']); ?>">
-                            <div class="card border-0 shadow-sm text-white h-100" style="border-radius: 12px; overflow: hidden;">
+                    <div class="col-md-3 mb-4">
+                        <a href="<?= base_url('produk/brand/' . $brand['id']); ?>" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm text-white brand-card">
                                 <img src="<?= base_url('uploads/brands/' . $brand['featured_image']); ?>"
-                                    class="card-img"
-                                    alt="<?= esc($brand['brand']); ?>"
-                                    style="object-fit: cover; height: 100%; filter: brightness(70%);">
+                                    class="card-img brand-img"
+                                    alt="<?= esc($brand['brand']); ?>">
                                 <div class="card-img-overlay d-flex align-items-end justify-content-center text-center p-3">
                                     <h6 class="font-weight-bold mb-0 text-white">
                                         <?= esc($brand['brand']); ?> <span class="ml-1">&rarr;</span>
@@ -36,6 +35,7 @@
                             </div>
                         </a>
                     </div>
+
                 <?php endforeach ?>
 
             </div>

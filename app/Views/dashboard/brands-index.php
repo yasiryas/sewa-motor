@@ -59,7 +59,9 @@
                 <!-- Modal Add Brand -->
                 <div class="modal fade" id="addBrandModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
-                        <form id="brandFormAdd" action="<?= base_url('dashboard/inventaris/brand/store'); ?>" method="post">
+                        <form id="brandFormAdd" action="<?= base_url('dashboard/inventaris/brand/store'); ?>"
+                            method="post"
+                            enctype="multipart/form-data">
                             <?= csrf_field(); ?>
                             <div class="modal-content">
                                 <div class="modal-header">

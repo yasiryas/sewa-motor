@@ -40,28 +40,6 @@ class BrandController extends BaseController
 
     public function store()
     {
-        // validasi
-        // $name = $this->request->getPost('name');
-        // $image = $this->request->getPost('image');
-        // $nameExists = $this->brandModel->where('brand', $name)->first();
-        // if (!$name) {
-        //     return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.')->with('modal', 'addBrandModal');
-        // } else if ($nameExists && $name == $nameExists['brand']) {
-        //     return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'addBrandModal');
-        // }
-
-        // if ($image == null) {
-        //     $featured_image = 'brand_default.png';
-        // }
-
-        // $this->brandModel->insert([
-        //     'brand' => $name,
-        //     'featured_image' => $featured_image,
-        // ]);
-        // session()->setFlashdata('success', 'Brand berhasil ditambahkan.');
-        // return redirect()->to('dashboard/inventaris/brand');
-
-
         $name = $this->request->getPost('name');
         $image = $this->request->getFile('image');
 
@@ -83,10 +61,10 @@ class BrandController extends BaseController
         // Default image
         $featured_image = 'default_brand.jpg';
 
-        // Jika ada file diupload
+        // Jika ada file diupload dan valid
         if ($image && $image->isValid() && !$image->hasMoved()) {
             $newName = $image->getRandomName();
-            $image->move('uploads/brands/', $newName);
+            $image->move(FCPATH . 'uploads/brands', $newName); // pastikan path absolut
             $featured_image = $newName;
         }
 
@@ -99,6 +77,7 @@ class BrandController extends BaseController
         session()->setFlashdata('success', 'Brand berhasil ditambahkan.');
         return redirect()->to('dashboard/inventaris/brand');
     }
+
 
     public function edit($id)
     {
