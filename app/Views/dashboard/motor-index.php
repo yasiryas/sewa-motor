@@ -157,7 +157,6 @@
                                         <input type="file" class="photo-input form-control-file" accept="image/*" name="photo">
                                         <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
-
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-sm btn-warning">Simpan</button>

@@ -77,8 +77,6 @@ class BrandController extends BaseController
         session()->setFlashdata('success', 'Brand berhasil ditambahkan.');
         return redirect()->to('dashboard/inventaris/brand');
     }
-
-
     public function edit($id)
     {
         $brand = $this->brandModel->find($id);
@@ -92,34 +90,84 @@ class BrandController extends BaseController
     {
         $id = $this->request->getPost('id');
         $brand = $this->brandModel->find($id);
-        $image = $this->request->getPost('image');
-        $nameExists = $this->brandModel->where('brand', $this->request->getPost('name'))->first();
+
         if (!$brand) {
             return redirect()->to('dashboard/inventaris/brand')->with('error', 'Brand tidak ditemukan.');
         }
-        if (!$this->request->getPost('name')) {
-            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand harus diisi.')->with('modal', 'addBrandModal');
-        }
-        if ($nameExists && $this->request->getPost('name') == $nameExists['brand']) {
-            return redirect()->to('dashboard/inventaris/brand')->withInput()->with('error', 'Nama brand sudah ada.')->with('modal', 'updateBrandModal');
+
+        $name = $this->request->getPost('name');
+        $image = $this->request->getFile('image');
+
+        // Validasi nama kosong
+        if (!$name) {
+            return redirect()->to('dashboard/inventaris/brand')
+                ->withInput()
+                ->with('error', 'Nama brand harus diisi.')
+                ->with('modal', 'updateBrandModal');
         }
 
+        // Cek nama duplikat tapi abaikan brand sendiri
+        $nameExists = $this->brandModel
+            ->where('brand', $name)
+            ->where('id !=', $id)
+            ->first();
+
+        if ($nameExists) {
+            return redirect()->to('dashboard/inventaris/brand')
+                ->withInput()
+                ->with('error', 'Nama brand sudah ada.')
+                ->with('modal', 'updateBrandModal');
+        }
+
+        // Default: pakai gambar lama
+        $featured_image = $brand['featured_image'];
+
+        // Jika upload gambar baru
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            $newName = $image->getRandomName();
+            $image->move('uploads/brands/', $newName);
+
+            // Hapus file lama jika bukan default
+            if ($featured_image !== 'default_brand.jpg' && file_exists('uploads/brands/' . $featured_image)) {
+                unlink('uploads/brands/' . $featured_image);
+            }
+
+            $featured_image = $newName;
+        }
+
+        // Simpan perubahan
         $this->brandModel->update($id, [
-            'brand' => $this->request->getPost('name'),
-            'featured_image' => $this->request->getPost('image'),
+            'brand' => $name,
+            'featured_image' => $featured_image,
         ]);
-        session()->setFlashdata('success', 'Brand berhasil diupdate.');
+
+        session()->setFlashdata('success', 'Brand berhasil diperbarui.');
         return redirect()->to('dashboard/inventaris/brand');
     }
+
 
     public function delete()
     {
         $id = $this->request->getPost('id');
         $brand = $this->brandModel->find($id);
+
         if (!$brand) {
-            return redirect()->to('dashboard/inventaris/brand')->with('error', 'Brand tidak ditemukan.');
+            return redirect()->to('dashboard/inventaris/brand')
+                ->with('error', 'Brand tidak ditemukan.');
         }
+
+        // Hapus gambar jika bukan default
+        if (!empty($brand['featured_image']) && $brand['featured_image'] !== 'default_brand.jpg') {
+            $imagePath = FCPATH . 'uploads/brands/' . $brand['featured_image'];
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        // Hapus data di database
         $this->brandModel->delete($id);
+
         session()->setFlashdata('success', 'Brand berhasil dihapus.');
         return redirect()->to('dashboard/inventaris/brand');
     }

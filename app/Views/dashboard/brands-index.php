@@ -93,7 +93,6 @@
                         </form>
                     </div>
                 </div>
-
                 <!-- Modal Delete Brand -->
                 <div class="modal fade" id="deleteBrandModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -122,7 +121,7 @@
                 <!-- Modal Edit Brand -->
                 <div class="modal fade" id="editBrandModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
-                        <form id="brandFormUpdate" action="<?= base_url('dashboard/inventaris/brand/update'); ?>" method="post">
+                        <form id="brandFormUpdate" action="<?= base_url('dashboard/inventaris/brand/update'); ?>" method="post" enctype="multipart/form-data">
                             <?= csrf_field(); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -139,6 +138,11 @@
                                         <label for="name">Nama Brand</label>
                                         <input type="text" name="name" id="update_brand_name" class="form-control" value="<?= old('name') ?? ''; ?>" required>
                                         <input type="hidden" id="update_brand_id" name="id" value="<?= old('id') ?? ''; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="image">Foto</label>
+                                        <input type="file" class="photo-input form-control-file" accept="image/*" name="image">
+                                        <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
                                 </div>
                                 <div class="modal-footer">

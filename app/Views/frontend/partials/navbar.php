@@ -34,14 +34,12 @@ use Faker\Provider\Base;
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?= esc(session()->get('username')); ?>
                         </a>
-
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                             <?php if (session()->get('role') === 'admin'): ?>
                                 <a class="dropdown-item" href="<?= base_url('dashboard/index'); ?>">Dashboard</a>
                             <?php else: ?>
                                 <a class="dropdown-item" href="<?= base_url('pesanan'); ?>">Pesanan Saya</a>
                             <?php endif; ?>
-
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="<?= base_url('logout'); ?>">Logout</a>
                         </div>
@@ -49,8 +47,6 @@ use Faker\Provider\Base;
                 <?php else: ?>
                     <a href="<?= base_url('login'); ?>" class="btn btn-warning text-white">Login</a>
                 <?php endif; ?>
-
-
             </div>
         </div>
     </div>

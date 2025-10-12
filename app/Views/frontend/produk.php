@@ -4,13 +4,14 @@
 
 <!-- Section Produk -->
 <section id="produk" class="py-5" style="height: 40vh;
-        background: url('<?= base_url('img/asset/bg-produk.png'); ?>') center/cover no-repeat;
+        background:linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('<?= base_url('img/asset/bg-produk-ori.png'); ?>') center/cover no-repeat;
         display: flex;
         justify-content: center;
         align-items: center;
-        text-align: center;">
+        text-align: center;
+        ">
     <div class="container">
-        <h2 class="text-center m-5 font-weight-bold text-dark">Produk</h2>
+        <h2 class="text-center m-5 font-weight-bold text-dark"><?= $title; ?></h2>
     </div>
 </section>
 
