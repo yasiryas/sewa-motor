@@ -163,6 +163,30 @@ border-radius: 3px;
   animation-fill-mode: forwards;
 }
 
+.bg-orange {
+    background: #ec6b1b;
+}
+
+.text-orange {
+    color: #ec6b1b;
+}
+
+.text-orange:hover {
+    color: #d25508;
+}
+
+/* Efek animasi saat dropdown muncul */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Footer */
 footer {
 background: #fdf5ec;

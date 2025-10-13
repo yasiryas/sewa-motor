@@ -52,8 +52,11 @@ class FrontController extends BaseController
     }
     public function faq()
     {
+        $FaqModel = new \App\Models\FaqModel();
+        $faqs = $FaqModel->findAll();
         $data = [
             'title' => 'FAQ',
+            'faqs' => $faqs,
         ];
         return view('frontend/faq', $data);
     }

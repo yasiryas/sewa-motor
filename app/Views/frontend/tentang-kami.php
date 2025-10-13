@@ -1,11 +1,6 @@
-<?php
-
-use Faker\Provider\Base;
-?>
 <?= $this->include('frontend/partials/header'); ?>
 <!-- Navbar -->
 <?= $this->include('frontend/partials/navbar'); ?>
-<!-- Section Produk -->
 <section id="produk" class="py-5" style="height: 40vh;
         background:linear-gradient(0deg, rgba(255, 255, 255, 0.85),
         rgba(255, 255, 255, 0.85)),
@@ -46,6 +41,14 @@ use Faker\Provider\Base;
         </div>
     </div>
 </section>
-
+<section id="cta-about-us" class="bg-orange">
+    <div class="container justify-content-center align-items-center text-white ">
+        <div class="text-center py-5 col-md-8 mx-auto">
+            <h3 class="font-weight-bold">Jelajahi Jogja, Sesukamu!</h3>
+            <p>Dengan DScooter Jogja, rasakan petualangan tak terbatas di Kota Pelajar. Nikmati kemudahan bergerak dan ciptakan kenangan indah di setiap perjalanan.</p>
+            <a href="<?= base_url('produk'); ?>" class="btn btn-light btn text-orange font-weight-bolder">Pesan Skuter Anda Sekarang!</a>
+        </div>
+    </div>
+</section>
 
 <?= $this->include('frontend/partials/footer'); ?>
