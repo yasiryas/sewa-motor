@@ -73,12 +73,12 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item <?= $title == 'Report' ? 'active' : ''; ?>">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-            aria-expanded="true" aria-controls="collapsePages">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+            aria-expanded="true" aria-controls="collapseReport">
             <i class="fas fa-fw fa-folder"></i>
             <span>Report</span>
         </a>
-        <div id="collapsePages" class="collapse <?= $title == 'Report' ? 'show' : ''; ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div id="collapseReport" class="collapse <?= $title == 'Report' ? 'show' : ''; ?>" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Report Menu</h6>
                 <a class="collapse-item <?= $submenu_title == 'Report Booking' ? 'active' : ''; ?>" href="<?= base_url('dashboard/report/booking'); ?>">Booking</a>
@@ -88,14 +88,19 @@
         </div>
     </li>
 
-
-
-    <!-- Nav Item - Tables -->
-    <!-- <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li> -->
+    <li class="nav-item <?= $title == 'Settings' ? 'active' : ''; ?>">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSettings"
+            aria-expanded="true" aria-controls="collapseSettings">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        <div id="collapseSettings" class="collapse <?= $title == 'Settings' ? 'show' : ''; ?>" aria-labelledby="headingSettings" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Settings Menu</h6>
+                <a class="collapse-item <?= $submenu_title == 'FAQ Setting' ? 'active' : ''; ?>" href="<?= base_url('dashboard/settings/faq'); ?>">FAQ</a>
+            </div>
+        </div>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

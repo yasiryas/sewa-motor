@@ -360,7 +360,7 @@ $(function () {
 
     // buka modal
     $('#deleteBookingAdminModal').modal('show');
-    console.log("Klik");
+    // console.log("Klik");
   });
 
   //ketika tanggal mulai atau tanggal akhir diubah tampilkan motor yang tersedia
@@ -471,7 +471,6 @@ $(document).on("change", ".photo-input", function () {
     $(document).on("click", ".btn-detail-transaction", function () {
     let id = $(this).data("id");
 
-
         $.ajax({
         url: BASE_URL + "/dashboard/booking/detail/" + id,
         type: "GET",
@@ -523,7 +522,26 @@ $(document).on("change", ".photo-input", function () {
             alert("Gagal mengambil data transaksi");
         }
     });
+    });
+
+    //setting faq
+    $('.btn-edit-faq-modal').on('click', function () {
+        $('#editFaqModal').modal('show');
+        $('#faq_id_edit').val($(this).data('id'));
+        $('#faq_question_edit').val($(this).data('question'));
+        $('#faq_answer_edit').val($(this).data('answer'));
+    });
+
+$('.btn-delete-faq-modal').on('click', function () {
+    let id_delete_faq = $(this).data('delete-id-faq');
+    let question_delete_faq = $(this).data('delete-questions-faq');
+
+    $('#faq_id_delete').val(id_delete_faq);
+    $('#faq_delete').text(question_delete_faq);
+
+    $('#deleteFaqModal').modal('show');
 });
+
 
 });
 

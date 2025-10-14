@@ -31,6 +31,10 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('report/booking', 'BookingController::reportBooking');
     $routes->get('report/motor', 'MotorController::reportMotors');
     $routes->get('report/users', 'UserController::reportUsers');
+    $routes->get('settings/faq', 'SettingController::index');
+    $routes->post('settings/faq/store', 'SettingController::faqStore');
+    $routes->post('settings/faq/update', 'SettingController::faqUpdate');
+    $routes->post('settings/faq/delete', 'SettingController::faqDelete');
 });
 
 // Manajemen brand

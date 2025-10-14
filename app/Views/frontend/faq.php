@@ -16,18 +16,14 @@
 </section>
 <section id="faq" class="py-5">
     <div class="container">
-        <!-- <div class="text-center mb-5">
-            <h3 class="font-weight-bold mb-4 text-secondary ">Frequently Asked Questions (FAQ)</h3>
-            <p class="text-muted">Temukan jawaban atas pertanyaan umum seputar layanan sewa skuter kami.</p>
-        </div> -->
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="accordion" id="faqAccordion">
+                <div class="accordion " id="faqAccordion">
                     <?php foreach ($faqs as $index => $faq) : ?>
-                        <div class="card mb-0">
+                        <div class="card mb-0 shadow-sm">
                             <div class="card-header" id="heading<?= $index; ?>">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left <?= $index !== 0 ? 'collapsed' : ''; ?>" type="button" data-toggle="collapse" data-target="#collapse<?= $index; ?>" aria-expanded="<?= $index === 0 ? 'true' : 'false'; ?>" aria-controls="collapse<?= $index; ?>">
+                                    <button class="btn btn-block text-left font-weight-bold <?= $index !== 0 ? 'collapsed' : ''; ?>" type="button" data-toggle="collapse" data-target="#collapse<?= $index; ?>" aria-expanded="<?= $index === 0 ? 'true' : 'false'; ?>" aria-controls="collapse<?= $index; ?>">
                                         <?= esc($faq['question']); ?>
                                     </button>
                                 </h2>
@@ -44,6 +40,7 @@
         </div>
     </div>
 </section>
+
 <section id="cta-about-us" class="bg-orange">
     <div class="container justify-content-center align-items-center text-white ">
         <div class="text-center py-5 col-md-8 mx-auto">
@@ -53,5 +50,7 @@
         </div>
     </div>
 </section>
+
+
 
 <?= $this->include('frontend/partials/footer'); ?>
