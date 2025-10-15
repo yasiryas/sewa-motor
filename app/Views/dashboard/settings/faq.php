@@ -46,7 +46,10 @@
                                         <td><?= esc($faq['question']); ?></td>
                                         <td><?= esc($faq['answer']); ?></td>
                                         <td>
-                                            <a href="#" class="btn btn-warning btn-sm btn-edit-faq-modal m-1" data-id-update="<?= $faq['id']; ?>" data-faq-update="<?= $faq['question']; ?>" data-toggle="modal"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="#" class="btn btn-warning btn-sm btn-edit-faq-modal m-1"
+                                                data-update-id-faq="<?= $faq['id']; ?>"
+                                                data-update-question-faq="<?= esc($faq['question']); ?>"
+                                                data-update-answer-faq="<?= esc($faq['answer']); ?>"><i class="fas fa-edit"></i> Edit</a>
                                             <a href="#" class="btn btn-danger btn-sm btn-delete-faq-modal m-1" data-delete-id-faq="<?= $faq['id']; ?>" data-delete-question-faq="<?= $faq['question']; ?>" data-target="#deleteFaqModal" data-toggle="modal"><i class="fas fa-trash"></i> Hapus</a>
                                         </td>
                                     </tr>
@@ -93,24 +96,24 @@
                 </div>
 
                 <!-- Modal Delete faq -->
-                <div class="modal fade" id="deleteFaqModal" tabindex="-1" role="dialog">
+                <div class="modal fade" id="deleteFaqModal" tabindex="-1" role="dialog" aria-labelledby="deleteFaqModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form id="faqFormDelete" action="<?= base_url('dashboard/inventaris/faq/delete'); ?>" method="post">
+                        <form id="faqFormDelete" action="<?= base_url('dashboard/settings/faq/delete'); ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Hapus faq</h5>
-                                    <button faq="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                                    <h5 class="modal-title" id="deleteFaqModalLabel">Hapus FAQ</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span>&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body">
                                     <input type="hidden" id="faq_id_delete" name="id">
-                                    <div class="form-group">
-                                        <label for="name">Apakah anda yakin mau menghapus Faq <br><strong id="faq_delete"></strong> ?</label>
-                                    </div>
+                                    <p>Apakah Anda yakin ingin menghapus FAQ <strong id="faq_delete"></strong> ?</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" data-dismiss="modal">Batal</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal">Batal</button>
                                 </div>
                             </div>
                         </form>
@@ -118,13 +121,13 @@
                 </div>
 
                 <!-- Modal Edit faq -->
-                <div class="modal fade" id="editfaqModal" tabindex="-1" role="dialog">
+                <div class="modal fade" id="editFaqModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
-                        <form id="faqFormUpdate" action="<?= base_url('dashboard/inventaris/faq/update'); ?>" method="post">
+                        <form id="faqFormUpdate" action="<?= base_url('dashboard/settings/faq/update'); ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit faq</h5>
+                                    <h5 class="modal-title">Edit FAQ</h5>
                                     <button faq="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                                 </div>
                                 <div class="modal-body">
@@ -133,10 +136,14 @@
                                             <?= session()->getFlashdata('error'); ?>
                                         </div>
                                     <?php endif; ?>
+                                    <input type="hidden" id="update_faq_id" name="id" value="<?= old('id') ?? ''; ?>">
                                     <div class="form-group">
-                                        <label for="name">Nama faq</label>
-                                        <input faq="text" name="name" id="update_faq_name" class="form-control" value="<?= old('name') ?? ''; ?>" required>
-                                        <input faq="hidden" id="update_faq_id" name="id" value="<?= old('id') ?? ''; ?>">
+                                        <label for="name">Pertanyaan</label>
+                                        <input type="text" name="question" id="update_faq_question" class="form-control" value="<?= old('name') ?? ''; ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Jawaban</label>
+                                        <textarea type="text" style="height: 100px;" name="answer" id="update_faq_answer" class="form-control" required><?= old('answer') ?? ''; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">

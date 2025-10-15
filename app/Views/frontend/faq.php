@@ -4,7 +4,7 @@
 <section id="produk" class="py-5" style="height: 40vh;
         background:linear-gradient(0deg, rgba(255, 255, 255, 0.85),
         rgba(255, 255, 255, 0.85)),
-        url('<?= base_url('img/asset/bg-tentang-kami.png'); ?>')
+        url('<?= base_url('img/asset/bg-faq.jpg'); ?>')
         center/cover no-repeat;
         display: flex;
         justify-content: center;
@@ -40,7 +40,6 @@
         </div>
     </div>
 </section>
-
 <section id="cta-about-us" class="bg-orange">
     <div class="container justify-content-center align-items-center text-white ">
         <div class="text-center py-5 col-md-8 mx-auto">
@@ -50,7 +49,4 @@
         </div>
     </div>
 </section>
-
-
-
 <?= $this->include('frontend/partials/footer'); ?>

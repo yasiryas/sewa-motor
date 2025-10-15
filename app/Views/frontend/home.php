@@ -90,11 +90,11 @@
 <!-- Contact Form -->
 <section id="kontak" class="py-5">
     <div class="container text-center">
-        <h4>Masih Ada Pertanyaan? Atau Ingin Langsung Pesan?</h4>
+        <h4>Masih Ada Pertanyaan?<br> Atau Ingin Langsung Pesan?</h4>
         <form class="mt-4 col-md-6 mx-auto">
             <input type="email" class="form-control mb-3" placeholder="Email">
             <input type="text" class="form-control mb-3" placeholder="WhatsApp">
-            <textarea class="form-control mb-3" placeholder="Pesan"></textarea>
+            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan"></textarea>
             <button type="submit" class="btn btn-warning text-white">Kirim Penawaran!</button>
         </form>
     </div>

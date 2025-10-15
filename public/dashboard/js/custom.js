@@ -527,20 +527,26 @@ $(document).on("change", ".photo-input", function () {
     //setting faq
     $('.btn-edit-faq-modal').on('click', function () {
         $('#editFaqModal').modal('show');
-        $('#faq_id_edit').val($(this).data('id'));
-        $('#faq_question_edit').val($(this).data('question'));
-        $('#faq_answer_edit').val($(this).data('answer'));
+        let id_update_faq = $(this).data('update-id-faq');
+        let question_update_faq = $(this).data('update-question-faq');
+        let answer_update_faq = $(this).data('update-answer-faq');
+
+        $('#update_faq_id').val(id_update_faq);
+        $('#update_faq_question').val(question_update_faq);
+        $('#update_faq_answer').val(answer_update_faq);
+
     });
 
-$('.btn-delete-faq-modal').on('click', function () {
-    let id_delete_faq = $(this).data('delete-id-faq');
-    let question_delete_faq = $(this).data('delete-questions-faq');
+    //delete faq
+    $('.btn-delete-faq-modal').on('click', function () {
+        let id_delete_faq = $(this).data('delete-id-faq');
+        let question_delete_faq = $(this).data('delete-question-faq'); // singular: question, bukan questions
 
-    $('#faq_id_delete').val(id_delete_faq);
-    $('#faq_delete').text(question_delete_faq);
+        $('#faq_id_delete').val(id_delete_faq);
+        $('#faq_delete').text(question_delete_faq);
 
-    $('#deleteFaqModal').modal('show');
-});
+        $('#deleteFaqModal').modal('show');
+    });
 
 
 });

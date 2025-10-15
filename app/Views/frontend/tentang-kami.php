@@ -17,7 +17,7 @@
 <section id="about-us">
     <div class="container">
         <div class="row py-5 justify-content-center">
-            <div class="col-lg align-content-center text-center m-4">
+            <div class="col-lg align-content-center text-center mt-4">
                 <img src="<?= base_url('img/asset/logo.png'); ?>" alt="tentang Kami">
             </div>
         </div>
