@@ -175,6 +175,11 @@ border-radius: 3px;
     color: #d25508;
 }
 
+.bg-orange{
+    background: #ec6b1b;
+    /* padding: 20px; */
+}
+
 /* Efek animasi saat dropdown muncul */
 @keyframes fadeIn {
   0% {
@@ -185,6 +190,37 @@ border-radius: 3px;
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+ .contact-item i {
+    width: 24px;
+    text-align: center;
+  }
+
+  /* Untuk tampilan mobile */
+  @media (max-width: 767.98px) {
+    .map-container {
+      height: 40vh;
+      border-radius: 10px 10px 0 0;
+    }
+    .contact-box {
+      border-radius: 0 0 10px 10px;
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  /* Untuk desktop */
+  @media (min-width: 768px) {
+    .map-container iframe {
+      border-radius: 10px 0 0 10px;
+    }
+    .contact-box {
+      border-radius: 0 10px 10px 0;
+    }
+  }
+
+  html {
+  scroll-behavior: smooth;
 }
 
 /* Footer */

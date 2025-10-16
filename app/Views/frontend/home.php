@@ -14,7 +14,7 @@
                     <p>Mulai dari keramaian Malioboro hingga ketenangan alam pedesaan, nikmati kebebasan bergerak dengan armada skuter terawat kami. Bebas macet, bebas khawatir!</p>
                 </div>
                 <div>
-                    <a href="#" class="btn btn-warning text-white">Pesan Sekarang!</a>
+                    <a href="#produk" class="btn btn-warning text-white">Pesan Sekarang!</a>
                 </div>
             </div>
         </div>
