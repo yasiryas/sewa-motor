@@ -25,7 +25,7 @@ class FrontController extends BaseController
                 ->select('motors.*, brands.brand as brand, types.type as type')
                 ->join('brands', 'brands.id = motors.id_brand')
                 ->join('types', 'types.id = motors.id_type')
-                // ->asObject()
+                ->limit(8)
                 ->findAll(),
             'brands' => $this->BrandModel->asObject()->findAll(),
 
@@ -66,5 +66,18 @@ class FrontController extends BaseController
             'title' => 'Kontak',
         ];
         return view('frontend/kontak', $data);
+    }
+
+    public function detailProduk($id)
+    {
+        $motor = $this->MotorModel->find($id);
+        if (!$motor) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Motor tidak ditemukan');
+        }
+        $data = [
+            'title' => 'Detail Motor',
+            'motor' => $motor,
+        ];
+        return view('frontend/detail-motor', $data);
     }
 }

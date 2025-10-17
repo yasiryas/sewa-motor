@@ -10,6 +10,7 @@ $routes->get('produk', 'FrontController::produk');
 $routes->get('tentang-kami', 'FrontController::tentang_kami');
 $routes->get('faq', 'FrontController::faq');
 $routes->get('kontak', 'FrontController::kontak');
+$routes->get('produk/(:num)', 'FrontController::detailProduk/$1');
 $routes->get('motors', 'MotorController::index');
 $routes->get('motors/(:num)', 'MotorController::show/$1');
 $routes->get('booking', 'BookingController::view');
@@ -82,7 +83,8 @@ $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
     $routes->get('getAvailableMotorsBooking', 'BookingController::getAvialableMotorsBooking');
 });
 
-
+//Email Test Route
+$routes->get('send-test-email', 'EmailController::sendEmail');
 
 
 // $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {

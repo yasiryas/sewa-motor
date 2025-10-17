@@ -66,14 +66,14 @@
                             <div class="mt-auto">
                                 <h5 class="card-title"><?= esc($motor['name']); ?></h5>
                                 <p class="card-text mb-4">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> / Day</p>
-                                <a href="#" class="btn btn-warning btn-sm text-white px-4">Booking</a>
+                                <a href="<?= base_url('produk/' . $motor['id']); ?>" class="btn btn-warning btn-sm text-white px-4">Booking</a>
                             </div>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
-        <a href="#" class="btn btn-outline-warning mt-3">Lihat yang lain →</a>
+        <a href="<?= base_url("produk"); ?>" class="btn btn-outline-warning mt-3">Lihat yang lain →</a>
     </div>
 </section>
 
@@ -83,7 +83,7 @@
     <div class="container m-5">
         <h4>PAKET EXPLORE JOGJA: Skuter + Rekomendasi Destinasi!</h4>
         <p>Selain skuter terawat, kami berikan peta digital berisi rute wisata favorit dan rekomendasi kuliner Jogja yang wajib Anda coba. Liburan lebih terencana dan berkesan!</p>
-        <a href="#" class="btn btn-light text-orange">Lihat Paket Unggulan Kami!</a>
+        <a href="<?= base_url("produk"); ?>" class="btn btn-light text-orange">Lihat Paket Unggulan Kami!</a>
     </div>
 </section>
 
