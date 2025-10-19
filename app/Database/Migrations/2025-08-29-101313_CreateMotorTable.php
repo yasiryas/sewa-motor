@@ -48,6 +48,10 @@ class CreateMotorTable extends Migration
                 'constraint' => '255',
                 'null'       => true,
             ],
+            'description' => [
+                'type'       => 'TEXT',
+                'null'       => true,
+            ],
             'created_at' => [
                 'type'    => 'DATETIME',
                 'null'    => false,
