@@ -548,6 +548,15 @@ $(document).on("change", ".photo-input", function () {
         $('#deleteFaqModal').modal('show');
     });
 
+    $('.description').summernote({
+        height: 200,
+        placeholder: 'Masukkan deskripsi motor di sini...',
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
 
 });
 

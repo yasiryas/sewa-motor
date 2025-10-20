@@ -138,6 +138,12 @@ class MotorController extends BaseController
                     'in_list'  => 'Status tidak valid.'
                 ]
             ],
+            'description' => [
+                'rules' => 'permit_empty|string',
+                'errors' => [
+                    'string' => 'Deskripsi harus berupa teks.'
+                ]
+            ],
             'photo' => [
                 'rules' => 'if_exist|uploaded[photo]|is_image[photo]|max_size[photo,2048]',
                 'errors' => [
@@ -172,6 +178,7 @@ class MotorController extends BaseController
             'id_type'             => $this->request->getPost('id_type'),
             'price_per_day'       => $this->request->getPost('price_per_day'),
             'availability_status' => $this->request->getPost('availability_status'),
+            'description'         => $this->request->getPost('description'),
             'photo'               => $photoName,
         ]);
 
@@ -208,8 +215,6 @@ class MotorController extends BaseController
         if (!$motor) {
             return redirect()->to('dashboard/inventaris/motor')->with('error', 'Motor tidak ditemukan.');
         }
-
-        // dd($this->request->getPost());
 
         $validationRules = [
             'update_name_motor' => [
@@ -254,6 +259,12 @@ class MotorController extends BaseController
                     'in_list'  => 'Status tidak valid.'
                 ]
             ],
+            'description_update' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Deskripsi harus diisi.'
+                ]
+            ],
             'photo_update' => [
                 'rules' => 'if_exist|is_image[photo_update]|max_size[photo,2048]',
                 'errors' => [
@@ -287,6 +298,7 @@ class MotorController extends BaseController
             'id_type'             => $this->request->getPost('id_type_update'),
             'price_per_day'       => $this->request->getPost('price_per_day_update'),
             'availability_status' => $this->request->getPost('availability_status_update'),
+            'description'         => $this->request->getPost('description_update'),
             'photo'               => $photoName ?? $motor['photo'],
         ]);
 

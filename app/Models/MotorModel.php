@@ -12,7 +12,7 @@ class MotorModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'number_plate', 'id_brand', 'id_type', 'brand', 'price_per_day', 'availability_status', 'photo'];
+    protected $allowedFields    = ['name', 'number_plate', 'id_brand', 'id_type', 'brand', 'price_per_day', 'availability_status', 'description', 'photo'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

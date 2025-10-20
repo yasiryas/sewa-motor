@@ -9,10 +9,9 @@
                 <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="img-fluid" style="height: 300px; object-fit: cover;" alt="<?= esc($motor['type']); ?>">
             </div>
             <div class="col-md-6">
-                <h3 class="mb-4"><b><?= esc($motor['brand']); ?> - <?= esc($motor['name']); ?></b></h3>
+                <h3 class="mb-4"><b><?= esc($motor['brand']); ?> <?= esc($motor['name']); ?></b></h3>
                 <p class="mb-4"><strong>Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> </strong>/ Day</p>
-                <!-- <p class="mb-4"><?php // esc($motor['description']);
-                                        ?></p> -->
+                <p class="mb-4"><?= $motor['description']; ?></p>
                 <a href="<?= base_url('produk'); ?>" class="btn btn-warning text-white">Pesan Sekarang!</a>
             </div>
         </div>

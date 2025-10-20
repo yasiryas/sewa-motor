@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="<?= base_url('dashboard/vendor/bootstrap/css/bootstrap.min.css'); ?>">
     <link href="<?= base_url('dashboard'); ?>/css/sb-admin-2.css" rel="stylesheet">
     <link href="<?= base_url('dashboard'); ?>/css/style.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="<?= base_url('dashboard/vendor/summernote/summernote-bs4.min.css'); ?>">
 
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />

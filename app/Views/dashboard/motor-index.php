@@ -157,6 +157,11 @@
                                         <input type="file" class="photo-input form-control-file" accept="image/*" name="photo">
                                         <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="description">Deskripsi</label>
+                                        <textarea name="description" id="description" class="form-control description" rows="3"><?= old('description') ?? ''; ?></textarea>
+                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-sm btn-warning">Simpan</button>
@@ -266,9 +271,12 @@
                                         <input type="file" class="photo-input form-control-file" accept="image/*" name="photo_update">
                                         <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:200px; display:none;">
                                     </div>
-
+                                    <div class="form-group">
+                                        <label for="description">Deskripsi</label>
+                                        <textarea name="description_update" id="description" class="form-control description" rows="3"><?= old('description_update') ?? ''; ?></textarea>
+                                    </div>
                                 </div>
-                                <div class="modal-footer">
+                                <div class=" modal-footer">
                                     <button type="submit" class="btn btn-sm btn-warning">Simpan</button>
                                     <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal">Batal</button>
                                 </div>
