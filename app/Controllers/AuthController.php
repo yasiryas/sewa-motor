@@ -68,6 +68,12 @@ class AuthController extends BaseController
             'isLoggedIn' => true,
         ]);
         // dd(session()->get());
+        $redirectUrl = session()->get('redirect_url');
+        if ($redirectUrl) {
+            session()->remove('redirect_url');
+            return redirect()->to($redirectUrl);
+        }
+
         if (session()->get('role') == 'admin') {
             return redirect()->to('dashboard/index');
         } else {

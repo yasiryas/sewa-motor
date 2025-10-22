@@ -70,6 +70,9 @@ class FrontController extends BaseController
 
     public function detailProduk($id)
     {
+        if (!session()->get('isLoggedIn')) {
+            session()->set('redirect_url', current_url());
+        }
         $motor = $this->MotorModel
             ->select('motors.*, brands.brand as brand, types.type as type')
             ->join('brands', 'brands.id = motors.id_brand')

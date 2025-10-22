@@ -10,28 +10,26 @@
     });
 
     $(function() {
-
-    // Fungsi format tanggal ke dd/mm/yyyy
-    function formatDate(dateStr) {
+    // Fungsi ubah format ke "1 September 2025"
+    function formatLongDate(dateStr) {
         if (!dateStr) return "";
         const date = new Date(dateStr);
         if (isNaN(date)) return "";
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
+
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return date.toLocaleDateString('id-ID', options);
     }
 
-    // Update preview ketika tanggal sewa / kembali berubah
+    // Update preview saat tanggal berubah
     $("#tanggal_sewa, #tanggal_kembali").on("change", function() {
-        const tanggalSewa = formatDate($("#tanggal_sewa").val());
-        const tanggalKembali = formatDate($("#tanggal_kembali").val());
+        const tanggalSewa = formatLongDate($("#tanggal_sewa").val());
+        const tanggalKembali = formatLongDate($("#tanggal_kembali").val());
 
         $("#preview_tanggal").text(
             `Tanggal Sewa: ${tanggalSewa || '-'} | Tanggal Kembali: ${tanggalKembali || '-'}`
         );
     });
-    });
+});
 });
 
 
