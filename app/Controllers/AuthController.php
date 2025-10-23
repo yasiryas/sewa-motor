@@ -77,7 +77,7 @@ class AuthController extends BaseController
         if (session()->get('role') == 'admin') {
             return redirect()->to('dashboard/index');
         } else {
-            return redirect()->to('home');
+            return redirect()->to('/');
         }
     }
 

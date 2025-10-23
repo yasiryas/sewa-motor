@@ -91,10 +91,18 @@
 <section id="kontak" class="py-5">
     <div class="container text-center">
         <h4>Masih Ada Pertanyaan?<br> Atau Ingin Langsung Pesan?</h4>
-        <form class="mt-4 col-md-6 mx-auto">
-            <input type="email" class="form-control mb-3" placeholder="Email">
-            <input type="text" class="form-control mb-3" placeholder="WhatsApp">
-            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan"></textarea>
+        <div class="mt-4 col-md-6 mx-auto">
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
+            <?php elseif (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger"><?= session()->getFlashdata('error'); ?></div>
+            <?php endif; ?>
+        </div>
+        <form class="mt-4 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post">
+            <?= csrf_field(); ?>
+            <input type="email" class="form-control mb-3" placeholder="Email" name="email">
+            <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp">
+            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan" name="pesan"></textarea>
             <button type="submit" class="btn btn-warning text-white">Kirim Penawaran!</button>
         </form>
     </div>

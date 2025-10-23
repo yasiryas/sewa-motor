@@ -84,7 +84,7 @@ $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
 });
 
 //Email Test Route
-$routes->get('send-test-email', 'EmailController::sendEmail');
+$routes->post('send-email', 'EmailController::sendEmail');
 
 
 // $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
