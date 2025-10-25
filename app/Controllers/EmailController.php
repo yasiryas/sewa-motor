@@ -19,7 +19,13 @@ class EmailController extends BaseController
         $whatsappUser = $this->request->getPost('whatsapp');
 
         if (!$emailUser || !$messageUser || !$whatsappUser) {
-            return $this->response->setStatusCode(400)->setBody('Upss! Semua harus diisi.');
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => 'false',
+                    'message' => 'Upss! Semua harus diisi.'
+                ]);
+            }
+            return redirect()->back()->withInput()->with('error', 'Upss! Semua harus diisi.');
         }
 
         $email = \Config\Services::email();
@@ -33,14 +39,23 @@ class EmailController extends BaseController
             <p><strong>Pesan:</strong><br>{$messageUser}</p>");
 
         if ($email->send()) {
-            // return $this->response->setStatusCode(200)->setBody('Email sent successfully.');
-            session()->setFlashdata('success', 'Pesan Anda telah terkirim. Kami akan menghubungi Anda segera.');
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => 'true',
+                    'message' => 'Terima kasih! Pesan Anda telah terkirim.'
+                ]);
+            }
+            session()->setFlashdata('success', 'Terima kasih! Pesan Anda telah terkirim.');
             return redirect()->back();
         } else {
-            // $data = $email->printDebugger(['headers']);
-            // return $this->response->setStatusCode(500)->setBody('Failed to send email. ' . $data);
-            session()->setFlashdata('error', 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.');
-            return redirect()->back();
+            $errorMessaage = $email->printDebugger(['headers']);
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => 'false',
+                    'message' => 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti. ' . $errorMessaage
+                ]);
+            }
+            return redirect()->back()->withInput()->with('error', 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti. ' . $errorMessaage);
         }
     }
 }

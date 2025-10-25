@@ -91,19 +91,15 @@
 <section id="kontak" class="py-5">
     <div class="container text-center">
         <h4>Masih Ada Pertanyaan?<br> Atau Ingin Langsung Pesan?</h4>
-        <div class="mt-4 col-md-6 mx-auto">
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
-            <?php elseif (session()->getFlashdata('error')): ?>
-                <div class="alert alert-danger"><?= session()->getFlashdata('error'); ?></div>
-            <?php endif; ?>
+        <div class="mt-4 col-md-6 mx-auto alert-box" id="alertBox">
+
         </div>
-        <form class="mt-4 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post">
+        <form class="mt-4 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post" id="formSendEmail">
             <?= csrf_field(); ?>
-            <input type="email" class="form-control mb-3" placeholder="Email" name="email">
-            <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp">
-            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan" name="pesan"></textarea>
-            <button type="submit" class="btn btn-warning text-white">Kirim Penawaran!</button>
+            <input type="email" class="form-control mb-3" placeholder="Email" name="email" id="email">
+            <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp" id="whatsapp">
+            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan" name="pesan" id="pesan"></textarea>
+            <button type="submit" class="btn btn-warning text-white" id="btnSendEmail">Kirim Penawaran!</button>
         </form>
     </div>
 </section>

@@ -43,7 +43,7 @@
 </footer>
 
 <!-- JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="<?= base_url('dashboard/vendor/jquery/jquery.min.js'); ?>"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'); ?>"></script>
 <script src="<?= base_url('front/js/script.js'); ?>"></script>
