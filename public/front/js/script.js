@@ -81,53 +81,59 @@
 
 
         //ajax search product (product page)
-        $('#searchProductAll').on('keyup', function() {
-            let query = $(this).val().trim();
-            let productContainer = $('#productContainer');
+         // Fungsi pencarian dengan AJAX
+    $('#searchProductAll').on('keyup', function() {
+        let query = $(this).val().trim();
+        let productContainer = $('#productContainer');
 
-            //preview loading
-            productContainer.html(`
-             <div class="col-12 text-center my-5">
+        // Tampilkan loading spinner
+        productContainer.html(`
+            <div class="col-12 text-center my-5">
                 <div class="spinner-border text-warning" role="status"></div>
                 <p class="mt-2">Mencari produk...</p>
             </div>
-            `);
+        `);
 
-            $.ajax({
-                url: '<?= base_url(`product/search`); ?>',
-                type: 'GET',
-                data: { query: query },
-                dataType : 'json',
-                success: function(response) {
-                    if (response.length === 0) {
-                        productContainer.html('<div class="col-12 text-center my-5"><p>Tidak ada produk ditemukan.</p></div>');
-                        return;
-                    }
+        // Kirim request AJAX
+        $.ajax({
+            url: BASE_URL + 'product/search',
+            type: 'GET',
+            data: { keyword: query },
+            dataType: 'json',
+            success: function(response) {
+                if (!response || response.length === 0) {
+                    productContainer.html('<div class="col-12 text-center my-5"><p>Tidak ada produk ditemukan.</p></div>');
+                    return;
+                }
 
-                    let html = '';
-                       $.each(response, function (i, motor) {
-                        html += `
+                let html = '';
+                $.each(response, function(i, motor) {
+                    html += `
                         <div class="col-md-3 mb-4 d-flex align-items-stretch">
                             <div class="card h-100 shadow">
-                                <img src="<?= base_url('uploads/motors/'); ?>/${motor.photo}" class="card-img-top" alt="${motor.name}">
+                                <img src="${ BASE_URL + 'uploads/motors/' + motor.photo}"
+                                     class="card-img-top" alt="${motor.name}">
                                 <div class="card-body d-flex flex-column">
+                                    <div class="mt-auto">
                                     <h5 class="card-title">${motor.name}</h5>
-                                    <p class="card-text mb-4">Rp. ${motor.price_per_day.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })} / Day</p>
-                                    <a href="<?= base_url('produk/'); ?>/${motor.id}" class="btn btn-warning btn-sm text-white px-4">Booking</a>
+                                    <p class="card-text mb-4">Rp. ${Number(motor.price_per_day).toLocaleString('id-ID')} / Hari</p>
+                                    <a href="${ BASE_URL + 'produk/' + motor.id}"
+                                       class="btn btn-warning btn-sm text-white px-4">Booking</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        `;
-                    });
-                    productContainer.html(html);
-                },
+                    `;
+                });
 
-                error: function(x) {
-                    productContainer.html('<div class="col-12 text-center my-5"><p>Terjadi kesalahan saat mencari produk.</p></div>');
-                }
-            });
-
+                productContainer.hide().html(html).fadeIn(300);
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                productContainer.html('<div class="col-12 text-center my-5"><p>Terjadi kesalahan saat mencari produk.</p></div>');
+            }
         });
+    });
 });
 
 

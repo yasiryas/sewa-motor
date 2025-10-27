@@ -52,7 +52,7 @@
             <div class="input-group w-50">
                 <input type="text" id="searchProductAll" name="search" class="form-control w-50 rounded-left" placeholder="Cari produk favoritmu">
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-warning rounded-right text-white px-4"><i class="fa fa-search"></i></button>
+                    <a href="#" class="btn btn-warning rounded-right text-white px-4"><i class="fa fa-search"></i></a>
                 </div>
             </div>
         </form>
