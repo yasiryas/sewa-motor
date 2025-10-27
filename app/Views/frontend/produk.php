@@ -50,13 +50,13 @@
         <h3 class="section-title mb-4">Daftar Produk</h3>
         <form action="<?= base_url('produk'); ?>" method="get" class="d-flex justify-content-center mb-3">
             <div class="input-group w-50">
-                <input type="text" name="search" class="form-control w-50 rounded-left" placeholder="Cari produk favoritmu">
+                <input type="text" id="searchProductAll" name="search" class="form-control w-50 rounded-left" placeholder="Cari produk favoritmu">
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-warning rounded-right text-white px-4"><i class="fa fa-search"></i></button>
                 </div>
             </div>
         </form>
-        <div class="row mt-5">
+        <div class="row mt-5" id="productContainer">
             <?php foreach ($motors as $motor) : ?>
                 <div class="col-md-3 mb-4 d-flex align-items-stretch">
                     <div class="card h-100 shadow">

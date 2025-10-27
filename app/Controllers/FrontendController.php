@@ -21,6 +21,12 @@ class FrontendController extends BaseController
     public function produk()
     {
         $motors = $this->MotorModel->getAvailableMotors();
-        return view('frontend/produk', ['motors' => $motors]);
+        // return view('frontend/produk', ['motors' => $motors]);
+    }
+
+    public function kategori()
+    {
+        $motors = $this->MotorModel->getAvailableMotors();
+        return view('frontend/kategori', ['motors' => $motors]);
     }
 }

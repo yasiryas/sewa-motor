@@ -43,6 +43,22 @@ class FrontController extends BaseController
         return view('frontend/produk', $data);
     }
 
+    public function searchAjaxProduk()
+    {
+        $keyword = $this->request->getGet('keyword');
+
+        $motors = $this->MotorModel
+            ->select('motors.*, brands.brand as brand, types.type as type')
+            ->join('brands', 'brands.id = motors.id_brand')
+            ->join('types', 'types.id = motors.id_type')
+            ->like('motors.name', $keyword)
+            ->orLike('brands.brand', $keyword)
+            ->orLike('description', $keyword)
+            ->findAll();
+
+        return $this->response->setJSON($motors);
+    }
+
     public function tentang_kami()
     {
         $data = [
