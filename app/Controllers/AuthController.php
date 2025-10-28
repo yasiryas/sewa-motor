@@ -32,7 +32,8 @@ class AuthController extends BaseController
     public function logout()
     {
         session()->destroy();
-        return redirect()->to('login')->with('success', 'Ups, Anda telah logout.');
+        return redirect()->to('/');
+        // return redirect()->to('login')->with('success', 'Ups, Anda telah logout.');
     }
 
     public function loginProcess()
@@ -49,14 +50,17 @@ class AuthController extends BaseController
         $userModel = new \App\Models\UserModel();
         $user = $userModel->where('email', $email)->first();
 
+        if (!$email || !$password) {
+            return redirect()->to(base_url('login'))->with('error', 'Ups! Data harus lengkap');
+        }
+
         if (!$user) {
             return redirect()->back()->with('error', 'Email tidak ditemukan');
         }
 
         // verify password
         if (!password_verify($password, $user['password_hash'])) {
-            return redirect()->back()->with('error', 'Password salah');
-            // dd($user['password'], $password, password_hash($password, PASSWORD_BCRYPT));
+            return redirect()->to(base_url('login'))->with('error', 'Password salah');
         }
 
         // set session
@@ -72,12 +76,6 @@ class AuthController extends BaseController
         if ($redirectUrl) {
             session()->remove('redirect_url');
             return redirect()->to($redirectUrl);
-        }
-
-        if (session()->get('role') == 'admin') {
-            return redirect()->to('dashboard/index');
-        } else {
-            return redirect()->to('/');
         }
     }
 

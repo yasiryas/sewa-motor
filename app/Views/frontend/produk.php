@@ -65,7 +65,7 @@
                             <div class="mt-auto">
                                 <h5 class="card-title"><?= esc($motor['name']); ?></h5>
                                 <p class="card-text mb-4">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> / Day</p>
-                                <a href="#" class="btn btn-warning btn-sm text-white px-4">Booking</a>
+                                <a href="<?= base_url('produk/' . $motor['id']); ?>" class="btn btn-warning btn-sm text-white px-4">Booking</a>
                             </div>
                         </div>
                     </div>
