@@ -23,8 +23,8 @@
             <div class="row justify-content-center">
                 <?php foreach ($brands as $brand) : ?>
                     <div class="col-md-3 mb-4">
-                        <a href="<?= base_url('produk/brand/' . $brand['id']); ?>" class="text-decoration-none">
-                            <div class="card border-0 shadow-sm text-white brand-card">
+                        <a href="javascript:void(0);" class="text-decoration-none brand-filter" data-brand-id="<?= $brand['id']; ?>">
+                            <div class=" card border-0 shadow-sm text-white brand-card ">
                                 <img src="<?= base_url('uploads/brands/' . $brand['featured_image']); ?>"
                                     class="card-img brand-img"
                                     alt="<?= esc($brand['brand']); ?>">

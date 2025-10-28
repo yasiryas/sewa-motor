@@ -22,6 +22,7 @@ $routes->get('register', 'AuthController::register');
 $routes->post('register/process', 'AuthController::registerProcess');
 $routes->get('logout', 'AuthController::logout');
 $routes->get('product/search', 'FrontController::searchAjaxProduk');
+$routes->get('product/filterByBrand/(:num)', 'FrontController::filterByBrand/$1');
 
 $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('index', 'DashboardController::index');
