@@ -22,8 +22,8 @@
 
     // Update preview saat tanggal berubah
     $("#tanggal_sewa, #tanggal_kembali").on("change", function() {
-        const tanggalSewa = formatLongDate($("#tanggal_sewa").val());
-        const tanggalKembali = formatLongDate($("#tanggal_kembali").val());
+        const tanggalSewa = $("#tanggal_sewa").val() && formatLongDate($("#tanggal_sewa").val());
+        const tanggalKembali = $("#tanggal_kembali").val() && formatLongDate($("#tanggal_kembali").val());
 
         $("#preview_tanggal").text(
             `Tanggal Sewa: ${tanggalSewa || '-'} | Tanggal Kembali: ${tanggalKembali || '-'}`

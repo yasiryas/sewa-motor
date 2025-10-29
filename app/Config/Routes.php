@@ -88,18 +88,14 @@ $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
 //Email Test Route
 $routes->post('send-email', 'EmailController::sendEmail');
 
+//booking from user
+$routes->group('booking', ['filter' => 'auth'], function ($routes) {
+    $routes->post('user-store', 'BookingController::userStore');
+    $routes->get('mybookings', 'BookingController::myBookings');
+    $routes->get('detail/(:num)', 'BookingController::bookingDetail/$1');
+    $routes->post('cancel/(:num)', 'BookingController::cancelBooking/$1');
+});
 
-// $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
-//     $routes->get('dashboard/index', 'DashboardController::index');
-//     $routes->get('dashboard/booking', 'BookingController::dashboard');
-//     $routes->get('dashboard/users', 'UserController::dashboard');
-//     $routes->get('dashboard/inventaris/merk', 'BrandController::index');
-//     $routes->get('dashboard/inventaris/type', 'TypeController::index');
-//     $routes->get('dashboard/inventaris/motor', 'MotorController::index');
-//     $routes->get('dashboard/report/booking', 'BookingController::reportBooking');
-//     $routes->get('dashboard/report/motor', 'MotorController::reportMotors');
-//     $routes->get('dashboard/report/users', 'UserController::reportUsers');
-// });
 
 $routes->get('home', 'FrontendController::index');
 $routes->get('about', 'FrontendController::about');

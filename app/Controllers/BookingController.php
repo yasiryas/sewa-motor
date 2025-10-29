@@ -263,6 +263,73 @@ class BookingController extends BaseController
         return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
 
+    public function userStore()
+    {
+        $this->validate([
+            'tanggal_sewa' => [
+                'required',
+                'errors' => [
+                    'required' => 'Tanggal sewa harus diisi.',
+
+                ]
+            ],
+            'tanggal_kembali' => [
+                'required',
+                'errors' => [
+                    'required' => 'Tanggal kembali harus diisi.',
+
+                ]
+            ],
+        ]);
+
+        if ($this->request->getPost('tanggal_kembali') < $this->request->getPost('tanggal_sewa')) {
+            return redirect()->back()->with('error', 'Tanggal kembali tidak boleh sebelum tanggal sewa.')->with('modal', 'addBookingModal')->withInput();
+        }
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->back()->with('error', 'Anda harus login terlebih dahulu.')->with('modal', 'addBookingModal');
+        }
+
+        $motor_id = $this->request->getPost('motor_id');
+        $start_date = $this->request->getPost('tanggal_sewa');
+        $end_date = $this->request->getPost('tanggal_kembali');
+        $user_id = session()->get('id');
+
+        // get data motor
+        $motorModel = new MotorModel();
+        $motor = $motorModel->find($motor_id);
+
+        // calculate total price
+        $start = new \DateTime($start_date);
+        $end = new \DateTime($end_date);
+        $interval = $start->diff($end);
+        $days = $interval->days + 1; // include start day
+        $total_price = $days * $motor['price_per_day']; // include start day
+
+        $bookingModel = new BookingModel();
+        $paymentModel = new PaymentModel();
+        // insert to database
+        $bookingID = $bookingModel->insert([
+            'user_id' => $user_id,
+            'motor_id' => $motor_id,
+            'rental_start_date' => $start_date,
+            'rental_end_date' => $end_date,
+            'total_price' => $total_price,
+            'status' => 'pending',
+        ]);
+
+        $paymentModel->insert([
+            'booking_id' => $bookingID,
+            'user_id' => $user_id,
+            'amount' => $total_price,
+            'payment_date' => date('Y-m-d H:i:s'),
+            'payment_method' => 'cash',
+            'status' => 'pending',
+            'payment_proof' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
+    }
+
     public function deleteAdmin()
     {
         $id = $this->request->getPost('id');

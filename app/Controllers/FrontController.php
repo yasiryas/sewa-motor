@@ -115,7 +115,8 @@ class FrontController extends BaseController
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Motor tidak ditemukan');
         }
         $data = [
-            'title' => 'Detail Motor',
+            'title' => 'Produk',
+            'sub-title' => 'Detail Motor',
             'motor' => $motor,
         ];
         return view('frontend/detail-motor', $data);
