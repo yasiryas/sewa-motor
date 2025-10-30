@@ -91,7 +91,7 @@ $routes->post('send-email', 'EmailController::sendEmail');
 //booking from user
 $routes->group('booking', ['filter' => 'auth'], function ($routes) {
     $routes->post('user-store', 'BookingController::userStore');
-    $routes->get('mybookings', 'BookingController::myBookings');
+    $routes->get('pesanan', 'FrontController::listBookingUser');
     $routes->get('detail/(:num)', 'BookingController::bookingDetail/$1');
     $routes->post('cancel/(:num)', 'BookingController::cancelBooking/$1');
 });

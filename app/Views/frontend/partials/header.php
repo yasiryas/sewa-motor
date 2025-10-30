@@ -12,6 +12,7 @@ use Faker\Provider\Base;
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?= base_url('dashboard/vendor/bootstrap/css/bootstrap.css'); ?>" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="<?= base_url('dashboard/vendor/datatables/dataTables.bootstrap4.min.css'); ?>" rel="stylesheet">
 
     <link rel="stylesheet" href="<?= base_url('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'); ?>">
     <link rel="stylesheet" href="<?= base_url('dashboard/vendor/fontawesome-free/css/all.min.css'); ?>">

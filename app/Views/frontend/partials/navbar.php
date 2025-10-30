@@ -1,10 +1,6 @@
-<?php
-
-use Faker\Provider\Base;
-?>
-<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+<?php ?>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="containerNavbar">
     <div class="container d-flex justify-content-between align-items-center">
-
         <!-- Logo -->
         <a class="navbar-brand" href="#">
             <img src="<?= base_url('img/asset/logo.png'); ?>" alt="Logo" height="40">
@@ -12,7 +8,7 @@ use Faker\Provider\Base;
 
         <!-- Toggle untuk mobile -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" id="buttonNavMobile">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -38,7 +34,7 @@ use Faker\Provider\Base;
                             <?php if (session()->get('role') === 'admin'): ?>
                                 <a class="dropdown-item" href="<?= base_url('dashboard/index'); ?>">Dashboard</a>
                             <?php else: ?>
-                                <a class="dropdown-item" href="<?= base_url('pesanan'); ?>">Pesanan Saya</a>
+                                <a class="dropdown-item" href="<?= base_url('booking/pesanan'); ?>">Pesanan Saya</a>
                             <?php endif; ?>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="<?= base_url('logout'); ?>">Logout</a>

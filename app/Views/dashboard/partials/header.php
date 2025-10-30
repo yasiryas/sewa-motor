@@ -11,9 +11,6 @@
 
     <title><?= $title ?? 'Dashboard'; ?></title>
 
-
-
-
     <link href="<?= base_url('dashboard/vendor/datatables/dataTables.bootstrap4.min.css'); ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('dashboard/vendor/bootstrap/css/bootstrap.min.css'); ?>">
     <link href="<?= base_url('dashboard'); ?>/css/sb-admin-2.css" rel="stylesheet">

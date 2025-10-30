@@ -121,4 +121,31 @@ class FrontController extends BaseController
         ];
         return view('frontend/detail-motor', $data);
     }
+
+    public function listBookingUser()
+    {
+        $BookingModel = new \App\Models\BookingModel();
+        $bookings = $BookingModel
+            ->select(
+                'bookings.*,
+            motors.name as motor_name,
+            motors.number_plate,
+            motors.price_per_day,
+            brands.brand as brand_name,
+            bookings.status as status,
+            brands.brand as brand_name,
+            bookings.rental_start_date,
+            bookings.rental_end_date'
+            )
+            ->join('motors', 'motors.id = bookings.motor_id')
+            ->join('brands', 'brands.id = motors.id_brand')
+            ->where('bookings.user_id', session()->get('id'))
+            ->orderBy('bookings.created_at', 'DESC')
+            ->findAll();
+        $data = [
+            'title' => 'Daftar Pesanan',
+            'bookings' => $bookings,
+        ];
+        return view('frontend/pesanan', $data);
+    }
 }

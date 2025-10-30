@@ -5,11 +5,13 @@
             $(".navbar").addClass("scrolled");
                 } else {
             $(".navbar").removeClass("scrolled");
-        }
-        });
-    });
+                }
+            });
 
-    $(function() {
+
+            $('#buttonNavMobile').on('click', function() {
+                $('#containerNavbar').toggleClass('clicked');
+            });
     // Fungsi ubah format ke "1 September 2025"
     function formatLongDate(dateStr) {
         if (!dateStr) return "";
@@ -186,6 +188,26 @@
                 }
             });
         });
-});
+
+        // tabel pesanan user
+        $('#tableUserBookings').DataTable(
+            {
+                responsive: true,
+                pageLength: 5,
+                language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Cari pesanan...",
+                lengthMenu: "Tampilkan _MENU_ data per halaman",
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                paginate: {
+                    previous: "&laquo;",
+                    next: "&raquo;"
+      }
+            }
+        }
+        );
+  });
+
+
 
 

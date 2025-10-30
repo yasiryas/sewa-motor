@@ -47,6 +47,10 @@
     const BASE_URL = "<?= base_url(); ?>";
 </script>
 <script src="<?= base_url('dashboard/vendor/jquery/jquery.min.js'); ?>"></script>
+<!-- DataTables -->
+<script src="<?= base_url('dashboard/vendor/datatables/jquery.dataTables.min.js'); ?>"></script>
+<script src="<?= base_url('dashboard/vendor/datatables/dataTables.bootstrap4.min.js'); ?>"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'); ?>"></script>
 <script src="<?= base_url('front/js/script.js'); ?>"></script>
