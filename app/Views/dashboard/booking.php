@@ -382,7 +382,7 @@
 
                             <form id="formRejPayment" method="post" class="d-inline">
                                 <?= csrf_field() ?>
-                                <input type="hidden" name="status" value="failed">
+                                <input type="hidden" name="status" value="canceled">
                                 <button type="submit" class="btn btn-sm btn-danger">Reject Payment</button>
                             </form>
 

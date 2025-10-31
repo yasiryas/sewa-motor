@@ -71,24 +71,18 @@
 <section>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md">
                 <div class="card border-0 my-5">
                     <div class="card-body p-4">
                         <h3 class="card-title text-center mb-4 font-weight-bold">Hubungi Kami</h3>
-                        <form action="https://formspree.io/f/xwkrqzjy" method="POST">
-                            <div class="form-group">
-                                <label for="name">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Pesan</label>
-                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-warning btn-block text-white">Kirim Pesan</button>
+                        <div class="mt-4 col-md-6 mx-auto alert-box" id="alertBox">
+                        </div>
+                        <form class="mt-4 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post" id="formSendEmail">
+                            <?= csrf_field(); ?>
+                            <input type="email" class="form-control mb-3" placeholder="Email" name="email" id="email">
+                            <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp" id="whatsapp">
+                            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan" name="pesan" id="pesan"></textarea>
+                            <button type="submit" class="btn btn-warning text-white" id="btnSendEmail">Kirim Penawaran!</button>
                         </form>
                     </div>
                 </div>

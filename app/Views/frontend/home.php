@@ -92,7 +92,6 @@
     <div class="container text-center">
         <h4>Masih Ada Pertanyaan?<br> Atau Ingin Langsung Pesan?</h4>
         <div class="mt-4 col-md-6 mx-auto alert-box" id="alertBox">
-
         </div>
         <form class="mt-4 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post" id="formSendEmail">
             <?= csrf_field(); ?>

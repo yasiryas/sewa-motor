@@ -187,6 +187,98 @@ border-radius: 3px;
     /* padding: 20px; */
 }
 
+/* style table  */
+/* 🟡 Rounded Card Container */
+.card {
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+/* 🟡 Table look clean */
+.table {
+  border-collapse: separate !important;
+  border-spacing: 0 0.6rem;
+}
+
+table.dataTable {
+  border-collapse: separate !important;
+  border-spacing: 0 10px !important;
+}
+
+table.dataTable thead th {
+  background-color: transparent !important;
+  border: none !important;
+  font-weight: 600;
+  color: #333;
+}
+
+table.dataTable tbody tr {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+table.dataTable tbody td {
+  padding: 14px 16px !important;
+}
+
+.table thead th {
+  background-color: transparent;
+  border: none;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.table tbody tr {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.table tbody tr:hover {
+  background-color: #fdfdfd;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+/* 🟡 Rounded corners */
+.table tbody tr td:first-child {
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+.table tbody tr td:last-child {
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+/* 🟡 Search box styling */
+.dataTables_filter input {
+  border-radius: 50px;
+  border: 1px solid #dee2e6;
+  padding: 0.4rem 1rem;
+  outline: none;
+  transition: 0.3s;
+}
+.dataTables_filter input:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+/* 🟡 Pagination buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 30px !important;
+  border: none !important;
+  margin: 0 2px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: #ffc107 !important;
+  color: white !important;
+}
+
+/* end style table  */
+
 /* Efek animasi saat dropdown muncul */
 @keyframes fadeIn {
   0% {

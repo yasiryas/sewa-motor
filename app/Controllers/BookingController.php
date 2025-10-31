@@ -412,7 +412,7 @@ class BookingController extends BaseController
         }
 
         // Tentukan status booking
-        $bookingStatus = ($status === 'completed') ? 'confirmed' : 'cancelled';
+        $bookingStatus = ($status === 'completed') ? 'confirmed' : 'canceled';
 
         // Update payment
         $paymentModel->update($payment['id'], [

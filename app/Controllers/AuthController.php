@@ -43,7 +43,7 @@ class AuthController extends BaseController
 
         // validation
         if (!$email || !$password) {
-            return redirect()->back()->with('error', 'Ups! Data harus lengkap');
+            return redirect()->back()->with('error', 'Ups! Data harus lengkap')->withInput();
         }
 
         // check user
@@ -51,16 +51,16 @@ class AuthController extends BaseController
         $user = $userModel->where('email', $email)->first();
 
         if (!$email || !$password) {
-            return redirect()->to(base_url('login'))->with('error', 'Ups! Data harus lengkap');
+            return redirect()->to(base_url('login'))->with('error', 'Ups! Data harus lengkap')->withInput();
         }
 
         if (!$user) {
-            return redirect()->back()->with('error', 'Email tidak ditemukan');
+            return redirect()->back()->with('error', 'Email tidak ditemukan')->withInput();
         }
 
         // verify password
         if (!password_verify($password, $user['password_hash'])) {
-            return redirect()->to(base_url('login'))->with('error', 'Password salah');
+            return redirect()->to(base_url('login'))->with('error', 'Password salah')->withInput();
         }
 
         // set session
@@ -71,8 +71,19 @@ class AuthController extends BaseController
             'role' => $user['role'],
             'isLoggedIn' => true,
         ]);
-        // dd(session()->get());
+
+        // redirect to intended page
         $redirectUrl = session()->get('redirect_url');
+        // dd($redirectUrl);
+
+        if ($redirectUrl == null) {
+            $redirectUrl = base_url();
+        }
+
+        if ($redirectUrl == base_url() . '/login/process') {
+            return redirect()->to('/');
+        }
+
         if ($redirectUrl) {
             session()->remove('redirect_url');
             return redirect()->to($redirectUrl);
