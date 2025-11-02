@@ -193,8 +193,9 @@
         $('#tableUserBookings').DataTable(
             {
                 responsive: true,
-                pageLength: 5,
+                pageLength: 10,
                 lengthMenu: [5, 10, 25, 50],
+                order: [],
                 language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Cari pesanan...",
@@ -205,8 +206,45 @@
                     next: "&raquo;"
       }
             }
-        }
-        );
+        });
+
+        // modal transaksi user
+        $('.btn-detail-transaction').on('click', function () {
+            let transactionId = $(this).data('id');
+
+            // Tampilkan loading di dalam modal
+            $('#detailPhotoMotor').attr('src', '');
+            $('#detailNamaMotor').text('Memuat...');
+            $('#detailTanggalSewa').text('');
+            $('#detailTanggalTransaksi').text('');
+            $('#detailKeterangan').text('');
+            $('#detailBukti').attr('src', '');
+            $.ajax({
+                url: BASE_URL + 'booking/detail-booking/' + transactionId,
+                type: 'GET',
+                dataType: 'json',
+               success: function(response) {
+                let data = response.booking; // Ambil objek booking di dalam response
+
+                $('#detailPhotoMotor').attr('src', BASE_URL + 'uploads/motors/' + data.photo);
+                $('#detailNamaMotor').text(data.motor_name + ' (' + data.brand_name + ')');
+                $('#detailTanggalSewa').text('Tanggal Sewa: ' + formatLongDate(data.rental_start_date) + ' - ' + formatLongDate(data.rental_end_date));
+                $('#detailTanggalTransaksi').text('Tanggal Transaksi: ' + formatLongDate(data.created_at));
+                $('#detailKeterangan').text(data.status ? 'Status: ' + data.status : '');
+
+                if (data.bukti) {
+                    $('#detailBukti').attr('src', BASE_URL + 'uploads/transactions/' + data.bukti);
+                } else {
+                    $('#detailBukti').attr('src', '');
+                }
+            },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    alert('Terjadi kesalahan saat memuat detail transaksi.');
+                }
+            });
+        });
+
   });
 
 

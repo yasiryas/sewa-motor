@@ -133,7 +133,6 @@ class FrontController extends BaseController
             motors.price_per_day,
             brands.brand as brand_name,
             bookings.status as status,
-            brands.brand as brand_name,
             bookings.rental_start_date,
             bookings.rental_end_date'
             )
@@ -159,7 +158,6 @@ class FrontController extends BaseController
             motors.photo as photo,
             motors.number_plate,
             motors.price_per_day,
-            brands.brand as brand_name,
             bookings.status as status,
             brands.brand as brand_name,
             bookings.rental_start_date,
@@ -179,6 +177,8 @@ class FrontController extends BaseController
             'title' => 'Detail Pesanan',
             'booking' => $booking,
         ];
-        return view('frontend/detail-pesanan', $data);
+        // return view('frontend/detail-pesanan', $data);
+        return $this->response->setJSON($data);
+        // dd($data);
     }
 }

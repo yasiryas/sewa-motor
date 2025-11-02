@@ -20,23 +20,30 @@
         <div class="row">
             <div class="col-lg mx-auto">
                 <div class="card shadow-sm rounded-4 border-0">
-                    <div class="card-body">
-                        <div class="justify-content-center mb-4 mx-sm-5 d-flex">
-                            <img src="<?= base_url('uploads/motors/') . $booking['photo']; ?>" class="image-fluid justify-content-center" alt="">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="<?= base_url('uploads/motors/') . $booking['photo']; ?>" alt="" class="img-fluid">
                         </div>
-                        <p><strong>Motor:</strong> <?= esc($booking['brand_name']); ?> <?= esc($booking['motor_name']); ?></p>
-                        <p><strong>Tanggal Sewa:</strong> <?php echo date('d F Y', strtotime($booking['rental_start_date'])); ?></p>
-                        <p><strong>Tanggal Kembali:</strong> <?php echo date('d F Y', strtotime($booking['rental_end_date'])); ?></p>
-                        <p><strong>Status:</strong>
-                            <?php if ($booking['status'] == 'pending'): ?>
-                                <span class="badge bg-warning  text-white">Pending</span>
-                            <?php elseif ($booking['status'] == 'confirmed'): ?>
-                                <span class="badge bg-primary  text-white">Confirmed</span>
-                            <?php elseif ($booking['status'] == 'canceled'): ?>
-                                <span class="badge bg-danger  text-white">Canceled</span>
-                            <?php endif; ?>
-                        </p>
-                        <a href="#" class="btn btn-sm btn-primary">Upload Bukti Pembayaran</a>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h3 class="card-title">Motor: <?= esc($booking['brand_name']); ?> <?= esc($booking['motor_name']); ?></h3>
+                                <p><strong>Tanggal Sewa:</strong> <?php echo date('d F Y', strtotime($booking['rental_start_date'])); ?></p>
+                                <p><strong>Tanggal Kembali:</strong> <?php echo date('d F Y', strtotime($booking['rental_end_date'])); ?></p>
+                                <p>Detail Tagihan</p>
+                                <p><strong>Harga per Hari:</strong> Rp. <?= number_format($booking['price_per_day'], 0, ',', '.'); ?></p>
+                                <p><strong>Total Harga:</strong> Rp. <?= number_format($booking['total_price'], 0, ',', '.'); ?></p>
+                                <p><strong>Status:</strong>
+                                    <?php if ($booking['status'] == 'pending'): ?>
+                                        <span class="badge bg-warning  text-white">Pending</span>
+                                    <?php elseif ($booking['status'] == 'confirmed'): ?>
+                                        <span class="badge bg-primary  text-white">Confirmed</span>
+                                    <?php elseif ($booking['status'] == 'canceled'): ?>
+                                        <span class="badge bg-danger  text-white">Canceled</span>
+                                    <?php endif; ?>
+                                </p>
+                                <a href="#" class="btn btn-sm btn-primary <?= $booking['status'] == 'confirmed' ? 'disabled' : '' ?>">Upload Bukti Pembayaran</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

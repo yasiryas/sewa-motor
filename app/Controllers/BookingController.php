@@ -135,6 +135,7 @@ class BookingController extends BaseController
                 ->select('bookings.*, users.username, motors.name as motor_name')
                 ->join('users', 'users.id = bookings.user_id')
                 ->join('motors', 'motors.id = bookings.motor_id')
+                ->orderBy('bookings.created_at', 'DESC')
                 ->findAll(),
             'payments' => $this->PaymentModel->findAll(),
         ];
@@ -282,9 +283,14 @@ class BookingController extends BaseController
             ],
         ]);
 
+        if ($this->request->getPost('tanggal_sewa') < date('Y-m-d')) {
+            return redirect()->back()->with('error', 'Ups! Tanggal sewa tidak boleh kurang dari saat ini!')->with('modal', 'addBookingModal')->withInput();
+        }
+
         if ($this->request->getPost('tanggal_kembali') < $this->request->getPost('tanggal_sewa')) {
             return redirect()->back()->with('error', 'Tanggal kembali tidak boleh sebelum tanggal sewa.')->with('modal', 'addBookingModal')->withInput();
         }
+
         if (!session()->get('isLoggedIn')) {
             return redirect()->back()->with('error', 'Anda harus login terlebih dahulu.')->with('modal', 'addBookingModal');
         }
@@ -327,7 +333,7 @@ class BookingController extends BaseController
             'payment_proof' => null,
         ]);
 
-        return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
+        return redirect('booking/pesanan')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
 
     public function deleteAdmin()
@@ -352,22 +358,6 @@ class BookingController extends BaseController
 
     public function detail($id)
     {
-        // $bookingModel = new BookingModel();
-        // $paymentModel = new PaymentModel();
-        // $userModel = new UserModel();
-        // $motorModel = new MotorModel();
-
-        // $booking = $bookingModel->find($id);
-        // if (!$booking) {
-        //     return $this->response->setJSON(['error' => 'Booking tidak ditemukan']);
-        // }
-
-        // $payment = $paymentModel->where('booking_id', $id)->first();
-
-        // return $this->response->setJSON([
-        //     'booking' => $booking,
-        //     'payment' => $payment
-        // ]);
         $bookingModel = new \App\Models\BookingModel();
 
         $data = $bookingModel
@@ -425,5 +415,32 @@ class BookingController extends BaseController
         ]);
 
         return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+    }
+
+    public function getBookingDeatail($id)
+    {
+        $booking = $this->BookingModel
+            ->select(
+                'bookings.*,
+            motors.name as motor_name,
+            motors.photo as photo,
+            motors.number_plate,
+            motors.price_per_day,
+            brands.brand as brand_name,
+            bookings.status as status,
+            brands.brand as brand_name,
+            bookings.rental_start_date,
+            bookings.rental_end_date'
+            )
+            ->join('motors', 'motors.id = bookings.motor_id')
+            ->join('brands', 'brands.id = motors.id_brand')
+            ->where('bookings.id', $id)
+            ->first();
+
+        if (!$booking) {
+            return $this->response->setJSON(['error' => 'Booking tidak ditemukan']);
+        }
+
+        return $this->response->setJSON($booking);
     }
 }

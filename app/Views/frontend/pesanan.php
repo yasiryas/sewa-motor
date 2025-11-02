@@ -26,7 +26,6 @@
                                     <tr>
                                         <th>Motor</th>
                                         <th>Tanggal Sewa</th>
-                                        <th>Tanggal Kembali</th>
                                         <th>Status</th>
                                         <th>Opsi</th>
                                     </tr>
@@ -35,8 +34,7 @@
                                     <?php foreach ($bookings as $booking): ?>
                                         <tr>
                                             <td><b><?= $booking['brand_name']; ?> <?= $booking['motor_name']; ?></b></td>
-                                            <td><?php echo date('d F Y', strtotime($booking['rental_start_date'])); ?></td>
-                                            <td><?php echo date('d F Y', strtotime($booking['rental_end_date'])); ?></td>
+                                            <td><?php echo date('d F Y', strtotime($booking['rental_start_date'])); ?> - <?php echo date('d F Y', strtotime($booking['rental_end_date'])); ?></td>
                                             <td>
                                                 <?php if ($booking['status'] == 'pending'): ?>
                                                     <span class="badge bg-warning  text-white">Pending</span>
@@ -47,7 +45,16 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="<?= base_url('booking/detail-booking/' . $booking['id']); ?>" class="btn btn-sm btn-warning">Detail</a>
+                                                <?php
+                                                if ($booking['status'] == 'pending'): ?>
+                                                    <form action="<?= base_url('booking/cancel/' . $booking['id']); ?>" method="POST" class="d-inline">
+                                                        <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
+                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Anda yakin ingin membatalkan pesanan ini?')">Batal</button>
+                                                    </form>
+                                                    <button class="btn btn-sm btn-primary ">Upload Bukti</button> <?php endif; ?>
+                                                <!-- <a href="<?php // echo base_url('booking/detail-booking/' . $booking['id']);
+                                                                ?>" class="btn btn-sm btn-warning text-white">Detail</a> -->
+                                                <button data-toggle="modal" data-target="#detailModal" data-id="<?= $booking['id']; ?>" class="btn btn-sm btn-warning text-white btn-detail-transaction">Detail</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -62,4 +69,43 @@
         </div>
     </div>
 </section>
+
+<!-- modal view transaction -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail Transaksi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-3 border-0 shadow-none">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img id="detailPhotoMotor" src="..." class="card-img" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 id="detailNamaMotor" class="card-title">Card title</h5>
+                                <p id="detailTanggalSewa" class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <p id="detailTanggalTransaksi" class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Note: Data transaksi yang dihapus tidak dapat dikembalikan.</p>
+                    <p id="detailKeterangan" class="card-text"></p>
+                    <img id="detailBukti" src="" alt="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <?= $this->include('frontend/partials/footer'); ?>
