@@ -16,12 +16,12 @@
 </section>
 <section id="pesanan" class="py-5">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg">
+        <div class="row justify-content-center d-flex">
+            <div class="col-md">
                 <div class="card shadow-sm rounded-4 border-0">
-                    <div class="card-body">
+                    <div class="card-body table-responsive justify-content-center">
                         <?php if (!empty($bookings)): ?>
-                            <table id="tableUserBookings" class="table table-hover align-middle">
+                            <table id="tableUserBookings" class="table table-hover align-middle justify-content-center">
                                 <thead class="">
                                     <tr>
                                         <th>Motor</th>
@@ -39,15 +39,15 @@
                                             <td><?php echo date('d F Y', strtotime($booking['rental_end_date'])); ?></td>
                                             <td>
                                                 <?php if ($booking['status'] == 'pending'): ?>
-                                                    <span class="badge bg-warning badge-pill text-white">Pending</span>
+                                                    <span class="badge bg-warning  text-white">Pending</span>
                                                 <?php elseif ($booking['status'] == 'confirmed'): ?>
-                                                    <span class="badge bg-primary badge-pill text-white">Confirmed</span>
+                                                    <span class="badge bg-primary  text-white">Confirmed</span>
                                                 <?php elseif ($booking['status'] == 'canceled'): ?>
-                                                    <span class="badge bg-danger badge-pill text-white">Canceled</span>
+                                                    <span class="badge bg-danger  text-white">Canceled</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="<?= base_url('pesanan/detail/' . $booking['id']); ?>" class="btn btn-sm btn-warning">Detail</a>
+                                                <a href="<?= base_url('booking/detail-booking/' . $booking['id']); ?>" class="btn btn-sm btn-warning">Detail</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

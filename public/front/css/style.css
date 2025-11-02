@@ -276,6 +276,10 @@ table.dataTable tbody td {
   background-color: #ffc107 !important;
   color: white !important;
 }
+/*
+.dataTables_scroll{
+    overflow-x: hidden !important;
+} */
 
 /* end style table  */
 
