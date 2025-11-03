@@ -326,6 +326,19 @@ table.dataTable tbody td {
   scroll-behavior: smooth;
 }
 
+#detailModal .table td {
+    border-top: none;
+    padding: 0.3rem 0.5rem;
+}
+#detailModal .badge {
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
+#detailModal .border {
+    border-color: #e0e0e0 !important;
+}
+
+
 /* Footer */
 footer {
 background: #fdf5ec;

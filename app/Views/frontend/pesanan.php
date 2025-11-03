@@ -100,6 +100,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <a class="btn btn-sm btn-success" href="<?= base_url('booking/invoice'); ?>">Download Invoice</a>
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary btn-sm">Save changes</button>
             </div>
