@@ -181,4 +181,38 @@ class FrontController extends BaseController
         return $this->response->setJSON($data);
         // dd($data);
     }
+
+    public function detailBookingUserPage($id)
+    {
+        $BookingModel = new \App\Models\BookingModel();
+        $booking = $BookingModel
+            ->select(
+                'bookings.*,
+            motors.name as motor_name,
+            motors.photo as photo,
+            motors.number_plate,
+            motors.price_per_day,
+            bookings.status as status,
+            brands.brand as brand_name,
+            bookings.rental_start_date,
+            bookings.rental_end_date,
+            payments.payment_proof as payment_proof,'
+            )
+            ->join('motors', 'motors.id = bookings.motor_id')
+            ->join('brands', 'brands.id = motors.id_brand')
+            ->join('payments', 'payments.booking_id = bookings.id', 'left')
+            ->where('bookings.user_id', session()->get('id'))
+            ->where('bookings.id', $id)
+            ->first();
+
+        if (!$booking) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Pesanan tidak ditemukan');
+        }
+
+        $data = [
+            'title' => 'Detail Pesanan',
+            'booking' => $booking,
+        ];
+        return view('frontend/detail-pesanan', $data);
+    }
 }

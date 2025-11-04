@@ -52,9 +52,9 @@
                                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Anda yakin ingin membatalkan pesanan ini?')">Batal</button>
                                                     </form>
                                                     <button class="btn btn-sm btn-primary ">Upload Bukti</button> <?php endif; ?>
-                                                <!-- <a href="<?php // echo base_url('booking/detail-booking/' . $booking['id']);
-                                                                ?>" class="btn btn-sm btn-warning text-white">Detail</a> -->
-                                                <button data-toggle="modal" data-target="#detailModal" data-id="<?= $booking['id']; ?>" class="btn btn-sm btn-warning text-white btn-detail-transaction">Detail</button>
+                                                <a href="<?php echo base_url('booking/detail-booking-page/' . $booking['id']);
+                                                            ?>" class="btn btn-sm btn-warning text-white">Detail</a>
+                                                <!-- <button data-toggle="modal" data-target="#detailModal" data-id="<?= $booking['id']; ?>" class="btn btn-sm btn-warning text-white btn-detail-transaction">Detail</button> -->
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
