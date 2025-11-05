@@ -338,6 +338,55 @@ table.dataTable tbody td {
     border-color: #e0e0e0 !important;
 }
 
+.method-btn {
+        background-color: #f8f9fa;
+        border: 2px solid #dee2e6;
+        text-align: center;
+        transition: all 0.25s ease;
+ }
+
+.method-btn:hover {
+        background-color: #e9f5ff;
+        border-color: #0d6efd;
+        transform: translateY(-2px);
+    }
+
+.method-btn.active {
+        background-color: #0d6efd;
+        color: #fff;
+        border-color: #0d6efd;
+    }
+
+@media (max-width: 768px) {
+        .method-btn {
+            font-size: 0.9rem;
+            padding: 1rem;
+        }
+    } .method-btn {
+        background-color: #f8f9fa;
+        border: 2px solid #dee2e6;
+        text-align: center;
+        transition: all 0.25s ease;
+    }
+
+    .method-btn:hover {
+        background-color: #e9f5ff;
+        border-color: #0d6efd;
+        transform: translateY(-2px);
+    }
+
+    .method-btn.active {
+        background-color: #0d6efd;
+        color: #fff;
+        border-color: #0d6efd;
+    }
+
+    @media (max-width: 768px) {
+        .method-btn {
+            font-size: 0.9rem;
+            padding: 1rem;
+        }
+    }
 
 /* Footer */
 footer {

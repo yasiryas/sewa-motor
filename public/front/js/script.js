@@ -323,5 +323,33 @@ $(document).ready(function () {
             alert('Terjadi kesalahan saat memuat detail transaksi.');
         }
     });
+    });
+
+    $('#btnTransfer').on('click', function() {
+        $(this).addClass('active');
+        $('#btnCOD').removeClass('active');
+        $('#rekeningSection').removeClass('d-none').hide().fadeIn(200);
+    });
+
+    $('#btnCOD').on('click', function() {
+        $(this).addClass('active');
+        $('#btnTransfer').removeClass('active');
+        $('#rekeningSection').fadeOut(200);
+        $('#confirmCODModal').modal('show');
+    });
+
+    // preview gambar motor saat tambah dan edit
+$(document).on("change", ".photo-input", function () {
+    const preview = $(this).siblings(".photo-preview");
+
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.attr("src", e.target.result).show();
+        };
+        reader.readAsDataURL(this.files[0]);
+    } else {
+        preview.hide().attr("src", "#");
+    }
 });
 });

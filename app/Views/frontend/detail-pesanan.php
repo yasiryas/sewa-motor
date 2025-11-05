@@ -108,6 +108,13 @@
                         </div>
                     </div>
 
+                    <!-- Form Keterangan -->
+                    <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
+                        <h5 class="fw-bold text-dark mb-3">Catatan Pembeli</h5>
+                        <p class="text-muted mb-3">Silakan tambahkan catatan tambahan di bawah ini:</p>
+                        <textarea class="form-control" rows="3" placeholder="Catatan tambahan..."></textarea>
+                    </div>
+
                     <!-- Bukti Pembayaran -->
                     <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
                         <h5 class="fw-bold text-dark mb-3">Bukti Pembayaran</h5>
@@ -116,7 +123,8 @@
                             <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Silakan unggah di bawah ini:</p>
                             <form action="<?= base_url('booking/upload-bukti/' . $booking['id']); ?>" method="post" enctype="multipart/form-data">
                                 <div class="mb-3">
-                                    <input type="file" name="payment_proof" id="payment_proof" class="form-control" required>
+                                    <input type="file" name="payment_proof" id="payment_proof" class="photo-input form-control-file" accept="image/*" required>
+                                    <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sm">Upload Bukti</button>
                             </form>
@@ -144,7 +152,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmCODModalLabel">Konfirmasi Pembayaran COD</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 Apakah kamu yakin ingin memilih metode <strong>Bayar di Tempat (COD)</strong>?
@@ -153,58 +161,11 @@
             <div class="modal-footer">
                 <form action="<?= base_url('booking/update-metode/' . $booking['id']); ?>" method="post">
                     <input type="hidden" name="payment_method" value="cod">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Ya, Saya Yakin</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Ya, Saya Yakin</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .method-btn {
-        background-color: #f8f9fa;
-        border: 2px solid #dee2e6;
-        text-align: center;
-        transition: all 0.25s ease;
-    }
-
-    .method-btn:hover {
-        background-color: #e9f5ff;
-        border-color: #0d6efd;
-        transform: translateY(-2px);
-    }
-
-    .method-btn.active {
-        background-color: #0d6efd;
-        color: #fff;
-        border-color: #0d6efd;
-    }
-
-    @media (max-width: 768px) {
-        .method-btn {
-            font-size: 0.9rem;
-            padding: 1rem;
-        }
-    }
-</style>
-
-
 <?= $this->include('frontend/partials/footer'); ?>
-
-<script>
-    $(document).ready(function() {
-        $('#btnTransfer').on('click', function() {
-            $(this).addClass('active');
-            $('#btnCOD').removeClass('active');
-            $('#rekeningSection').removeClass('d-none').hide().fadeIn(200);
-        });
-
-        $('#btnCOD').on('click', function() {
-            $(this).addClass('active');
-            $('#btnTransfer').removeClass('active');
-            $('#rekeningSection').fadeOut(200);
-            $('#confirmCODModal').modal('show');
-        });
-    });
-</script>
