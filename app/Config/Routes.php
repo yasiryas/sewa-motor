@@ -97,6 +97,7 @@ $routes->group('booking', ['filter' => 'auth'], function ($routes) {
     $routes->get('detail-booking/(:num)', 'FrontController::detailBookingUser/$1');
     $routes->get('detail-booking-page/(:num)', 'FrontController::detailBookingUserPage/$1');
     $routes->get('getBookingDetails', 'BookingController::getBookingDetails');
+    $routes->post('update-from-detail-user', 'FrontController::updateBookingFromDetailUser');
 });
 
 

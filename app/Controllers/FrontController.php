@@ -196,7 +196,11 @@ class FrontController extends BaseController
             brands.brand as brand_name,
             bookings.rental_start_date,
             bookings.rental_end_date,
-            payments.payment_proof as payment_proof,'
+            payments.payment_proof as payment_proof,
+            payments.payment_method as payment_method,
+            payments.id as payment_id,
+            payments.status as payment_status,
+            payments.amount as payment_amount'
             )
             ->join('motors', 'motors.id = bookings.motor_id')
             ->join('brands', 'brands.id = motors.id_brand')
@@ -214,5 +218,55 @@ class FrontController extends BaseController
             'booking' => $booking,
         ];
         return view('frontend/detail-pesanan', $data);
+    }
+
+    public function updateBookingFromDetailUser()
+    {
+        $BookingModel = new \App\Models\BookingModel();
+        $PayementModel = new \App\Models\PaymentModel();
+
+        $id_booking = $this->request->getPost('id_booking');
+        $id_payment = $this->request->getPost('id_payment');
+
+        $booking = $BookingModel->find($id_booking);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking tidak ditemukan');
+        }
+
+        $data = [
+            'payment_method' => $this->request->getPost('payment_method'),
+            'notes' => $this->request->getPost('notes'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        // upload identitiy photo
+        $identityFile = $this->request->getFile('identity_photo');
+        if ($identityFile && $identityFile->isValid()) {
+            $identityPhotoName = 'identity_' . time() . '.' . $identityFile->getClientExtension();
+            $identityFile->move('uploads/identitas/', $identityPhotoName);
+            $data['identity_photo'] = $identityPhotoName;
+        }
+
+        // upload bukti pembayaran
+        $proofFile = $this->request->getFile('payment_proof');
+        if ($proofFile && $proofFile->isValid()) {
+            $paymentProofName = 'payment_proof_' . time() . '.' . $proofFile->getClientExtension();
+            $proofFile->move('uploads/payments/', $paymentProofName);
+            $data['payment_proof'] = $paymentProofName;
+        }
+
+        if ($BookingModel->update($id_booking, $data)) {
+            // update payment table if payment proof is uploaded
+            if (isset($data['payment_proof'])) {
+                $paymentData = [
+                    'payment_proof' => $data['payment_proof'],
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ];
+                $PayementModel->update($id_payment, $paymentData);
+            }
+            return redirect()->back()->with('success', 'Booking berhasil diperbarui');
+        } else {
+            return redirect()->back()->with('error', 'Gagal memperbarui booking');
+        }
     }
 }

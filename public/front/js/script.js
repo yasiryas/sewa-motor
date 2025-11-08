@@ -325,18 +325,34 @@ $(document).ready(function () {
     });
     });
 
+    // ===== Metode pembayaran =====
+
     $('#btnTransfer').on('click', function() {
         $(this).addClass('active');
+        $('#payment_method').val('transfer')
         $('#btnCOD').removeClass('active');
         $('#rekeningSection').removeClass('d-none').hide().fadeIn(200);
+        $('#CODSection').fadeOut(200);
     });
 
     $('#btnCOD').on('click', function() {
         $(this).addClass('active');
+        $('#payment_method').val('cash')
         $('#btnTransfer').removeClass('active');
         $('#rekeningSection').fadeOut(200);
-        $('#confirmCODModal').modal('show');
+        $('#CODSection').removeClass('d-none').hide().fadeIn(200);
+
+        // $('#confirmCODModal').modal('show');
     });
+
+    // $('#btnCOD').on('click', function() {
+    //     $(this).addClass('active');
+    //     $('#btnTransfer').removeClass('active');
+    //     $('#rekeningSection').fadeOut(200);
+    //     $('#confirmCODModal').modal('show');
+    // });
+
+    // ===== Preview gambar KTP saat upload =====
 
     // preview gambar motor saat tambah dan edit
 $(document).on("change", ".photo-input", function () {

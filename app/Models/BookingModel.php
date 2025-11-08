@@ -12,7 +12,7 @@ class BookingModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_id', 'motor_id', 'rental_start_date', 'rental_end_date', 'total_price', 'status'];
+    protected $allowedFields    = ['user_id', 'motor_id', 'rental_start_date', 'rental_end_date', 'total_price', 'status', 'identity_photo', 'notes'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

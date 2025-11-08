@@ -41,6 +41,15 @@ class CreateBookingTable extends Migration
                 'constraint' => ['pending', 'confirmed', 'canceled', 'completed'],
                 'default'    => 'pending',
             ],
+            'identity_photo' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
+                'null'       => true,
+            ],
+            'notes' => [
+                'type'       => 'TEXT',
+                'null'       => true,
+            ],
             'created_at' => [
                 'type'    => 'DATETIME',
                 'null'    => true,
