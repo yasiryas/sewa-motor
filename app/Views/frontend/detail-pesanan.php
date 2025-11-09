@@ -30,7 +30,7 @@
                 <div class="col-lg-4 text-center">
                     <img src="<?= base_url('uploads/motors/' . $booking['photo']); ?>"
                         alt="Foto Motor"
-                        class="img-fluid rounded-3 shadow-sm mb-3"
+                        class="img-fluid rounded-3 mb-3"
                         style="max-height: 250px; object-fit: cover;">
                     <h5 class="fw-bold mt-2"><?= esc($booking['brand_name']); ?> <?= esc($booking['motor_name']); ?></h5>
                     <p class="text-muted mb-0"><i class="bi bi-geo-alt"></i> <?= esc($booking['number_plate']); ?></p>
@@ -87,38 +87,37 @@
                         <!-- Metode Pembayaran -->
                         <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
                             <h5 class="fw-bold text-dark mb-3">Pilih Metode Pembayaran</h5>
+                            <?php
+                            $selectedMethod = old('payment_method', $booking['payment_method']);
+                            ?>
+
                             <div class="d-flex flex-column flex-md-row gap-3">
                                 <button type="button" id="btnTransfer"
-                                    class="method-btn w-100 p-3 rounded-3 border">
+                                    class="method-btn w-100 p-3 rounded-3 border <?= $selectedMethod == 'transfer' ? 'bg-primary text-white active' : ''; ?>">
                                     <i class="bi bi-bank fs-4 mb-2 d-block"></i>
                                     <strong>Transfer Bank</strong><br>
                                     <small>BCA / Mandiri / BRI</small>
                                 </button>
 
                                 <button type="button" id="btnCOD"
-                                    class="method-btn w-100 p-3 rounded-3 border">
+                                    class="method-btn w-100 p-3 rounded-3 border <?= $selectedMethod == 'cash' ? 'bg-primary text-white active' : ''; ?>">
                                     <i class="bi bi-cash-stack fs-4 mb-2 d-block"></i>
                                     <strong>Bayar di Tempat</strong><br>
                                     <small>(COD)</small>
                                 </button>
 
                                 <input type="hidden" name="payment_method" id="payment_method" value="">
-                                <!-- <button type="button" id="btnCOD"
-                                class="method-btn w-100 p-3 rounded-3 border">
-                                <i class="bi bi-cash-stack fs-4 mb-2 d-block"></i>
-                                <strong>Bayar di Tempat</strong><br>
-                                <small>(COD)</small>
-                            </button> -->
                             </div>
 
                             <!-- Rekening Bank -->
-                            <div id="rekeningSection" class="mt-4 bg-light p-3 rounded-3 d-none">
+                            <div id="rekeningSection" class="mt-4 bg-light p-3 rounded-3 <?= $selectedMethod == 'transfer' ? '' : 'd-none'; ?>">
                                 <p class="fw-bold mb-1">Nomor Rekening:</p>
                                 <p class="mb-0">BCA - 1234567890 a.n. <strong>Rental Motor Indonesia</strong></p>
                                 <p class="small text-muted mb-0">Kirim sesuai total pembayaran dan upload bukti di bawah ini.</p>
                             </div>
 
-                            <div id="CODSection" class="mt-4 bg-light p-3 rounded-3 d-none">
+                            <!-- COD Section -->
+                            <div id="CODSection" class="mt-4 bg-light p-3 rounded-3 <?= $selectedMethod == 'cash' ? '' : 'd-none'; ?>">
                                 <p class="fw-bold mb-1">Pembayaran dilakukan di tempat (COD)</p>
                                 <p class="mb-0">Rental Motor Jogja <strong>Jl. Karangwaru No. 12</strong></p>
                                 <p class="small text-muted mb-0">Pesanan kamu akan disimpan dan dibayar saat pengambilan motor.</p>
@@ -129,23 +128,21 @@
                         <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
                             <h5 class="fw-bold text-dark mb-3">Catatan Pembeli</h5>
                             <p class="text-muted mb-3">Silakan tambahkan catatan tambahan di bawah ini:</p>
-                            <textarea class="form-control" rows="3" placeholder="Catatan tambahan..." name="notes"></textarea>
+                            <textarea class="form-control" rows="3" placeholder="Catatan tambahan..." name="notes"><?= old('notes', $booking['notes']); ?></textarea>
                         </div>
 
                         <!-- Upload kartu identitas   -->
                         <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
                             <h5 class="fw-bold text-dark mb-3">Unggah Kartu Identitas (KTP/SIM)</h5>
-
-                            <?php if (empty($booking['identity_card'])): ?>
+                            <?php if (empty($booking['identity_photo'])): ?>
                                 <p class="text-muted mb-3">Kamu belum mengunggah kartu identitas. Silakan unggah di bawah ini:</p>
                                 <div class="mb-3">
                                     <input type="file" name="identity_photo" id="identity_photo" class="photo-input form-control-file" accept="image/*" required>
                                     <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
                                 </div>
-
                             <?php else: ?>
                                 <p class="text-muted mb-2">Kartu identitas kamu:</p>
-                                <img src="<?= base_url('uploads/identity_cards/' . $booking['identity_card']); ?>"
+                                <img src="<?= base_url('uploads/identitas/' . $booking['identity_photo']); ?>"
                                     alt="Kartu Identitas" class="img-fluid rounded shadow-sm mb-3" style="max-width: 400px;">
                             <?php endif; ?>
                         </div>
@@ -153,19 +150,15 @@
                         <!-- Bukti Pembayaran -->
                         <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
                             <h5 class="fw-bold text-dark mb-3">Bukti Pembayaran</h5>
-
                             <?php if (empty($booking['payment_proof'])): ?>
                                 <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Silakan unggah di bawah ini:</p>
-
                                 <div class="mb-3">
                                     <input type="file" name="payment_proof" id="payment_proof" class="photo-input form-control-file" accept="image/*" required>
                                     <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
                                 </div>
-
-
                             <?php else: ?>
                                 <p class="text-muted mb-2">Bukti pembayaran kamu:</p>
-                                <img src="<?= base_url('uploads/payment_proof/' . $booking['payment_proof']); ?>"
+                                <img src="<?= base_url('uploads/payments/' . $booking['payment_proof']); ?>"
                                     alt="Bukti Pembayaran" class="img-fluid rounded shadow-sm mb-3" style="max-width: 400px;">
                             <?php endif; ?>
                         </div>

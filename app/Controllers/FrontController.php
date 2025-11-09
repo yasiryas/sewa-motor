@@ -200,7 +200,8 @@ class FrontController extends BaseController
             payments.payment_method as payment_method,
             payments.id as payment_id,
             payments.status as payment_status,
-            payments.amount as payment_amount'
+            payments.amount as payment_amount,
+            bookings.identity_photo as identity_photo'
             )
             ->join('motors', 'motors.id = bookings.motor_id')
             ->join('brands', 'brands.id = motors.id_brand')
@@ -261,9 +262,11 @@ class FrontController extends BaseController
                 $paymentData = [
                     'payment_proof' => $data['payment_proof'],
                     'updated_at' => date('Y-m-d H:i:s'),
+                    'payment_method' => $data['payment_method'],
                 ];
                 $PayementModel->update($id_payment, $paymentData);
             }
+            // dd($data);
             return redirect()->back()->with('success', 'Booking berhasil diperbarui');
         } else {
             return redirect()->back()->with('error', 'Gagal memperbarui booking');
