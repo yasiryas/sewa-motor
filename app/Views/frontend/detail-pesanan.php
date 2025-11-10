@@ -106,7 +106,7 @@
                                     <small>(COD)</small>
                                 </button>
 
-                                <input type="hidden" name="payment_method" id="payment_method" value="">
+                                <input type="hidden" name="payment_method" id="payment_method" value="<?= $booking['payment_method']; ?>">
                             </div>
 
                             <!-- Rekening Bank -->
@@ -148,7 +148,7 @@
                         </div>
 
                         <!-- Bukti Pembayaran -->
-                        <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
+                        <div class="bg-white rounded-4 shadow-sm p-4 mt-4 <?= $booking['payment_method'] == 'cash' ? 'd-none' : ''; ?>" id="buktiPembayaran">
                             <h5 class="fw-bold text-dark mb-3">Bukti Pembayaran</h5>
                             <?php if (empty($booking['payment_proof'])): ?>
                                 <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Silakan unggah di bawah ini:</p>

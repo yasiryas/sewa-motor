@@ -260,16 +260,49 @@ class FrontController extends BaseController
             // update payment table if payment proof is uploaded
             if (isset($data['payment_proof'])) {
                 $paymentData = [
+                    'payment_method' => $data['payment_method'],
                     'payment_proof' => $data['payment_proof'],
                     'updated_at' => date('Y-m-d H:i:s'),
+                ];
+                $PayementModel->update($id_payment, $paymentData);
+            } else {
+                // update payment method only
+                $paymentData = [
                     'payment_method' => $data['payment_method'],
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ];
                 $PayementModel->update($id_payment, $paymentData);
             }
-            // dd($data);
             return redirect()->back()->with('success', 'Booking berhasil diperbarui');
         } else {
             return redirect()->back()->with('error', 'Gagal memperbarui booking');
         }
+    }
+
+    public function invoice($id)
+    {
+        $BookingModel = new \App\Models\BookingModel();
+        $PaymentModel = new \App\Models\PaymentModel();
+
+        $booking = $BookingModel
+            ->select('bookings.*, payments.payment_method, payments.payment_proof, motors.brand as brand_name, motors.name as motor_name, motors.number_plate')
+            ->join('payments', 'payments.booking_id = bookings.id', 'left')
+            ->join('motors', 'motors.id = bookings.motor_id', 'left')
+            ->join('brands', 'brands.id = motors.id_brand', 'left')
+            ->join('types', 'types.id = motors.id_type', 'left')
+            ->join('users', 'users.id = bookings.user_id', 'left')
+            ->find($id);
+
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Data booking tidak ditemukan');
+        }
+
+        $html = view('frontend/invoice', ['booking' => $booking]);
+
+        $dompdf = new \Dompdf\Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+        $dompdf->stream('Invoice_Booking_' . $booking['id'] . '.pdf', ['Attachment' => true]);
     }
 }

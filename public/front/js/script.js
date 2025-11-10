@@ -328,43 +328,36 @@ $(document).ready(function () {
     // ===== Metode pembayaran =====
 
     // === TRANSFER BANK ===
-    $('#btnTransfer').on('click', function() {
-        // Tambahkan class aktif ke tombol ini, hapus dari tombol lain
+     $('#btnTransfer').on('click', function() {
         $(this).addClass('active bg-primary text-white');
         $('#btnCOD').removeClass('active bg-primary text-white');
-
-        // Set nilai metode pembayaran
         $('#payment_method').val('transfer');
-
-        // Tampilkan bagian rekening
         $('#rekeningSection').removeClass('d-none').hide().fadeIn(200);
-
-        // Sembunyikan bagian COD
-        $('#CODSection').fadeOut(200, function() {
-            $(this).addClass('d-none');
-        });
+        $('#CODSection').fadeOut(200, function() { $(this).addClass('d-none'); });
     });
 
     // === COD ===
     $('#btnCOD').on('click', function() {
-        // Tambahkan class aktif ke tombol ini, hapus dari tombol lain
         $(this).addClass('active bg-primary text-white');
         $('#btnTransfer').removeClass('active bg-primary text-white');
-
-        // Set nilai metode pembayaran (gunakan "cod", bukan "cash" biar konsisten)
         $('#payment_method').val('cash');
-
-        // Tampilkan bagian COD
         $('#CODSection').removeClass('d-none').hide().fadeIn(200);
-
-        // Sembunyikan bagian rekening
-        $('#rekeningSection').fadeOut(200, function() {
-            $(this).addClass('d-none');
-        });
-
-        // Jika mau konfirmasi dulu:
-        // $('#confirmCODModal').modal('show');
+        $('#rekeningSection').fadeOut(200, function () { $(this).addClass('d-none'); });
+        $('#buktiPembayaran').addClass('d-none'); // sembunyikan bukti pembayaran jika COD
     });
+
+    // === SETELAH REFRESH: tampilkan metode dari database ===
+    const selectedMethod = "<?= $booking['payment_method']; ?>";
+    if (selectedMethod === 'transfer') {
+        $('#btnTransfer').addClass('active bg-primary text-white');
+        $('#rekeningSection').removeClass('d-none');
+        $('#payment_method').val('transfer'); // penting!
+    } else if (selectedMethod === 'cash') {
+        $('#btnCOD').addClass('active bg-primary text-white');
+        $('#CODSection').removeClass('d-none');
+        $('#payment_method').val('cash'); // penting!
+        $('#buktiPembayaran').addClass('d-none'); // sembunyikan bukti pembayaran jika COD
+    }
 
     // $('#btnCOD').on('click', function() {
     //     $(this).addClass('active');
