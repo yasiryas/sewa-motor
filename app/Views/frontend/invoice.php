@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 
+
 <head>
     <meta charset="UTF-8">
     <title>Invoice #<?= $booking['id']; ?></title>
@@ -161,7 +162,6 @@
                 <tr>
                     <th>Deskripsi</th>
                     <th>Tanggal</th>
-                    <th>Durasi</th>
                     <th>Harga per Hari</th>
                     <th>Total</th>
                 </tr>
@@ -170,7 +170,6 @@
                 <tr>
                     <td><?= esc($booking['brand_name']); ?> <?= esc($booking['motor_name']); ?> (<?= esc($booking['number_plate']); ?>)</td>
                     <td><?= date('d M Y', strtotime($booking['rental_start_date'])); ?> - <?= date('d M Y', strtotime($booking['rental_end_date'])); ?></td>
-                    <td><?= (new DateTime($booking['rental_start_date']))->diff(new DateTime($booking['rental_end_date']))->days; ?> Hari</td>
                     <td>Rp <?= number_format($booking['price_per_day'], 0, ',', '.'); ?></td>
                     <td>Rp <?= number_format($booking['total_price'], 0, ',', '.'); ?></td>
                 </tr>
@@ -193,7 +192,7 @@
         </div>
 
         <div class="footer">
-            <p>Terima kasih telah mempercayakan perjalananmu kepada <strong>Rental Motor Indonesia</strong> 🚀</p>
+            <p>Terima kasih telah mempercayakan perjalananmu kepada <strong>Rental Motor Indonesia</strong></p>
             <p>Website: www.rentalmotor.id | Email: support@rentalmotor.id</p>
         </div>
     </div>

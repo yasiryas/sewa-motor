@@ -6,6 +6,8 @@ use App\Models\BrandModel;
 use App\Models\MotorModel;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class FrontController extends BaseController
 {
@@ -285,7 +287,19 @@ class FrontController extends BaseController
         $PaymentModel = new \App\Models\PaymentModel();
 
         $booking = $BookingModel
-            ->select('bookings.*, payments.payment_method, payments.payment_proof, motors.brand as brand_name, motors.name as motor_name, motors.number_plate')
+            ->select('bookings.*,
+        payments.amount,
+        payments.status as payment_status,
+        payments.payment_method,
+        payments.payment_proof,
+        brands.brand as brand_name,
+        motors.name as motor_name,
+        motors.number_plate,
+        motors.price_per_day,
+        users.full_name,
+        users.phone,
+        users.email,
+        types.type as type_name')
             ->join('payments', 'payments.booking_id = bookings.id', 'left')
             ->join('motors', 'motors.id = bookings.motor_id', 'left')
             ->join('brands', 'brands.id = motors.id_brand', 'left')
@@ -297,12 +311,21 @@ class FrontController extends BaseController
             return redirect()->back()->with('error', 'Data booking tidak ditemukan');
         }
 
+        // === 1️⃣ Setup opsi Dompdf ===
+        $options = new Options();
+        $options->set('isRemoteEnabled', true); // agar logo bisa di-load dari base_url
+        $options->set('isHtml5ParserEnabled', true);
+        $dompdf = new Dompdf($options);
+
+        // === 2️⃣ Siapkan HTML ===
         $html = view('frontend/invoice', ['booking' => $booking]);
 
-        $dompdf = new \Dompdf\Dompdf();
+        // === 3️⃣ Render ke PDF ===
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
+
+        // === 4️⃣ Unduh PDF ===
         $dompdf->stream('Invoice_Booking_' . $booking['id'] . '.pdf', ['Attachment' => true]);
     }
 }
