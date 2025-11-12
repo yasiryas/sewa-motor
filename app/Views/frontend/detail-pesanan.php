@@ -162,16 +162,48 @@
                                     alt="Bukti Pembayaran" class="img-fluid rounded shadow-sm mb-3" style="max-width: 400px;">
                             <?php endif; ?>
                         </div>
+                        <?php
+                        $isCancellable = (
+                            $booking['status'] !== 'canceled' &&
+                            $booking['status'] === 'pending' && // Tambahkan agar hanya pending yang bisa dibatalkan
+                            strtotime($booking['rental_start_date']) > time()
+                        );
+                        ?>
+
+                        <?php if (!$isCancellable): ?>
+                            <div class="alert alert-warning text-center mt-4">
+                                Pesanan tidak dapat diubah atau dibatalkan karena
+                                <?= $booking['status'] === 'canceled'
+                                    ? 'pesanan telah dibatalkan.'
+                                    : 'tanggal sewa sudah dimulai atau status bukan pending.'; ?>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="mt-4 d-flex justify-content-center align-items-center gap-2">
-                            <a href="#" class="btn btn-danger w-100 m-2" data-target="#confirmCancelModal" modal="confirmCancelModal" data-toggle="modal">
-                                <i class="fa fa-times"></i> Batalkan Pesanan
-                            </a>
-                            <a href="<?= base_url('booking/invoice/' . $booking['id']); ?>" class="btn btn-success w-100 m-2">
-                                <i class="fa fa-download"></i> Download Invoice
-                            </a>
-                            <button type="submit" class="btn btn-primary w-100 m-2">
-                                <i class="fa fa-save"></i> Simpan
-                            </button>
+                            <?php if ($isCancellable): ?>
+                                <!-- Tombol Batalkan -->
+                                <a href="#" class="btn btn-danger w-100 m-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmCancelModal">
+                                    <i class="fa fa-times"></i> Batalkan Pesanan
+                                </a>
+
+                                <!-- Tombol Download Invoice -->
+                                <a href="<?= base_url('booking/invoice/' . $booking['id']); ?>" class="btn btn-success w-100 m-2">
+                                    <i class="fa fa-download"></i> Download Invoice
+                                </a>
+
+                                <!-- Tombol Simpan -->
+                                <button type="submit" class="btn btn-primary w-100 m-2">
+                                    <i class="fa fa-save"></i> Simpan
+                                </button>
+
+                            <?php else: ?>
+                                <!-- Hanya tampilkan tombol invoice -->
+                                <a href="<?= base_url('booking/invoice/' . $booking['id']); ?>" class="btn btn-success w-100 m-2">
+                                    <i class="fa fa-download"></i> Download Invoice
+                                </a>
+                            <?php endif; ?>
                         </div>
                     </form>
                 </div>

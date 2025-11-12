@@ -328,4 +328,15 @@ class FrontController extends BaseController
         // === 4️⃣ Unduh PDF ===
         $dompdf->stream('Invoice_Booking_' . $booking['id'] . '.pdf', ['Attachment' => true]);
     }
+
+    public function checkTime()
+    {
+        echo "<h3>Waktu Server</h3>";
+        echo "PHP Timezone: " . date_default_timezone_get() . "<br>";
+        echo "PHP Time: " . date('Y-m-d H:i:s') . "<br>";
+
+        $db = \Config\Database::connect();
+        $query = $db->query("SELECT NOW() AS waktu_mysql")->getRow();
+        echo "MySQL Time: " . $query->waktu_mysql;
+    }
 }

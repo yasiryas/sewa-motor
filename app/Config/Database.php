@@ -49,6 +49,7 @@ class Database extends Config
             'datetime' => 'Y-m-d H:i:s',
             'time'     => 'H:i:s',
         ],
+        'initSQL'  => ['SET time_zone = "+07:00";'],
     ];
 
     //    /**
