@@ -9,6 +9,15 @@ $(document).ready(function () {
         }
     });
 
+    // Jalankan juga saat halaman dimuat ulang
+    setTimeout(function() {
+    if ($(window).scrollTop() > 50) {
+        $(".navbar").addClass("scrolled");
+    } else {
+        $(".navbar").removeClass("scrolled");
+    }
+}, 100);
+
     // ===== Toggle mobile navbar =====
     $('#buttonNavMobile').on('click', function () {
         $('#containerNavbar').toggleClass('clicked');
