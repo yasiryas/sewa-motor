@@ -99,6 +99,7 @@ $routes->group('booking', ['filter' => 'auth'], function ($routes) {
     $routes->get('getBookingDetails', 'BookingController::getBookingDetails');
     $routes->post('update-from-detail-user', 'FrontController::updateBookingFromDetailUser');
     $routes->get('invoice/(:num)', 'FrontController::invoice/$1');
+    $routes->get('cancel-user/(:num)', 'BookingController::cancelBookingUser/$1');
 });
 
 

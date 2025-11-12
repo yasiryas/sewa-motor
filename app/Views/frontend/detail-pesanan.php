@@ -163,7 +163,7 @@
                             <?php endif; ?>
                         </div>
                         <div class="mt-4 d-flex justify-content-center align-items-center gap-2">
-                            <a href="<?= base_url('booking/cancel-user/' . $booking['id']); ?>" class="btn btn-danger w-100 m-2">
+                            <a href="#" class="btn btn-danger w-100 m-2" data-target="#confirmCancelModal" modal="confirmCancelModal" data-toggle="modal">
                                 <i class="fa fa-times"></i> Batalkan Pesanan
                             </a>
                             <a href="<?= base_url('booking/invoice/' . $booking['id']); ?>" class="btn btn-success w-100 m-2">
@@ -202,4 +202,24 @@
         </div>
     </div>
 </div>
+
+<!-- modal confirm cancel -->
+<div class="modal fade" id="confirmCancelModal" tabindex="-1" aria-labelledby="confirmCancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmCancelModalLabel">Konfirmasi Pembatalan Pesanan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                Apakah kamu yakin ingin membatalkan pesanan ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                <a href="<?= base_url('booking/cancel-user/' . $booking['id']); ?>" class="btn btn-sm btn-danger">Ya, Batalkan Pesanan</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?= $this->include('frontend/partials/footer'); ?>

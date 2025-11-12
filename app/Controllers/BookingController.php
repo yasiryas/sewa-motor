@@ -443,4 +443,29 @@ class BookingController extends BaseController
 
         return $this->response->setJSON($booking);
     }
+
+    public function cancelBookingUser($id)
+    {
+        $booking = $this->BookingModel->find($id);
+
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking tidak ditemukan.');
+        }
+
+        if ($booking['user_id'] != session()->get('id')) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk membatalkan booking ini.');
+        }
+
+        if ($booking['status'] == 'canceled') {
+            return redirect()->back()->with('error', 'Booking sudah dibatalkan.');
+        }
+
+        $this->BookingModel->update($id, [
+            'status' => 'canceled'
+        ]);
+
+        $this->PaymentModel->where('booking_id', $id)->set(['status' => 'canceled'])->update();
+
+        return redirect()->back()->with('success', 'Booking berhasil dibatalkan.');
+    }
 }
