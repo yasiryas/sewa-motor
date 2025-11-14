@@ -19,6 +19,14 @@ ini_set('display_errors', '1');
 
 /*
  |--------------------------------------------------------------------------
+ | SET DEFAULT TIMEZONE
+ |--------------------------------------------------------------------------
+ | Tambahkan baris ini agar semua fungsi date(), time(), dsb pakai WIB.
+*/
+date_default_timezone_set('Asia/Jakarta');
+
+/*
+ |--------------------------------------------------------------------------
  | DEBUG BACKTRACES
  |--------------------------------------------------------------------------
  | If true, this constant will tell the error screens to display debug
