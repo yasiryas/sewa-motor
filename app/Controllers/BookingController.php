@@ -11,6 +11,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
+
 class BookingController extends BaseController
 {
 
@@ -97,6 +98,7 @@ class BookingController extends BaseController
             'status' => 'pending',
         ]);
 
+
         return redirect()->to('booking/success')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($totalPrice));
     }
 
@@ -155,6 +157,7 @@ class BookingController extends BaseController
 
     public function adminStore()
     {
+
         // code to store booking by admin
         $validationRules = [
             'user_id' => [
@@ -261,6 +264,12 @@ class BookingController extends BaseController
             'payment_proof' => null,
         ]);
 
+        // Get user data for email
+        $user = $this->UserModel->find(session()->get('id'));
+
+        // Send email notification
+        sendBookingEmail($user, $bookingID, $motor, $start_date, $end_date, $total_price, $days);
+
         return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
 
@@ -332,6 +341,12 @@ class BookingController extends BaseController
             'status' => 'pending',
             'payment_proof' => null,
         ]);
+
+        // Get user data for email
+        $user = $this->UserModel->find($user_id);
+
+        // Send email notification
+        sendBookingEmail($user, $bookingID, $motor, $start_date, $end_date, $total_price, $days);
 
         return redirect('booking/pesanan')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
