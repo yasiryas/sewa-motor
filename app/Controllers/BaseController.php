@@ -58,7 +58,7 @@ abstract class BaseController extends Controller
             $uri = current_url(true);
             $path = trim($uri->getPath(), '/');
 
-            if (!in_array($path, ['login', 'login/process', 'logout', 'register'])) {
+            if (!in_array($path, ['login', 'login/process', 'logout', 'register', 'register/process'])) {
                 $this->session->set('redirect_url', current_url());
             }
         }

@@ -99,11 +99,11 @@ class AuthController extends BaseController
 
         // validation
         if (!$username || !$email || !$password || !$confirmPassword) {
-            return redirect()->back()->with('error', 'Ups! Data harus lengkap');
+            return redirect()->back()->with('error', 'Ups! Data harus lengkap')->withInput();
         }
 
         if ($password !== $confirmPassword) {
-            return redirect()->back()->with('error', 'Password dan konfirmasi password tidak sesuai');
+            return redirect()->back()->with('error', 'Password dan konfirmasi password tidak sesuai')->withInput();
         }
 
         // check if email already exists
@@ -112,9 +112,9 @@ class AuthController extends BaseController
         $existingUsername = $userModel->where('username', $username)->first();
 
         if ($existingEmail) {
-            return redirect()->back()->with('error', 'Email sudah terdaftar');
+            return redirect()->back()->with('error', 'Email sudah terdaftar')->withInput();
         } else if ($existingUsername) {
-            return redirect()->back()->with('error', 'Username sudah terdaftar');
+            return redirect()->back()->with('error', 'Username sudah terdaftar')->withInput();
         }
 
         // insert user

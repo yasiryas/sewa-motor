@@ -24,16 +24,16 @@
                                     <div class="form-group">
                                         <input type="text" class="form-control form-control-user"
                                             id="username" aria-describedby="username"
-                                            placeholder="Enter username" name="username">
+                                            placeholder="Enter username" name="username" value="<?= old('username'); ?>">
                                     </div>
                                     <div class="form-group">
                                         <input type="email" class="form-control form-control-user"
                                             id="exampleInputEmail" aria-describedby="emailHelp"
-                                            placeholder="Enter Email Address..." name="email">
+                                            placeholder="Enter Email Address..." name="email" value="<?= old('email'); ?>">
                                     </div>
                                     <div class="form-group position-relative">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password" name="password">
+                                            id="exampleInputPassword" placeholder="Password" name="password" id="password" value="<?= old('password'); ?>">
 
                                         <!-- Tombol toggle password -->
                                         <span onclick="togglePassword('exampleInputPassword','toggleIcon1')"
@@ -45,7 +45,7 @@
 
                                     <div class="form-group position-relative">
                                         <input type="password" class="form-control form-control-user"
-                                            id="confirm_password" placeholder="Confirm Password" name="confirm_password">
+                                            id="confirm_password" placeholder="Confirm Password" name="confirm_password" value="<?= old('confirm_password'); ?>">
 
                                         <!-- Tombol toggle confirm password -->
                                         <span onclick="togglePassword('confirm_password','toggleIcon2')"
