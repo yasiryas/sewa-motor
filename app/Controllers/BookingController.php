@@ -98,6 +98,28 @@ class BookingController extends BaseController
             'status' => 'pending',
         ]);
 
+        $user = $this->UserModel->find(session()->get('id'));
+        $bookingData = [
+            'booking_id' => $bookingModel->getInsertID(),
+            'motor_name' => $motor['name'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'total_price' => $totalPrice,
+            'days' => $days
+        ];
+
+        sendBookingEmail($user['email'], $user['name'], $bookingData);
+
+        $adminData = [
+            'user_name' => $user['name'],
+            'booking_id' => $bookingModel->getInsertID(),
+            'motor_name' => $motor['name'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'total_price' => $totalPrice
+        ];
+
+        sendAdminNotification($adminData);
 
         return redirect()->to('booking/success')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($totalPrice));
     }
@@ -157,7 +179,6 @@ class BookingController extends BaseController
 
     public function adminStore()
     {
-
         // code to store booking by admin
         $validationRules = [
             'user_id' => [
@@ -267,8 +288,31 @@ class BookingController extends BaseController
         // Get user data for email
         $user = $this->UserModel->find(session()->get('id'));
 
-        // Send email notification
-        sendBookingEmail($user, $bookingID, $motor, $start_date, $end_date, $total_price, $days);
+        $bookingData = [
+            'user_name' => $user['name'],
+            'booking_id' => $bookingID,
+            'motor_name' => $motor['name'],
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'total_price' => $total_price,
+            'days' => $days,
+        ];
+
+        $emailResult = sendBookingEmail($user['email'], $user['name'], $bookingData);
+
+        $adminData = [
+            'user_name' => $user['name'],
+            'booking_id' => $bookingID,
+            'motor_name' => $motor['name'],
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'total_price' => $total_price
+        ];
+        sendAdminNotification($adminData);
+
+        if (!$emailResult) {
+            return redirect()->back()->with('error', 'Gagal mengirim email')->withInput()->with('modal', 'addBookingModal');
+        }
 
         return redirect()->back()->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }
@@ -345,8 +389,34 @@ class BookingController extends BaseController
         // Get user data for email
         $user = $this->UserModel->find($user_id);
 
+        $bookingData = [
+            'booking_id' => $bookingID,
+            'motor_name' => $motor['name'],
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'total_price' => $total_price,
+            'days' => $days
+        ];
+
         // Send email notification
-        sendBookingEmail($user, $bookingID, $motor, $start_date, $end_date, $total_price, $days);
+        $emailResult = sendBookingEmail($user['email'], $user['username'], $bookingData);
+
+        if ($emailResult) {
+            log_message('info', 'Email berhasil dikirim ke: ' . $user['email']);
+        } else {
+            log_message('error', 'Gagal mengirim email ke: ' . $user['email']);
+        }
+
+        $adminData = [
+            'user_name' => $user['username'],
+            'booking_id' => $bookingID,
+            'motor_name' => $motor['name'],
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'total_price' => $total_price
+        ];
+
+        sendAdminNotification($adminData);
 
         return redirect('booking/pesanan')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
     }

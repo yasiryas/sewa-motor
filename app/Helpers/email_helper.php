@@ -21,7 +21,7 @@ if (!function_exists('sendBookingEmail')) {
             $message = view('emails/booking_confirmation', $data);
 
             $email->setTo($userEmail);
-            $email->setFrom('noreply@rentalmotor.com', 'Rental Motor App');
+            $email->setFrom('sewaskuterjogja.com@gmail.com', 'Rental Motor App');
             $email->setSubject('Konfirmasi Booking Rental Motor - ID: ' . $bookingData['booking_id']);
             $email->setMessage($message);
 
@@ -57,8 +57,8 @@ if (!function_exists('sendAdminNotification')) {
 
             $message = view('emails/admin_notification', $data);
 
-            $email->setTo('admin@rentalmotor.com'); // Ganti dengan email admin sebenarnya
-            $email->setFrom('noreply@rentalmotor.com', 'Rental Motor App');
+            $email->setTo('yasir123983@gmail.com'); // Ganti dengan email admin sebenarnya
+            $email->setFrom('sewaskuterjogja.com@gmail.com', 'Rental Motor App');
             $email->setSubject('Notifikasi Booking Baru - ID: ' . $bookingData['booking_id']);
             $email->setMessage($message);
 
