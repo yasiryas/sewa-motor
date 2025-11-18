@@ -99,4 +99,17 @@ class MotorModel extends Model
         $motors = $builder->get()->getResultArray();
         return $this->response->setJSON($motors);
     }
+
+    public function isMotorAvailable($motorId, $startDate, $endDate)
+    {
+        $conflict = $this->db->table('bookings')
+            ->where('motor_id', $motorId)
+            ->where('status !=', 'canceled')
+            ->where('rental_start_date <=', $endDate)
+            ->where('rental_end_date >=', $startDate)
+            ->get()
+            ->getRowArray();
+
+        return $conflict ? false : true;
+    }
 }

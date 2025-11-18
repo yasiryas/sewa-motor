@@ -7,18 +7,21 @@ use App\Models\BrandModel;
 use App\Models\MotorModel;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\BookingModel;
 
 class MotorController extends BaseController
 {
     protected $MotorModel;
     protected $TypeModel;
     protected $BrandModel;
+    protected $BookingModel;
 
     public function __construct()
     {
         $this->MotorModel = new MotorModel();
         $this->BrandModel = new BrandModel();
         $this->TypeModel = new TypeModel();
+        $this->BookingModel = new BookingModel();
     }
 
     public function index()
@@ -305,4 +308,40 @@ class MotorController extends BaseController
         session()->setFlashdata('success', 'Motor berhasil diperbarui.');
         return redirect()->to('dashboard/inventaris/motor');
     }
+
+    public function checkMotorAvailability($id, $availability_status, $start_date, $end_date)
+    {
+        $bookingModel = new BookingModel();
+
+        $query = $bookingModel->where('motor_id', $id)
+            ->where('status !=', 'canceled')
+            ->where('rental_start_date <=', $end_date)
+            ->where('rental_end_date >=', $start_date);
+
+        if ($availability_status === 'rented') {
+            $query->where('status', 'rented');
+        } elseif ($availability_status === 'maintenance') {
+            $query->where('status', 'maintenance');
+        }
+
+        $existingBooking = $query->first();
+
+        if ($existingBooking) {
+            log_message('info', 'Motor ID ' . $id . ' tidak tersedia di tanggal ' . $start_date . ' hingga ' . $end_date . ' karena sudah ada booking dengan ID ini: ' . $existingBooking['id']);
+            return false;
+        }
+    }
+
+    // public function isMotorAvailable($motorId, $startDate, $endDate)
+    // {
+    //     $bookingModel = new BookingModel();
+
+    //     $existingBooking = $bookingModel->where('motor_id', $motorId)
+    //         ->where('status !=', 'canceled')
+    //         ->where('rental_start_date <=', $endDate)
+    //         ->where('rental_end_date >=', $startDate)
+    //         ->first();
+
+    //     return $existingBooking ? false : true;
+    // }
 }

@@ -44,6 +44,7 @@ class BookingController extends BaseController
 
     public function store()
     {
+
         if (!session()->get('id')) {
             return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
         }
@@ -67,6 +68,12 @@ class BookingController extends BaseController
 
         if ($endDate < $startDate) {
             return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai');
+        }
+
+        $isAvailable = $this->MotorModel->isMotorAvailable($motorId, $startDate, $endDate);
+
+        if (!$isAvailable) {
+            return redirect()->back()->with('error', 'Ups, Maaf motor sudah dibooking pada tanggal tersebut. Silakan pilih motor atau tanggal lain.');
         }
 
         // calculate total price
@@ -246,6 +253,12 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Tanggal mulai tidak boleh sebelum hari ini')->withInput()->with('modal', 'addBookingModal');
         }
 
+        $isAvailable = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
+
+        if (!$isAvailable) {
+            return redirect()->back()->with('error', 'Ups, Maaf motor sudah dibooking pada tanggal tersebut. Silakan pilih motor atau tanggal lain.')->withInput()->with('modal', 'addBookingModal');
+        }
+
         $conflict = $this->BookingModel->where('motor_id', $motor_id)
             ->where('status !=', 'canceled')
             ->where('rental_start_date <=', $end_date)
@@ -356,6 +369,12 @@ class BookingController extends BaseController
         // get data motor
         $motorModel = new MotorModel();
         $motor = $motorModel->find($motor_id);
+
+        $isAvailable = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
+
+        if (!$isAvailable) {
+            return redirect()->back()->with('error', 'Ups, Maaf motor sudah dibooking pada tanggal tersebut. Silakan pilih motor atau tanggal lain.')->with('modal', 'addBookingModal')->withInput();
+        }
 
         // calculate total price
         $start = new \DateTime($start_date);
