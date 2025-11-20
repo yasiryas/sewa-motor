@@ -70,10 +70,10 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai');
         }
 
-        $isAvailable = $this->MotorModel->isMotorAvailable($motorId, $startDate, $endDate);
+        $availability = $this->MotorModel->isMotorAvailable($motorId, $startDate, $endDate);
 
-        if (!$isAvailable) {
-            return redirect()->back()->with('error', 'Ups, Maaf motor sudah dibooking pada tanggal tersebut. Silakan pilih motor atau tanggal lain.');
+        if (!$availability['available']) {
+            return redirect()->back()->with('error', $availability['message']);
         }
 
         // calculate total price
@@ -253,10 +253,10 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Tanggal mulai tidak boleh sebelum hari ini')->withInput()->with('modal', 'addBookingModal');
         }
 
-        $isAvailable = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
+        $availability = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
 
-        if (!$isAvailable) {
-            return redirect()->back()->with('error', 'Ups, Maaf motor sudah dibooking pada tanggal tersebut. Silakan pilih motor atau tanggal lain.')->withInput()->with('modal', 'addBookingModal');
+        if (!$availability['available']) {
+            return redirect()->back()->with('error', $availability['message'])->withInput()->with('modal', 'addBookingModal');
         }
 
         $conflict = $this->BookingModel->where('motor_id', $motor_id)
@@ -372,8 +372,11 @@ class BookingController extends BaseController
 
         $isAvailable = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
 
+        //cek motor available
+        $availability = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
+
         if (!$isAvailable) {
-            return redirect()->back()->with('error', 'Ups, Maaf motor sudah dibooking pada tanggal tersebut. Silakan pilih motor atau tanggal lain.')->with('modal', 'addBookingModal')->withInput();
+            return redirect()->back()->with('error', $avaiability = ['message'])->with('modal', 'addBookingModal')->withInput();
         }
 
         // calculate total price
@@ -571,5 +574,24 @@ class BookingController extends BaseController
         $this->PaymentModel->where('booking_id', $id)->set(['status' => 'canceled'])->update();
 
         return redirect()->back()->with('success', 'Booking berhasil dibatalkan.');
+    }
+
+    public function checkMotorAvailability()
+    {
+        $motorId = $this->request->getGet('motor_id');
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
+        if (!$motorId || !$startDate || !$endDate) {
+            return $this->response->setJSON([
+                'available' => false,
+                'message' => 'Data tidak lengkap'
+            ]);
+        }
+
+        $motorModel = new MotorModel();
+        $availability = $motorModel->isMotorAvailable($motorId, $startDate, $endDate);
+
+        return $this->response->setJSON($availability);
     }
 }

@@ -100,16 +100,42 @@ class MotorModel extends Model
         return $this->response->setJSON($motors);
     }
 
-    public function isMotorAvailable($motorId, $startDate, $endDate)
+    public function isMotorAvailable($motorId, $startDate, $endDate, $excludeBookingId = null)
     {
-        $conflict = $this->db->table('bookings')
+        $query = $this->db->table('bookings')
+            ->select('bookings.*', 'users.name as user_name', 'users.email as user_email', 'users.phone as user_phone')
+            ->join('users', 'bookings.user_id = users.id')
             ->where('motor_id', $motorId)
             ->where('status !=', 'canceled')
             ->where('rental_start_date <=', $endDate)
-            ->where('rental_end_date >=', $startDate)
-            ->get()
-            ->getRowArray();
+            ->where('rental_end_date >=', $startDate);
 
-        return $conflict ? false : true;
+        if ($excludeBookingId) {
+            $query->where('bookings.id !=', $excludeBookingId);
+        }
+
+        $conflict = $query->get()->getRowArray();
+
+        if ($conflict) {
+            return [
+                'available' => false,
+                'conflict_data' => $conflict,
+                'message' => $this->genrateConflictMessage($conflict)
+            ]; // motor tidak tersedia
+        }
+        return [
+            'available' => true,
+            'conflict_data' => null,
+            'message' => 'Motor is available for the selected dates.'
+        ]; // motor tersedia
+    }
+
+    private function genrateConflictMessage($conflict)
+    {
+        $startDate = date('d M Y', strtotime($conflict['rental_start_date']));
+        $endDate = date('d M Y', strtotime($conflict['rental_end_date']));
+        $username = $conflict['user_name'] ?? ' Customer ';
+
+        return "Ups, Motor sudah terbooking oleh <b>{$username}</b> dari tanggal <b>{$startDate}</b> sampai <b>{$endDate}</b>. Silakan pilih tanggal lain.";
     }
 }
