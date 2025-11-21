@@ -7,18 +7,20 @@
     display:flex;justify-content:center;align-items:center;text-align:center;">
     <div class="container">
         <h2 class="text-center m-5 font-weight-bold text-dark"><?= $title; ?></h2>
+        <a href="<?= base_url('booking/pesanan'); ?>" class="btn mb-3"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
 </section>
 
 <section id="detailPesanan">
+
     <div class="container py-5">
+
 
         <?php if (session()->getFlashdata('success')): ?>
             <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
         <?php elseif (session()->getFlashdata('error')): ?>
             <div class="alert alert-danger"><?= session()->getFlashdata('error'); ?></div>
         <?php endif; ?>
-
         <div class="card shadow-lg border-0 rounded-4 p-4 bg-light">
             <div class="text-center mb-4">
                 <h3 class="fw-bold text-dark mb-1">Nota Pembayaran</h3>
@@ -105,7 +107,6 @@
                                     <strong>Bayar di Tempat</strong><br>
                                     <small>(COD)</small>
                                 </button>
-
                                 <input type="hidden" name="payment_method" id="payment_method" value="<?= $booking['payment_method']; ?>">
                             </div>
 
@@ -153,8 +154,8 @@
                             <?php if (empty($booking['payment_proof'])): ?>
                                 <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Silakan unggah di bawah ini:</p>
                                 <div class="mb-3">
-                                    <input type="file" name="payment_proof" id="payment_proof" class="photo-input form-control-file" accept="image/*" required>
-                                    <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
+                                    <input type="file" name="payment_proof" id="payment_proof" class="photo-input form-control-file" accept="image/*" data-required="true">
+                                    <img src=" #" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
                                 </div>
                             <?php else: ?>
                                 <p class="text-muted mb-2">Bukti pembayaran kamu:</p>
@@ -183,21 +184,20 @@
                             <?php if ($isCancellable): ?>
                                 <!-- Tombol Batalkan -->
                                 <a href="#" class="btn btn-danger w-100 m-2"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#confirmCancelModal">
+                                    data-toggle="modal"
+                                    data-target="#confirmCancelModal">
                                     <i class="fa fa-times"></i> Batalkan Pesanan
                                 </a>
 
                                 <!-- Tombol Download Invoice -->
                                 <a href="<?= base_url('booking/invoice/' . $booking['id']); ?>" class="btn btn-success w-100 m-2">
-                                    <i class="fa fa-download"></i> Download Invoice
+                                    <i class="fa fa-download"></i> Invoice
                                 </a>
 
                                 <!-- Tombol Simpan -->
                                 <button type="submit" class="btn btn-primary w-100 m-2">
                                     <i class="fa fa-save"></i> Simpan
                                 </button>
-
                             <?php else: ?>
                                 <!-- Hanya tampilkan tombol invoice -->
                                 <a href="<?= base_url('booking/invoice/' . $booking['id']); ?>" class="btn btn-success w-100 m-2">
@@ -206,6 +206,7 @@
                             <?php endif; ?>
                         </div>
                     </form>
+                    <a href="<?= base_url('booking/pesanan'); ?>" class="btn btn-warning mb-3 m-2 text-white w-100"><i class="fa fa-arrow-left"></i> List Booking</a>
                 </div>
             </div>
         </div>
@@ -226,7 +227,7 @@
             </div>
             <div class="modal-footer">
                 <form action="<?= base_url('booking/update-metode/' . $booking['id']); ?>" method="post">
-                    <input type="hidden" name="payment_method" value="cod">
+                    <input type="hidden" name="payment_method" value="cash">
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-sm btn-primary">Ya, Saya Yakin</button>
                 </form>

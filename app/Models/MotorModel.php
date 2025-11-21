@@ -117,10 +117,14 @@ class MotorModel extends Model
         $conflict = $query->get()->getRowArray();
 
         if ($conflict) {
+            $message = "Motor sudah dibooking oleh " . ($conflict['username'] ?? 'Customer') .
+                " pada tanggal " . date('d F Y', strtotime($conflict['rental_start_date'])) .
+                " hingga " . date('d F Y', strtotime($conflict['rental_end_date'])) .
+                ". Silakan pilih tanggal lain.";
             return [
                 'available' => false,
                 'conflict_data' => $conflict,
-                'message' => $this->genrateConflictMessage($conflict)
+                'message' => $message
             ]; // motor tidak tersedia
         }
         return [

@@ -370,13 +370,21 @@ class BookingController extends BaseController
         $motorModel = new MotorModel();
         $motor = $motorModel->find($motor_id);
 
-        $isAvailable = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
+        if (!$motor) {
+            return redirect()->back()->with('error', 'Motor tidak ditemukan.')->with('modal', 'addBookingModal')->withInput();
+        }
 
-        //cek motor available
-        $availability = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
+        try {
+            //cek motor available
+            $availability = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
 
-        if (!$isAvailable) {
-            return redirect()->back()->with('error', $avaiability = ['message'])->with('modal', 'addBookingModal')->withInput();
+            if (!$availability['available']) {
+                $errorMessage = is_array($availability['message']) ? 'Motor tidak tersedia pada tanggal yang dipilih.' : $availability['message'];
+
+                return redirect()->back()->with('error', $errorMessage)->with('modal', 'addBookingModal')->withInput();
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memeriksa ketersediaan motor: ' . $e->getMessage())->with('modal', 'addBookingModal')->withInput();
         }
 
         // calculate total price
@@ -409,6 +417,7 @@ class BookingController extends BaseController
         ]);
 
         // Get user data for email
+        helper('email_helper');
         $user = $this->UserModel->find($user_id);
 
         $bookingData = [
