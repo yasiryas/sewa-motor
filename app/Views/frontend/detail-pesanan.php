@@ -92,17 +92,16 @@
                             <?php
                             $selectedMethod = old('payment_method', $booking['payment_method']);
                             ?>
-
+                            <p>Selected Method: <?= $selectedMethod ?></p>
                             <div class="d-flex flex-column flex-md-row gap-3">
                                 <button type="button" id="btnTransfer"
-                                    class="method-btn w-100 p-3 rounded-3 border <?= $selectedMethod == 'transfer' ? 'bg-primary text-white active' : ''; ?>">
+                                    class="method-btn w-100 p-3 rounded-3 border <?= $selectedMethod == 'transfer' ? 'active bg-primary text-white' : ''; ?>">
                                     <i class="bi bi-bank fs-4 mb-2 d-block"></i>
                                     <strong>Transfer Bank</strong><br>
                                     <small>BCA / Mandiri / BRI</small>
                                 </button>
-
                                 <button type="button" id="btnCOD"
-                                    class="method-btn w-100 p-3 rounded-3 border <?= $selectedMethod == 'cash' ? 'bg-primary text-white active' : ''; ?>">
+                                    class="method-btn w-100 p-3 rounded-3 border <?= $selectedMethod == 'cash' ? 'active bg-primary text-white' : ''; ?>">
                                     <i class="bi bi-cash-stack fs-4 mb-2 d-block"></i>
                                     <strong>Bayar di Tempat</strong><br>
                                     <small>(COD)</small>

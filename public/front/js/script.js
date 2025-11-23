@@ -335,98 +335,36 @@ $(document).ready(function () {
     });
 
     // ===== Metode pembayaran =====
+function setPaymentMethod(method) {
+        // Reset
+        $('#btnTransfer, #btnCOD').removeClass('active bg-primary text-white');
 
-    // // === TRANSFER BANK ===
-    //  $('#btnTransfer').on('click', function() {
-    //     $(this).addClass('active bg-primary text-white');
-    //     $('#btnCOD').removeClass('active bg-primary text-white');
-    //     $('#payment_method').val('transfer');
-    //     $('#rekeningSection').removeClass('d-none').hide().fadeIn(200);
-    //     $('#CODSection').fadeOut(200, function() { $(this).addClass('d-none'); });
-    // });
+        if (method === 'transfer') {
+            $('#btnTransfer').addClass('active bg-primary text-white');
+            $('#payment_method').val('transfer');
 
-    // // === COD ===
-    // $('#btnCOD').on('click', function() {
-    //     $(this).addClass('active bg-primary text-white');
-    //     $('#btnTransfer').removeClass('active bg-primary text-white');
-    //     $('#payment_method').val('cash');
-    //     $('#CODSection').removeClass('d-none').hide().fadeIn(200);
-    //     $('#rekeningSection').fadeOut(200, function () { $(this).addClass('d-none'); });
-    //     $('#buktiPembayaran').addClass('d-none'); // sembunyikan bukti pembayaran jika COD
-    // });
+            $('#rekeningSection, #buktiPembayaran').removeClass('d-none');
+            $('#CODSection').addClass('d-none');
 
-    // // === SETELAH REFRESH: tampilkan metode dari database ===
-    // const selectedMethod = "<?= $booking['payment_method']; ?>";
-    // if (selectedMethod === 'transfer') {
-    //     $('#btnTransfer').addClass('active bg-primary text-white');
-    //     $('#rekeningSection').removeClass('d-none');
-    //     $('#payment_method').val('transfer'); // penting!
-    // } else if (selectedMethod === 'cash') {
-    //     $('#btnCOD').addClass('active bg-primary text-white');
-    //     $('#CODSection').removeClass('d-none');
-    //     $('#payment_method').val('cash'); // penting!
-    //     $('#buktiPembayaran').addClass('d-none'); // sembunyikan bukti pembayaran jika COD
-    // }
+        } else if (method === 'cash') {
+            $('#btnCOD').addClass('active bg-primary text-white');
+            $('#payment_method').val('cash');
 
-    // $('#btnCOD').on('click', function() {
-    //     $(this).addClass('active');
-    //     $('#btnTransfer').removeClass('active');
-    //     $('#rekeningSection').fadeOut(200);
-    //     $('#confirmCODModal').modal('show');
-    // });
-
-    function setPaymentMethod(method) {
-    // Reset semua
-    $('#btnTransfer, #btnCOD').removeClass('active bg-primary text-white');
-
-    if (method === 'transfer') {
-        $('#btnTransfer').addClass('active bg-primary text-white');
-        $('#payment_method').val('transfer');
-
-        // Tampilkan transfer sections
-        $('#rekeningSection, #buktiPembayaran').removeClass('d-none').hide().fadeIn(200);
-
-        // Sembunyikan COD
-        $('#CODSection').fadeOut(200, function() {
-            $(this).addClass('d-none');
-        });
-
-    } else if (method === 'cash') {
-        $('#btnCOD').addClass('active bg-primary text-white');
-        $('#payment_method').val('cash');
-
-        // Tampilkan COD
-        $('#CODSection').removeClass('d-none').hide().fadeIn(200);
-
-        // Sembunyikan transfer sections
-        $('#rekeningSection, #buktiPembayaran').fadeOut(200, function() {
-            $(this).addClass('d-none');
-        });
+            $('#CODSection').removeClass('d-none');
+            $('#rekeningSection, #buktiPembayaran').addClass('d-none');
+        }
     }
-}
 
-// Event handlers
-$('#btnTransfer').on('click', function() {
-    setPaymentMethod('transfer');
-});
-
-$('#btnCOD').on('click', function() {
-    setPaymentMethod('cash');
-});
-
-// Initialize berdasarkan data dari database
-$(document).ready(function() {
-    const selectedMethod = "<?= $booking['payment_method']; ?>";
-
-    if (selectedMethod === 'transfer') {
+    // Event
+    $('#btnTransfer').on('click', function() {
         setPaymentMethod('transfer');
-    } else if (selectedMethod === 'cash') {
+    });
+
+    $('#btnCOD').on('click', function() {
         setPaymentMethod('cash');
-    } else {
-        // Default ke transfer jika tidak ada metode
-        setPaymentMethod('transfer');
-    }
-});
+    });
+
+    // setPaymentMethod('<?= $selectedMethod ?>');
 
     // ===== Preview gambar KTP saat upload =====
 
