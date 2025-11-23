@@ -362,13 +362,25 @@
                                         <h5>Payment Details</h5>
                                         <p><strong>Payment Method:</strong> <span id="detail_payment_method"></span></p>
                                         <p><strong>Payment Status:</strong> <span id="detail_payment_status"></span></p>
-                                        <p><strong>Proof of Payment:</strong> <span id="detail_payment_proof"></span></p>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5>Booking Status</h5>
                                         <p><strong>Status:</strong> <span id="detail_booking_status"></span></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h5>Bukti Pembayaran</h5>
+                                        <img src="" alt="Bukti Pembayaran" class="img-fluid" id="detail_payment_proof">
+                                        <p id="detail_payment_proof_text"></p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h5>Identitas User</h5>
+                                        <img src="" alt="Identitas User" class="img-fluid" id="identity_user_photo">
+                                        <p id="identity_user_photo_text"></p>
                                     </div>
                                 </div>
                             </div>

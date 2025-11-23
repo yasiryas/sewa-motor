@@ -135,10 +135,11 @@
                         <div class="bg-white rounded-4 shadow-sm p-4 mt-4">
                             <h5 class="fw-bold text-dark mb-3">Unggah Kartu Identitas (KTP/SIM)</h5>
                             <?php if (empty($booking['identity_photo'])): ?>
-                                <p class="text-muted mb-3">Kamu belum mengunggah kartu identitas. Silakan unggah di bawah ini:</p>
+                                <p class="text-muted mb-3">Upload file dengan extensi .jpg, .jpeg, .png dan pastikan ukuran file kurang dari 1 mb ya!</p>
                                 <div class="mb-3">
-                                    <input type="file" name="identity_photo" id="identity_photo" class="photo-input form-control-file" accept="image/*" required>
+                                    <input type="file" name="identity_photo" id="identity_photo" class="photo-input form-control-file " accept="image/*" required>
                                     <img src="#" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
+                                    <small id="error_identity_photo" class="text-danger d-none"></small>
                                 </div>
                             <?php else: ?>
                                 <p class="text-muted mb-2">Kartu identitas kamu:</p>
@@ -153,6 +154,7 @@
                             <?php if (empty($booking['payment_proof'])): ?>
                                 <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Silakan unggah di bawah ini:</p>
                                 <div class="mb-3">
+                                    <label for="payment_proof">Upload file dengan extensi .jpg, .jpeg, .png dan pastikan ukuran file kurang dari 1 mb ya!</label>
                                     <input type="file" name="payment_proof" id="payment_proof" class="photo-input form-control-file" accept="image/*" data-required="true">
                                     <img src=" #" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
                                 </div>
@@ -160,6 +162,7 @@
                                 <p class="text-muted mb-2">Bukti pembayaran kamu:</p>
                                 <img src="<?= base_url('uploads/payments/' . $booking['payment_proof']); ?>"
                                     alt="Bukti Pembayaran" class="img-fluid rounded shadow-sm mb-3" style="max-width: 400px;">
+                                <small id="error_payment_proof" class="text-danger d-none"></small>
                             <?php endif; ?>
                         </div>
                         <?php

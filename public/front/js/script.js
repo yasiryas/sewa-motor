@@ -369,17 +369,56 @@ function setPaymentMethod(method) {
     // ===== Preview gambar KTP saat upload =====
 
     // preview gambar motor saat tambah dan edit
-$(document).on("change", ".photo-input", function () {
-    const preview = $(this).siblings(".photo-preview");
+    $(document).on("change", ".photo-input", function () {
+        const preview = $(this).siblings(".photo-preview");
 
-    if (this.files && this.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.attr("src", e.target.result).show();
-        };
-        reader.readAsDataURL(this.files[0]);
-    } else {
-        preview.hide().attr("src", "#");
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.attr("src", e.target.result).show();
+            };
+            reader.readAsDataURL(this.files[0]);
+        } else {
+            preview.hide().attr("src", "#");
+        }
+    });
+
+    function validateImageInput(inputId, maxSizeMB = 1) {
+        const input = document.getElementById(inputId);
+        const errorMsg = document.getElementById('error_' + inputId);
+
+        input.addEventListener('change', function () {
+
+            const file = this.files[0];
+            errorMsg.classList.add('d-none');
+            errorMsg.textContent = '';
+
+            if (!file) return;
+
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            const maxSize = maxSizeMB * 1024 * 1024; // convert ke byte
+
+            // Cek tipe file
+            if (!allowedTypes.includes(file.type)) {
+                errorMsg.textContent = "Tipe file tidak valid. Hanya .jpg, .jpeg, .png yang diizinkan.";
+                errorMsg.classList.remove('d-none');
+                this.value = "";
+                return;
+            }
+
+            // Cek ukuran file
+            if (file.size > maxSize) {
+                errorMsg.textContent = "Ukuran file maksimal " + maxSizeMB + "MB";
+                errorMsg.classList.remove('d-none');
+                this.value = "";
+                return;
+            }
+            console.log("File valid:", file.name);
+        });
     }
-});
+
+    // Panggil validasi untuk dua input
+    validateImageInput('identity_photo', 1);
+    validateImageInput('payment_proof', 1);
+
 });

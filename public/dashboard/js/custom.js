@@ -505,9 +505,18 @@ $(document).on("change", ".photo-input", function () {
             $("#detail_payment_method").text(res.payment_method ?? "-");
 
             if (res.payment_proof) {
-                $("#detail_payment_proof").html(`<br><a href="/uploads/payments/${res.payment_proof}" target="_blank">Lihat Bukti Pembayaran</a>`);
+                $("#detail_payment_proof").attr("src",BASE_URL +  "/uploads/payments/" + res.payment_proof);
+                $("#detail_payment_proof_text").text(""); // hapus teks "belum ada"
             } else {
-                $("#detail_payment_proof").text("Belum ada");
+                $("#detail_payment_proof").css("display", "none");
+                $("#detail_payment_proof_text").text("Belum ada bukti pembayaran");
+            }
+
+            if (res.identity_photo) {
+                $("#identity_user_photo").attr("src", BASE_URL + "/uploads/identitas/" + res.identity_photo);
+            } else {
+                $("#identity_user_photo").css("display", "none");
+                $("#identity_user_photo_text").text("Belum ada foto identitas");
             }
 
             // Booking status
@@ -557,6 +566,8 @@ $(document).on("change", ".photo-input", function () {
             ['view', ['fullscreen', 'codeview', 'help']]
         ]
     });
+
+
 
 });
 

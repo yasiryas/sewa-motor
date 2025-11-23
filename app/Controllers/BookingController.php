@@ -487,6 +487,8 @@ class BookingController extends BaseController
             motors.price_per_day,
             brands.brand as brand_name,
             types.type as type_name,
+            payments.payment_proof,
+            bookings.status as booking_status
             ')
             ->join('payments', 'payments.booking_id = bookings.id', 'left')
             ->join('users', 'users.id = bookings.user_id', 'left')
@@ -546,10 +548,15 @@ class BookingController extends BaseController
             bookings.status as status,
             brands.brand as brand_name,
             bookings.rental_start_date,
-            bookings.rental_end_date'
+            bookings.rental_end_date,
+            payments.status as payment_status,
+            payments.amount as payment_amount,
+            payments.payment_method as payment_method,
+            payments.payment_proof as payment_proof,'
             )
             ->join('motors', 'motors.id = bookings.motor_id')
             ->join('brands', 'brands.id = motors.id_brand')
+            ->join('payments', 'payments.booking_id = bookings.id', 'left')
             ->where('bookings.id', $id)
             ->first();
 
