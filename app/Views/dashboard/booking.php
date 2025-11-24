@@ -82,7 +82,7 @@
                                                         data-delete-end-date-booking="<?= esc($booking['rental_end_date']); ?>"
                                                         data-delete-total-price-booking="<?= 'Rp ' . number_format($booking['total_price']); ?>"
                                                         data-delete-status-booking="<?= esc($booking['status']); ?>"><i class="fas fa-trash"></i></a>
-                                                    <a href="#" class="btn btn-sm btn-secondary m-1" title="Print Invoice"><i class="fas fa-print"></i></a>
+                                                    <a href="<?= base_url('dashboard/invoice/' . $booking['id']); ?>" class="btn btn-sm btn-secondary m-1" title="Print Invoice"><i class="fas fa-print"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

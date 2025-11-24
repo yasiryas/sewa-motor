@@ -39,6 +39,7 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('settings/faq/store', 'SettingController::faqStore');
     $routes->post('settings/faq/update', 'SettingController::faqUpdate');
     $routes->post('settings/faq/delete', 'SettingController::faqDelete');
+    $routes->get('invoice/(:num)', 'BookingController::invoice/$1');
 });
 
 // Manajemen brand
