@@ -391,7 +391,6 @@
                                 <input type="hidden" name="status" value="completed">
                                 <button type="submit" class="btn btn-sm btn-primary">Acc Payment</button>
                             </form>
-
                             <form id="formRejPayment" method="post" class="d-inline">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="status" value="canceled">

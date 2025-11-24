@@ -509,6 +509,8 @@ class BookingController extends BaseController
 
     public function updateStatus($bookingId)
     {
+        helper('email_helper');
+
         $status = $this->request->getPost('status');
 
         $paymentModel = new \App\Models\PaymentModel();
@@ -533,6 +535,19 @@ class BookingController extends BaseController
         $bookingModel->update($bookingId, [
             'status' => $bookingStatus
         ]);
+
+        $user = $this->UserModel->find($booking['user_id']);
+        $motor = $this->MotorModel->find($booking['motor_id']);
+        $bookingData = [
+            'booking_id' => $bookingId,
+            'motor_name' => $motor['name'],
+            'start_date' => $booking['rental_start_date'],
+            'end_date' => $booking['rental_end_date'],
+            'total_price' => $booking['total_price'],
+            'status' => $status
+        ];
+
+        sendBookingStatusEmail($user['email'], $user['username'], $bookingId, $status, $bookingData);
 
         return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
     }

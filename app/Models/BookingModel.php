@@ -48,4 +48,13 @@ class BookingModel extends Model
     {
         return $this->where('user_id', $userId)->findAll();
     }
+
+    public function getBookingDetails($bookingId)
+    {
+        return $this->select('bookings.*, users.full_name, users.email, users.phone, motors.brand_name, motors.motor_name, motors.number_plate, motors.price_per_day')
+            ->join('users', 'users.id = bookings.user_id')
+            ->join('motors', 'motors.id = bookings.motor_id')
+            ->where('bookings.id', $bookingId)
+            ->first();
+    }
 }
