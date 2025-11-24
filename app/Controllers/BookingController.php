@@ -451,7 +451,7 @@ class BookingController extends BaseController
 
         sendAdminNotification($adminData);
 
-        return redirect('booking/pesanan')->with('success', 'Booking berhasil! Total harga: Rp ' . number_format($total_price));
+        return redirect()->to('booking/detail-booking-page/' . $bookingID)->with('modal', 'addBookingModal')->with('success', 'Booking berhasil! Segera lakukan pembayaran ya agar bookingan anda dapat segera diproses.');
     }
 
     public function deleteAdmin()

@@ -152,9 +152,8 @@
                         <div class="bg-white rounded-4 shadow-sm p-4 mt-4 <?= $booking['payment_method'] == 'cash' ? 'd-none' : ''; ?>" id="buktiPembayaran">
                             <h5 class="fw-bold text-dark mb-3">Bukti Pembayaran</h5>
                             <?php if (empty($booking['payment_proof'])): ?>
-                                <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Silakan unggah di bawah ini:</p>
+                                <p class="text-muted mb-3">Kamu belum mengunggah bukti pembayaran. Upload file dengan extensi .jpg, .jpeg, .png dan pastikan ukuran file kurang dari 1 mb ya!</p>
                                 <div class="mb-3">
-                                    <label for="payment_proof">Upload file dengan extensi .jpg, .jpeg, .png dan pastikan ukuran file kurang dari 1 mb ya!</label>
                                     <input type="file" name="payment_proof" id="payment_proof" class="photo-input form-control-file" accept="image/*" data-required="true">
                                     <img src=" #" alt="Preview Gambar" class="photo-preview img-fluid mt-2" style="max-width:300px; display:none;">
                                 </div>
