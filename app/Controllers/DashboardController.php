@@ -102,4 +102,48 @@ class DashboardController extends BaseController
             'values' => $values
         ]);
     }
+
+    public function bookingStatus()
+    {
+        $bookingModel = new BookingModel();
+
+        // Ambil bulan terakhir
+        $month = date('m');
+        $year = date('Y');
+
+        // Hitung jumlah booking
+        $total = $bookingModel
+            ->where('MONTH(created_at)', $month)
+            ->where('YEAR(created_at)', $year)
+            ->countAllResults();
+
+        if ($total == 0) {
+            return $this->response->setJSON([
+                'completed' => 0,
+                'pending'   => 0,
+                'canceled'  => 0
+            ]);
+        }
+
+        $completed = $bookingModel->where('status', 'confirmed')
+            ->where('MONTH(created_at)', $month)
+            ->where('YEAR(created_at)', $year)
+            ->countAllResults();
+
+        $pending = $bookingModel->where('status', 'pending')
+            ->where('MONTH(created_at)', $month)
+            ->where('YEAR(created_at)', $year)
+            ->countAllResults();
+
+        $canceled = $bookingModel->where('status', 'canceled')
+            ->where('MONTH(created_at)', $month)
+            ->where('YEAR(created_at)', $year)
+            ->countAllResults();
+
+        return $this->response->setJSON([
+            'completed' => round(($completed / $total) * 100),
+            'pending'   => round(($pending / $total) * 100),
+            'canceled'  => round(($canceled / $total) * 100),
+        ]);
+    }
 }

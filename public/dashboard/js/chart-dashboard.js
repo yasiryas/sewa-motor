@@ -130,6 +130,23 @@ fetch(BASE_URL + "/dashboard/top-motors")
           legend: { position: 'bottom' }
       }
     });
-
   });
+
+  // =============================
+// BAR CHART - STATUS BOOKING
+// =============================
+fetch(BASE_URL + "/dashboard/booking-status")
+    .then(res => res.json())
+    .then(res => {
+
+        document.getElementById("completedPercent").textContent = res.completed + "%";
+        document.getElementById("pendingPercent").textContent   = res.pending + "%";
+        document.getElementById("canceledPercent").textContent  = res.canceled + "%";
+
+        document.getElementById("completedBar").style.width = res.completed + "%";
+        document.getElementById("pendingBar").style.width   = res.pending + "%";
+        document.getElementById("canceledBar").style.width  = res.canceled + "%";
+    });
+
+
 

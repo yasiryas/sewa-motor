@@ -42,6 +42,7 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('invoice/(:num)', 'BookingController::invoice/$1');
     $routes->get('monthly-bookings', 'DashboardController::getMonthlyBookings');
     $routes->get('top-motors', 'DashboardController::topMotors');
+    $routes->get('booking-status', 'DashboardController::bookingStatus');
 });
 
 // Manajemen brand
