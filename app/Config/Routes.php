@@ -40,6 +40,8 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('settings/faq/update', 'SettingController::faqUpdate');
     $routes->post('settings/faq/delete', 'SettingController::faqDelete');
     $routes->get('invoice/(:num)', 'BookingController::invoice/$1');
+    $routes->get('monthly-bookings', 'DashboardController::getMonthlyBookings');
+    $routes->get('top-motors', 'DashboardController::topMotors');
 });
 
 // Manajemen brand
