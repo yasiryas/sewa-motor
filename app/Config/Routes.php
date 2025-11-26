@@ -32,7 +32,10 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('inventaris/merk', 'BrandController::index');
     $routes->get('inventaris/type', 'TypeController::index');
     $routes->get('inventaris/motor', 'MotorController::index');
-    $routes->get('report/booking', 'BookingController::reportBooking');
+    $routes->get('report/booking', 'ReportController::reportBooking');
+    $routes->post('report/booking/get-data', 'ReportController::getBookingData');
+    $routes->post('get-bookings', 'ReportController::ajaxBookings');
+    $routes->post('report/booking/export', 'ReportController::exportBookingExcel');
     $routes->get('report/motor', 'MotorController::reportMotors');
     $routes->get('report/users', 'UserController::reportUsers');
     $routes->get('settings/faq', 'SettingController::index');

@@ -531,6 +531,7 @@ $(document).on("change", ".photo-input", function () {
             alert("Gagal mengambil data transaksi");
         }
     });
+
     });
 
     //setting faq
@@ -568,6 +569,26 @@ $(document).on("change", ".photo-input", function () {
     });
 
 
+
+    //report booking
+     // INIT DATATABLE
+    let table = $('#bookingTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: BASE_URL + "/dashboard/get-bookings",
+            type: "POST",
+            data: function (d) {
+                d.start_date = $('#start_date').val();
+                d.end_date   = $('#end_date').val();
+            }
+        }
+    });
+
+    // AUTO RELOAD SAAT TANGGAL DIUBAH
+    $('#start_date, #end_date').on('change', function () {
+        table.ajax.reload();
+    });
 
 });
 

@@ -14,19 +14,35 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
-                <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Report Booking</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                <div class="card p-3">
+                    <h2 class="text-center p-3"><?= $submenu_title; ?></h2>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label>Start Date</label>
+                            <input type="date" id="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label>End Date</label>
+                            <input type="date" id="end_date" class="form-control">
+                        </div>
+                    </div>
+                    <table id="bookingTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Motor</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
 
-                <!-- Content Row -->
+                <!-- /.container-fluid -->
+
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
 
-        </div>
-        <!-- End of Main Content -->
-
-        <?= $this->include('dashboard/partials/footer'); ?>
+            <?= $this->include('dashboard/partials/footer'); ?>
