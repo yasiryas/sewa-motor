@@ -74,7 +74,14 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             'honeypot',
-            'csrf' => ['except' => ['product/search', 'dashboard/get-bookings']],
+            'csrf' => ['except' =>
+            [
+                'product/search',
+                'dashboard/get-bookings',
+                'dashboard/report/motor/get-data',
+                'dashboard/report/user/get-data',
+                'dashboard/report/booking/get-data',
+            ]],
             'invalidchars',
         ],
         'after' => [

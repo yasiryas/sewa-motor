@@ -592,6 +592,42 @@ $(document).on("change", ".photo-input", function () {
         $('#end_date_hidden').val($('#end_date').val());
     });
 
+    //report motor
+    let reportMotorTable = $('#motorReportTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: BASE_URL + "/dashboard/report/motor/get-data",
+            type: "POST",
+        },
+        columnDefs: [
+            { orderable: false, targets: [2] } // photo tidak bisa sort
+        ]
+    });
+
+    $('#motorReportTable_filter input').on('keyup', function () {
+        $('#search_value').val(this.value);
+    });
+
+    //report user
+     //report motor
+    let reportUserTable = $('#userReportTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: BASE_URL + "/dashboard/report/user/get-data",
+            type: "POST",
+        },
+        columnDefs: [
+            { orderable: false, targets: [2] } // photo tidak bisa sort
+        ]
+    });
+
+    $('#userReportTable_filter input').on('keyup', function () {
+        $('#search_value').val(this.value);
+    });
+
+
 });
 
 

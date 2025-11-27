@@ -14,19 +14,34 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+                <div class="card p-3">
+                    <h2 class="text-center p-3"><?= $submenu_title; ?></h2>
+                    <table id="userReportTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>username</th>
+                                <th>full_name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Join Date</th>
+                            </tr>
+                        </thead>
+                    </table>
 
-                <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Report User</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    <div class="col-md align-items-center p-3 d-flex justify-content-center">
+                        <!-- Download Excel -->
+                        <form id="exportForm" method="post" action="<?= base_url('dashboard/report/user/export') ?>" target="_blank">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="search_value" id="search_value">
+                            <button class="btn btn-success mb-3"><i class="fas fa-file-excel"></i> Download Excel</button>
+                        </form>
+                    </div>
                 </div>
+                <!-- /.container-fluid -->
 
-                <!-- Content Row -->
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
 
-        </div>
-        <!-- End of Main Content -->
-
-        <?= $this->include('dashboard/partials/footer'); ?>
+            <?= $this->include('dashboard/partials/footer'); ?>

@@ -36,8 +36,12 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('report/booking/get-data', 'ReportController::getBookingData');
     $routes->post('get-bookings', 'ReportController::ajaxBookings');
     $routes->post('report/booking/export', 'ReportController::exportBookingExcel');
-    $routes->get('report/motor', 'MotorController::reportMotors');
+    $routes->get('report/motor', 'ReportController::reportMotor');
+    $routes->post('report/motor/get-data', 'ReportController::getMotorData');
+    $routes->post('report/motor/export', 'ReportController::exportMotorExcel');
     $routes->get('report/users', 'UserController::reportUsers');
+    $routes->post('report/user/get-data', 'ReportController::getUserData');
+    $routes->post('report/user/export', 'ReportController::exportUserExcel');
     $routes->get('settings/faq', 'SettingController::index');
     $routes->post('settings/faq/store', 'SettingController::faqStore');
     $routes->post('settings/faq/update', 'SettingController::faqUpdate');
