@@ -568,8 +568,6 @@ $(document).on("change", ".photo-input", function () {
         ]
     });
 
-
-
     //report booking
      // INIT DATATABLE
     let table = $('#bookingTable').DataTable({
@@ -588,6 +586,10 @@ $(document).on("change", ".photo-input", function () {
     // AUTO RELOAD SAAT TANGGAL DIUBAH
     $('#start_date, #end_date').on('change', function () {
         table.ajax.reload();
+
+        // Set value input hidden
+        $('#start_date_hidden').val($('#start_date').val());
+        $('#end_date_hidden').val($('#end_date').val());
     });
 
 });

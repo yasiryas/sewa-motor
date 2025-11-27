@@ -25,6 +25,7 @@
                             <label>End Date</label>
                             <input type="date" id="end_date" class="form-control">
                         </div>
+
                     </div>
                     <table id="bookingTable" class="table table-bordered table-striped">
                         <thead>
@@ -38,8 +39,17 @@
                             </tr>
                         </thead>
                     </table>
-                </div>
 
+                    <div class="col-md align-items-center p-3 d-flex justify-content-center">
+                        <!-- Download Excel -->
+                        <form method="post" action="<?= base_url('dashboard/report/booking/export') ?>" target="_blank">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="start_date" id="start_date_hidden">
+                            <input type="hidden" name="end_date" id="end_date_hidden">
+                            <button class="btn btn-success mb-3"><i class="fas fa-file-excel"></i> Download Excel</button>
+                        </form>
+                    </div>
+                </div>
                 <!-- /.container-fluid -->
 
             </div>

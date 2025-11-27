@@ -61,7 +61,7 @@ class ReportController extends BaseController
         $end   = $this->request->getPost('end_date');
 
         $query = $bookingModel
-            ->select('bookings.*, users.full_name, motors.name AS motor_name')
+            ->select('bookings.*, users.username, motors.name AS motor_name')
             ->join('users', 'users.id = bookings.user_id')
             ->join('motors', 'motors.id = bookings.motor_id');
 
@@ -90,11 +90,11 @@ class ReportController extends BaseController
 
         foreach ($rows as $item) {
             $sheet->setCellValue('A' . $row, $no++);
-            $sheet->setCellValue('B' . $row, $item['full_name']);
+            $sheet->setCellValue('B' . $row, $item['username']);
             $sheet->setCellValue('C' . $row, $item['motor_name']);
-            $sheet->setCellValue('D' . $row, $item['created_at']);
+            $sheet->setCellValue('D' . $row, date('d-m-Y', strtotime($item['created_at'])));
             $sheet->setCellValue('E' . $row, $item['status']);
-            $sheet->setCellValue('F' . $row, $item['total_amount'] ?? 0);
+            $sheet->setCellValue('F' . $row, $item['total_price'] ?? 0);
 
             $row++;
         }
@@ -138,7 +138,10 @@ class ReportController extends BaseController
         $end   = $this->request->getPost('end_date');
 
         $builder = $bookingModel
-            ->select('bookings.*, users.full_name, motors.name as motor_name');
+            ->select('bookings.*, users.username as username, motors.name as motor_name')
+            ->join('users', 'users.id = bookings.user_id')
+            ->join('motors', 'motors.id = bookings.motor_id')
+            ->orderBy('bookings.created_at', 'DESC');
 
         if ($start && $end) {
             $builder->where('DATE(bookings.created_at) >=', $start)
@@ -151,7 +154,7 @@ class ReportController extends BaseController
         $search = $this->request->getPost('search')['value'] ?? '';
         if (!empty($search)) {
             $builder->groupStart()
-                ->like('users.full_name', $search)
+                ->like('users.username', $search)
                 ->orLike('motors.name', $search)
                 ->groupEnd();
         }
@@ -159,8 +162,8 @@ class ReportController extends BaseController
         $recordsFiltered = $builder->countAllResults(false);
 
         // LIMIT (PAGINATION)
-        $length = $this->request->getPost('length');
-        $start  = $this->request->getPost('start');
+        $length = (int) $this->request->getPost('length');
+        $start  = (int) $this->request->getPost('start');
         $builder->limit($length, $start);
 
         $data = $builder->get()->getResultArray();
@@ -170,11 +173,11 @@ class ReportController extends BaseController
         foreach ($data as $row) {
             $result[] = [
                 $no++,
-                $row['full_name'],
+                $row['username'],
                 $row['motor_name'],
                 $row['created_at'],
                 ucfirst($row['status']),
-                number_format($row['total_amount'])
+                number_format($row['total_price'])
             ];
         }
 
