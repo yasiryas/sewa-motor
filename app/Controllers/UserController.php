@@ -314,10 +314,6 @@ class UserController extends BaseController
 
     public function updateProfile()
     {
-        if (!session()->get('id')) {
-            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
-        }
-
         $id = session()->get('id');
         $user = $this->userModel->find($id);
 
@@ -385,7 +381,7 @@ class UserController extends BaseController
                     'min_length' => 'Password baru minimal 6 karakter.',
                 ]
             ],
-            'repeat_new_password' => [
+            'confirm_new_password' => [
                 'rules' => 'required|matches[new_password]',
                 'errors' => [
                     'required' => 'Ulangi Password baru wajib diisi.',

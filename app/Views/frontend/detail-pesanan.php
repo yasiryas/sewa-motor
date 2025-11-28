@@ -14,8 +14,6 @@
 <section id="detailPesanan">
 
     <div class="container py-5">
-
-
         <?php if (session()->getFlashdata('success')): ?>
             <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
         <?php elseif (session()->getFlashdata('error')): ?>

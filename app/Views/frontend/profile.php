@@ -16,8 +16,12 @@
 </section>
 <section id="profile" class="py-5">
     <div class="container">
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
+        <?php elseif (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger"><?= session()->getFlashdata('error'); ?></div>
+        <?php endif; ?>
         <div class="row justify-content-center">
-
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
@@ -54,11 +58,11 @@
                         <h4 class="mb-0">Reset Password</h4>
                     </div>
                     <div class="card-body">
-                        <form action="<?= base_url('profile/reset-password'); ?>" method="post">
+                        <form action="<?= base_url('profile/change-password'); ?>" method="post">
                             <?= csrf_field(); ?>
                             <div class="form-group">
                                 <label for="password">Password Lama</label>
-                                <input type="password" class="form-control" id="password" name="password">
+                                <input type="password" class="form-control" id="password" name="current_password">
                             </div>
                             <div class="form-group">
                                 <label for="new_password">Password Baru</label>
