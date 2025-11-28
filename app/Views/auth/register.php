@@ -34,7 +34,6 @@
                                     <div class="form-group position-relative">
                                         <input type="password" class="form-control form-control-user"
                                             id="exampleInputPassword" placeholder="Password" name="password" id="password" value="<?= old('password'); ?>">
-
                                         <!-- Tombol toggle password -->
                                         <span onclick="togglePassword('exampleInputPassword','toggleIcon1')"
                                             class="position-absolute"

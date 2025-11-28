@@ -36,7 +36,8 @@
                                 <table class="table table-bordered datatable" id="bookingTable" width="100%" cellspacing="0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>#</th>
+                                            <th>No</th>
+                                            <th>Tanggal Masuk</th>
                                             <th>Nama User</th>
                                             <th>Motor</th>
                                             <th>Tanggal Mulai</th>
@@ -51,6 +52,7 @@
                                         <?php foreach ($bookings as $booking): ?>
                                             <tr>
                                                 <td><?= $no++; ?></td>
+                                                <td><?= esc(date('d M Y', strtotime($booking['created_at']))); ?></td>
                                                 <td><?= esc($booking['username']); ?></td>
                                                 <td><?= esc($booking['motor_name']); ?></td>
                                                 <td><?= esc($booking['rental_start_date']); ?></td>

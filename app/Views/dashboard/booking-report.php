@@ -27,10 +27,10 @@
                         </div>
 
                     </div>
-                    <table id="bookingTable" class="table table-bordered table-striped">
+                    <table id="bookingReportTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>User</th>
                                 <th>Motor</th>
                                 <th>Tanggal</th>

@@ -45,7 +45,7 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('report/users', 'UserController::reportUsers');
     $routes->post('report/user/get-data', 'ReportController::getUserData');
     $routes->post('report/user/export', 'ReportController::exportUserExcel');
-    $routes->get('settings/faq', 'SettingController::index');
+    $routes->get('settings/faq', 'SettingController::indexFAQ');
     $routes->post('settings/faq/store', 'SettingController::faqStore');
     $routes->post('settings/faq/update', 'SettingController::faqUpdate');
     $routes->post('settings/faq/delete', 'SettingController::faqDelete');
@@ -53,6 +53,10 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('monthly-bookings', 'DashboardController::getMonthlyBookings');
     $routes->get('top-motors', 'DashboardController::topMotors');
     $routes->get('booking-status', 'DashboardController::bookingStatus');
+    $routes->get('settings/profile', 'SettingController::profile');
+    $routes->post('settings/profile/update', 'SettingController::updateProfile');
+    $routes->post('settings/profile/update-password', 'SettingController::updatePassword');
+    $routes->get('settings/profile/bussiness', 'SettingController::profileBussiness');
 });
 
 // Manajemen brand

@@ -146,4 +146,15 @@ class DashboardController extends BaseController
             'canceled'  => round(($canceled / $total) * 100),
         ]);
     }
+
+    public function profileAdmin()
+    {
+        $userModel = new UserModel();
+        $data = [
+            'title' => 'Profile',
+            'submenu_title' => 'Setting Profile',
+            'user' => $userModel->find(session()->get('id'))
+        ];
+        return view('dashboard/settings/profile', $data);
+    }
 }

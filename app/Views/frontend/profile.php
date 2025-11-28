@@ -105,5 +105,6 @@
                 </div>
             </div>
         </div>
+    </div>
 </section>
 <?= $this->include('frontend/partials/footer'); ?>

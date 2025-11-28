@@ -570,7 +570,7 @@ $(document).on("change", ".photo-input", function () {
 
     //report booking
      // INIT DATATABLE
-    let table = $('#bookingTable').DataTable({
+    let table = $('#bookingReportTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
@@ -627,6 +627,22 @@ $(document).on("change", ".photo-input", function () {
         $('#search_value').val(this.value);
     });
 
+    //show password toggle di profile
+    $('.toggle-password').click(function() {
+        const target = $(this).data('target');
+        const input = $(target);
+        const icon = $(this).find('i');
+
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            $(this).attr('title', 'Sembunyikan Password');
+        } else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            $(this).attr('title', 'Tampilkan Password');
+        }
+    });
 
 });
 

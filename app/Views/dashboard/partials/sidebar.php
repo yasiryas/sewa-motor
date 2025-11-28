@@ -97,6 +97,7 @@
         <div id="collapseSettings" class="collapse <?= $title == 'Settings' ? 'show' : ''; ?>" aria-labelledby="headingSettings" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Settings Menu</h6>
+                <a class="collapse-item <?= $submenu_title == 'Profile' ? 'active' : ''; ?>" href="<?= base_url('dashboard/settings/profile'); ?>">Profile</a>
                 <a class="collapse-item <?= $submenu_title == 'Profile Bussiness' ? 'active' : ''; ?>" href="<?= base_url('dashboard/settings/profile'); ?>">Profile Bussiness</a>
                 <a class="collapse-item <?= $submenu_title == 'FAQ Setting' ? 'active' : ''; ?>" href="<?= base_url('dashboard/settings/faq'); ?>">FAQ</a>
             </div>
