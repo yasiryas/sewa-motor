@@ -8,11 +8,13 @@ use CodeIgniter\HTTP\ResponseInterface;
 class UserController extends BaseController
 {
     protected $userModel;
+    protected $bookingModel;
 
     public function __construct()
     {
         helper(['form', 'url']);
         $this->userModel = new \App\Models\UserModel();
+        $this->bookingModel = new \App\Models\BookingModel();
     }
 
     public function index() {}
@@ -273,5 +275,139 @@ class UserController extends BaseController
             'role' => $this->request->getPost('role'),
         ]);
         return redirect()->to('dashboard/booking')->with('success', 'User berhasil ditambahkan.')->with('modal', 'addBookingModal');
+    }
+
+    public function profile()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        $lastBooking = $this->bookingModel
+            ->select('
+            bookings.*,
+            motors.name AS motor_name,
+            motors.number_plate,
+            motors.price_per_day,
+            brands.brand AS brand_name,
+            types.type AS type_name
+        ')
+            ->join('motors', 'motors.id = bookings.motor_id', 'left')
+            ->join('brands', 'brands.id = motors.id_brand', 'left')
+            ->join('types', 'types.id = motors.id_type', 'left')
+            ->where('bookings.user_id', session()->get('id'))
+            ->orderBy('bookings.created_at', 'DESC')
+            ->limit(5)
+            ->findAll();
+
+        $user = $this->userModel->find(session()->get('id'));
+
+        $data = [
+            'title'      => 'Profile',
+            'user'       => $user,
+            'activities' => $lastBooking
+        ];
+
+        return view('frontend/profile', $data);
+    }
+
+
+    public function updateProfile()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        $id = session()->get('id');
+        $user = $this->userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('profile')->with('error', 'User tidak ditemukan.');
+        }
+
+        // Validasi input
+        $validationRules = [
+            'full_name' => [
+                'rules' => 'required|min_length[3]|max_length[100]',
+                'errors' => [
+                    'required' => 'Nama lengkap wajib diisi.',
+                    'min_length' => 'Nama lengkap minimal 3 karakter.',
+                    'max_length' => 'Nama lengkap maksimal 100 karakter.',
+                ]
+            ],
+            'phone' => [
+                'rules' => 'required|min_length[10]|max_length[15]',
+                'errors' => [
+                    'required' => 'Nomor telepon wajib diisi.',
+                    'min_length' => 'Nomor telepon minimal 10 digit.',
+                    'max_length' => 'Nomor telepon maksimal 15 digit.',
+                ]
+            ],
+        ];
+
+        if (!$this->validate($validationRules)) {
+            return redirect()->to('profile')->withInput()->with('error', $this->validator->listErrors());
+        }
+
+        $this->userModel->update($id, [
+            'full_name' => $this->request->getPost('full_name'),
+            'phone' => $this->request->getPost('phone'),
+        ]);
+
+        return redirect()->to('profile')->with('success', 'Profile berhasil diperbarui.');
+    }
+
+    public function changePassword()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        $id = session()->get('id');
+        $user = $this->userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('profile')->with('error', 'User tidak ditemukan.');
+        }
+
+        // Validasi input
+        $validationRules = [
+            'current_password' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Password saat ini wajib diisi.',
+                ]
+            ],
+            'new_password' => [
+                'rules' => 'required|min_length[6]',
+                'errors' => [
+                    'required' => 'Password baru wajib diisi.',
+                    'min_length' => 'Password baru minimal 6 karakter.',
+                ]
+            ],
+            'repeat_new_password' => [
+                'rules' => 'required|matches[new_password]',
+                'errors' => [
+                    'required' => 'Ulangi Password baru wajib diisi.',
+                    'matches' => 'Ulangi Password baru belum cocok.',
+                ]
+            ],
+        ];
+
+        if (!$this->validate($validationRules)) {
+            return redirect()->to('profile')->withInput()->with('error', $this->validator->listErrors());
+        }
+
+        // Cek password saat ini
+        if (!password_verify($this->request->getPost('current_password'), $user['password_hash'])) {
+            return redirect()->to('profile')->withInput()->with('error', 'Password saat ini salah.');
+        }
+
+        // Update password
+        $this->userModel->update($id, [
+            'password_hash' => password_hash($this->request->getPost('new_password'), PASSWORD_BCRYPT),
+        ]);
+
+        return redirect()->to('profile')->with('success', 'Password berhasil diubah.');
     }
 }

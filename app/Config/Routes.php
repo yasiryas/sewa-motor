@@ -24,6 +24,9 @@ $routes->get('logout', 'AuthController::logout');
 $routes->get('product/search', 'FrontController::searchAjaxProduk');
 $routes->get('product/filterByBrand/(:num)', 'FrontController::filterByBrand/$1');
 $routes->get('check-time', 'FrontController::checkTime');
+$routes->get('profile', 'UserController::profile', ['filter' => 'auth']);
+$routes->post('profile/update', 'UserController::updateProfile', ['filter' => 'auth']);
+$routes->post('profile/change-password', 'UserController::changePassword', ['filter' => 'auth']);
 
 $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('index', 'DashboardController::index');

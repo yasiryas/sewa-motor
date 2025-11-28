@@ -30,14 +30,14 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?= esc(session()->get('username')); ?>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <div class="dropdown-menu dropdown-menu-right p-2 rounded" aria-labelledby="userDropdown">
                             <?php if (session()->get('role') === 'admin'): ?>
-                                <a class="dropdown-item" href="<?= base_url('dashboard/index'); ?>">Dashboard</a>
+                                <a class="dropdown-item p-2" href="<?= base_url('dashboard/index'); ?>">Dashboard</a>
                             <?php else: ?>
-                                <a class="dropdown-item" href="<?= base_url('booking/pesanan'); ?>">Pesanan Saya</a>
+                                <a class="dropdown-item p-2" href="<?= base_url('booking/pesanan'); ?>">Pesanan Saya</a>
                             <?php endif; ?>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="<?= base_url('logout'); ?>">Logout</a>
+                            <a class="dropdown-item p-2" href="<?= base_url('profile'); ?>">Profile</a>
+                            <a class="dropdown-item text-danger p-2" href="<?= base_url('logout'); ?>">Logout</a>
                         </div>
                     </div>
                 <?php else: ?>
