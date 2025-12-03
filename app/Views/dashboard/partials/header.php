@@ -10,6 +10,7 @@
     <meta name="author" content="">
 
     <title><?= $title ?? 'Dashboard'; ?></title>
+    <link rel="icon" href="<?php echo base_url('/'); ?>img/asset/icon.webp" type="image/gif">
 
     <link href="<?= base_url('dashboard/vendor/datatables/dataTables.bootstrap4.min.css'); ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('dashboard/vendor/bootstrap/css/bootstrap.min.css'); ?>">
