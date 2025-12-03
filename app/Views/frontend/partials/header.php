@@ -1,7 +1,3 @@
-<?php
-
-use Faker\Provider\Base;
-?>
 <!DOCTYPE html>
 <html lang="id">
 
