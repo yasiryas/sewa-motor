@@ -61,7 +61,7 @@
                 ?>
              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="alertsDropdown">
-                 <h6 class="dropdown-header">
+                 <h6 class="dropdown-header bg-orange">
                      Alerts Center
                  </h6>
                  <a class="dropdown-item d-flex align-items-center" href="#">
