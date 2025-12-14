@@ -10,7 +10,7 @@ $routes->get('produk', 'FrontController::produk');
 $routes->get('tentang-kami', 'FrontController::tentang_kami');
 $routes->get('faq', 'FrontController::faq');
 $routes->get('kontak', 'FrontController::kontak');
-$routes->get('produk/(:num)', 'FrontController::detailProduk/$1');
+$routes->get('produk/(:num)', 'FrontController::detailP`roduk/$1');
 $routes->get('motors', 'MotorController::index');
 $routes->get('motors/(:num)', 'MotorController::show/$1');
 $routes->get('booking', 'BookingController::view');
