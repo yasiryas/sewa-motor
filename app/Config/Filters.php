@@ -81,6 +81,8 @@ class Filters extends BaseFilters
                 'dashboard/report/motor/get-data',
                 'dashboard/report/user/get-data',
                 'dashboard/report/booking/get-data',
+                'admin/save-fcm-token',
+                'notification/save-token',
             ]],
             'invalidchars',
         ],

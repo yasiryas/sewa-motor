@@ -88,5 +88,5 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = ['email_helper', 'url_helper', 'notification_helper'];
+    public $helpers = ['email_helper', 'url_helper', 'notification_helper', 'firebase_helper', 'time_helper', 'image_helper'];
 }

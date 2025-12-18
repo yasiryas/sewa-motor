@@ -9,6 +9,7 @@ use App\Models\MotorModel;
 use App\Models\BookingModel;
 use App\Models\PaymentModel;
 use Psr\Log\LoggerInterface;
+use App\Models\NotificationModel;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -449,7 +450,37 @@ class BookingController extends BaseController
             'total_price' => $total_price
         ];
 
+
         sendAdminNotification($adminData);
+        $deviceModel = new \App\Models\UserDeviceModel();
+        $adminIds = $this->UserModel->where('role', 'admin')->findColumn('id');
+        $tokens = [];
+        foreach ($adminIds as $adminId) {
+            $adminTokens =  $deviceModel->where('user_id', $adminId)->findColumn('fcm_token');
+            if ($adminTokens) {
+                $tokens = array_merge($tokens, $adminTokens);
+            }
+        }
+
+        sendFCM(
+            $tokens,
+            'Booking Baru',
+            'Ada booking baru dari ' . $user['username'] . '.',
+            base_url('admin/bookings')
+        );
+
+        $notificationModel = new \App\Models\NotificationModel();
+        foreach ($adminIds as $adminId) {
+            $notificationModel->insert([
+                'user_id' => $adminId,
+                'type' => 'booking',
+                'title' => 'Booking Baru',
+                'message' => 'User ' . $user['username'] . ' membuat booking',
+                'link' => base_url('/dashboard/booking'),
+                'is_read' => 0
+            ]);
+        }
+
 
         return redirect()->to('booking/detail-booking-page/' . $bookingID)->with('modal', 'addBookingModal')->with('success', 'Booking berhasil! Segera lakukan pembayaran ya agar bookingan anda dapat segera diproses.');
     }

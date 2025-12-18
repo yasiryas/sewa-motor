@@ -644,6 +644,73 @@ $(document).on("change", ".photo-input", function () {
         }
     });
 
+   $(function () {
+
+    // =========================
+    // NOTIFICATION HTML HELPER
+    // =========================
+    window.notifItemHtml = function (data) {
+        return `
+        <a class="dropdown-item d-flex align-items-center" href="${data.link ?? '#'}">
+            <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                    <i class="fas fa-bell text-white"></i>
+                </div>
+            </div>
+            <div>
+                <div class="small text-gray-500">${data.time}</div>
+                <span class="font-weight-bold">${data.title}</span>
+            </div>
+        </a>`;
+    };
+
+    // =========================
+    // LOAD NOTIF AWAL
+    // =========================
+    fetch('/admin/notifications/latest')
+        .then(res => res.json())
+        .then(data => {
+            const list  = $('#notifList');
+            const badge = $('#notifBadge');
+
+            if (!list.length || !badge.length) return;
+
+            list.html('');
+
+            if (data.length > 0) {
+                badge.text(data.length).removeClass('d-none');
+
+                data.forEach(n => {
+                    list.append(notifItemHtml(n));
+                });
+            }
+        });
+
+       // =========================
+        // REALTIME FCM LISTENER
+        // =========================
+        if (typeof onMessage !== 'undefined' && typeof messaging !== 'undefined') {
+
+            onMessage(messaging, (payload) => {
+                console.log('🔥 Realtime notif:', payload);
+
+                const badge = $('#notifBadge');
+                const list  = $('#notifList');
+
+                if (!badge.length || !list.length) return;
+
+                let count = parseInt(badge.text() || 0);
+                badge.text(count + 1).removeClass('d-none');
+
+                list.prepend(
+                    notifItemHtml({
+                        title: payload.data.title,
+                        link: payload.data.url,
+                        time: 'Baru saja'
+                    })
+                );
+            });
+
+        }
+    });
 });
-
-

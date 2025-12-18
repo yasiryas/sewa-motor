@@ -10,7 +10,7 @@ $routes->get('produk', 'FrontController::produk');
 $routes->get('tentang-kami', 'FrontController::tentang_kami');
 $routes->get('faq', 'FrontController::faq');
 $routes->get('kontak', 'FrontController::kontak');
-$routes->get('produk/(:num)', 'FrontController::detailP`roduk/$1');
+$routes->get('produk/(:num)', 'FrontController::detailProduk/$1');
 $routes->get('motors', 'MotorController::index');
 $routes->get('motors/(:num)', 'MotorController::show/$1');
 $routes->get('booking', 'BookingController::view');
@@ -127,3 +127,7 @@ $routes->get('home', 'FrontendController::index');
 $routes->get('about', 'FrontendController::about');
 $routes->get('contact', 'FrontendController::contact');
 $routes->get('services', 'FrontendController::services');
+
+// Notification routes
+$routes->post('admin/save-fcm-token', 'NotificationController::saveFcmToken');
+$routes->get('admin/notifications/latest', 'NotificationController::latest');
