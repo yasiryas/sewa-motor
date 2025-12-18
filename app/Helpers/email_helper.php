@@ -114,3 +114,33 @@ if (!function_exists('sendBookingStatusEmail')) {
         }
     }
 }
+
+if (!function_exists('sendAdminCancelNotification')) {
+    function sendAdminCancelNotification($adminEmail, $data)
+    {
+        try {
+            $email = \Config\Services::email();
+
+            $message = view('emails/admin_cancel_booking', [
+                'user_name'  => $data['user_name'],
+                'booking_id' => $data['booking_id']
+            ]);
+
+            $email->setTo($adminEmail); // email admin
+            $email->setFrom('sewaskuterjogja.com@gmail.com', 'Rental Motor App');
+            $email->setSubject('Booking Dibatalkan - ID: ' . $data['booking_id']);
+            $email->setMessage($message);
+
+            if ($email->send()) {
+                log_message('info', 'Email cancel booking admin terkirim');
+                return true;
+            } else {
+                log_message('error', 'Gagal kirim email cancel booking admin');
+                return false;
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Error sendAdminCancelNotification: ' . $e->getMessage());
+            return false;
+        }
+    }
+}

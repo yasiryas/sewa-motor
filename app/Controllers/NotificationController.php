@@ -7,23 +7,18 @@ use App\Models\NotificationModel;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
+
 class NotificationController extends BaseController
 {
+    protected $notificationModel;
+    public function __construct()
+    {
+        $this->notificationModel = new NotificationModel();
+    }
+
     public function index()
     {
         //
-    }
-
-    public function saveToken()
-    {
-        $data = $this->request->getJSON();
-        $model = new UserDeviceModel();
-        $model->save([
-            'user_id' => $data->user_id,
-            'fcm_token' => $data->token,
-        ]);
-
-        return $this->response->setJSON(['status' => 'success']);
     }
 
     public function latest()
@@ -93,5 +88,20 @@ class NotificationController extends BaseController
             'status' => true,
             'message' => 'FCM token saved'
         ]);
+    }
+
+    public function markRead()
+    {
+        $this->notificationModel = new NotificationModel();
+
+        $userId = session()->get('id');
+
+        $this->notificationModel
+            ->where('user_id', $userId)
+            ->where('is_read', 0)
+            ->set(['is_read' => 1])
+            ->update();
+
+        return $this->response->setJSON(['status' => 'ok']);
     }
 }

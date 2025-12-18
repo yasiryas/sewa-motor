@@ -25,7 +25,7 @@ async function initFCM() {
     if (permission !== 'granted') return;
 
     const token = await getToken(messaging, {
-        vapidKey: 'VAPID_KEY_KAMU',
+        vapidKey: 'BBIshT94AgmW-tnPZCozkwK9j8Aze319LufxdXyp5kfEvFC1eTMklncTXX8n5SzKFTghG1Du_OBJydOnQVzSgt4',
         serviceWorkerRegistration: swReg
     });
 
@@ -74,3 +74,24 @@ onMessage(messaging, (payload) => {
         </a>
     `);
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('enableNotif');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+        try {
+            await initFCM();
+
+            btn.innerText = 'Notifikasi Aktif';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-success');
+            btn.disabled = true;
+
+        } catch (e) {
+            console.error(e);
+            alert('Gagal mengaktifkan notifikasi');
+        }
+    });
+});
+

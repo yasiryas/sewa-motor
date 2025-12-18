@@ -17,7 +17,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class BookingController extends BaseController
 {
-
     protected $BookingModel;
     protected $UserModel;
     protected $MotorModel;
@@ -636,6 +635,63 @@ class BookingController extends BaseController
         ]);
 
         $this->PaymentModel->where('booking_id', $id)->set(['status' => 'canceled'])->update();
+
+        // ambil user pembatal
+        $user = $this->UserModel->find(session()->get('id'));
+
+        // ambil semua admin
+        $adminIds = $this->UserModel
+            ->where('role', 'admin')
+            ->findAll();
+
+        //send email to admin
+        helper('email_helper');
+        foreach ($adminIds as $adminId) {
+            sendAdminCancelNotification(
+                $adminId['email'],
+                [
+                    'user_name'  => $user['username'],
+                    'booking_id' => $id
+                ]
+            );
+        }
+
+        // FCM Admin
+        $deviceModel = new \App\Models\UserDeviceModel();
+        $tokens = [];
+
+        foreach ($adminIds as $adminId) {
+            $adminTokens = $deviceModel
+                ->where('user_id', $adminId['id'])
+                ->findColumn('fcm_token');
+
+            if ($adminTokens) {
+                $tokens = array_merge($tokens, $adminTokens);
+            }
+        }
+
+        if (!empty($tokens)) {
+            sendFCM(
+                $tokens,
+                'Booking Dibatalkan',
+                'User ' . $user['username'] . ' membatalkan booking',
+                base_url('admin/bookings')
+            );
+        }
+
+        // Notif database
+        $notificationModel = new \App\Models\NotificationModel();
+
+        foreach ($adminIds as $adminId) {
+            $notificationModel->insert([
+                'user_id' => $adminId['id'],
+                'type'    => 'cancel',
+                'title'   => 'Booking Dibatalkan',
+                'message' => 'User ' . $user['username'] . ' membatalkan booking',
+                'link'    => base_url('admin/bookings'),
+                'is_read' => 0
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Booking berhasil dibatalkan.');
     }

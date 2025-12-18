@@ -686,9 +686,6 @@ $(document).on("change", ".photo-input", function () {
             }
         });
 
-       // =========================
-        // REALTIME FCM LISTENER
-        // =========================
         if (typeof onMessage !== 'undefined' && typeof messaging !== 'undefined') {
 
             onMessage(messaging, (payload) => {
@@ -713,4 +710,25 @@ $(document).on("change", ".photo-input", function () {
 
         }
     });
+
+    $('#alertsDropdown').on('click', function () {
+
+    const badge = $('#notifBadge');
+
+    if (!badge.length) return;
+    if (badge.text() === '0') return;
+
+    fetch('/admin/notifications/mark-read', {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    }).then(() => {
+        // langsung reset badge
+        badge.text('0').addClass('d-none');
+    });
+
+});
+
+
 });

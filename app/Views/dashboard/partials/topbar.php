@@ -60,20 +60,18 @@
 
              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="alertsDropdown">
-
                  <h6 class="dropdown-header bg-orange">
                      Alerts Center
                  </h6>
-
                  <!-- Container notif -->
                  <div id="notifList"></div>
-
-                 <a class="dropdown-item text-center small text-gray-500" href="<?= base_url('admin/notifications'); ?>">
+                 <a class="dropdown-item text-center small text-gray-500"
+                     href="<?= base_url('admin/notifications'); ?>">
                      Show All Alerts
-                    </a>
+                 </a>
+             </div>
+         </li>
 
-                </div>
-            </li>
 
 
          <!-- Nav Item - Messages -->
@@ -111,8 +109,7 @@
                  </a>
              </div>
          </li>
-
      </ul>
-
  </nav>
+
  <!-- End of Topbar -->

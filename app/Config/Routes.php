@@ -129,5 +129,8 @@ $routes->get('contact', 'FrontendController::contact');
 $routes->get('services', 'FrontendController::services');
 
 // Notification routes
-$routes->post('admin/save-fcm-token', 'NotificationController::saveFcmToken');
-$routes->get('admin/notifications/latest', 'NotificationController::latest');
+$routes->group('admin', ['filter' => 'auth'], function ($routes) {
+    $routes->get('notifications/latest', 'NotificationController::latest');
+    $routes->post('notifications/mark-read', 'NotificationController::markRead');
+    $routes->post('save-fcm-token', 'NotificationController::saveFcmToken');
+});
