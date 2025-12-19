@@ -2,21 +2,30 @@
 
 namespace App\Controllers;
 
-use App\Models\BrandModel;
-use App\Models\MotorModel;
-use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Models\UserModel;
+use App\Models\BrandModel;
+use App\Models\MotorModel;
+use App\Models\UserDeviceModel;
+use App\Models\NotificationModel;
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
 
 class FrontController extends BaseController
 {
     protected $MotorModel;
     protected $BrandModel;
+    protected $UserModel;
+    protected $NotificationModel;
+    protected $UserDeviceModel;
     public function __construct()
     {
         $this->MotorModel = new MotorModel();
         $this->BrandModel = new BrandModel();
+        $this->UserModel = new UserModel();
+        $this->NotificationModel = new NotificationModel();
+        $this->UserDeviceModel = new UserDeviceModel();
     }
     public function index()
     {
@@ -274,6 +283,51 @@ class FrontController extends BaseController
                     'updated_at' => date('Y-m-d H:i:s'),
                 ];
                 $PayementModel->update($id_payment, $paymentData);
+            }
+
+            if (isset($data['payment_proof'])) {
+                $user = $this->UserModel->find(session()->get('id'));
+                $admins = $this->UserModel->where('role', 'admin')->findAll();
+
+                helper('email_helper');
+                $tokens = [];
+
+                foreach ($admins as $admin) {
+                    sendAdminPaymentConfirmationEmail(
+                        $admin->email,
+                        [
+                            'user_email' => $user->email,
+                            'user_name' => $user->full_name,
+                            'booking_id' => $booking->id,
+                            'payment_proof' => base_url('uploads/payments/' . $data['payment_proof']),
+                        ]
+                    );
+
+                    $this->NotificationModel->insert([
+                        'user_id' => $admin->id,
+                        'type' => 'payment_confirmation',
+                        'title' => 'Konfirmasi Pembayaran Dikirim',
+                        'message' => 'User ' . $user->full_name . ' telah mengirimkan bukti pembayaran untuk booking ID #' . $booking->id . '. Silakan lakukan verifikasi.',
+                        'link' => '/dashboard/booking/detail/' . $booking->id,
+                        'is_read' => 0,
+                        'created_at' => date('Y-m-d H:i:s'),
+                    ]);
+
+                    $adminTokens = $this->UserDeviceModel->where('user_id', $admin->id)
+                        ->findColumn('fcm_token');
+
+                    if ($adminTokens) {
+                        $tokens = array_merge($tokens, $adminTokens);
+                    }
+                }
+                if (!empty($tokens)) {
+                    sendFcmNotification(
+                        $tokens,
+                        'Konfirmasi Pembayaran Dikirim',
+                        'User ' . $user->full_name . ' telah mengirimkan bukti pembayaran untuk booking ID #' . $booking->id . '. Silakan lakukan verifikasi.',
+                        '/dashboard/booking/detail/' . $booking->id
+                    );
+                }
             }
             return redirect()->back()->with('success', 'Booking berhasil diperbarui');
         } else {

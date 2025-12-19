@@ -53,7 +53,6 @@
              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <i class="fas fa-bell fa-fw"></i>
-
                  <!-- Badge counter -->
                  <span id="notifBadge" class="badge badge-danger badge-counter d-none">0</span>
              </a>

@@ -143,4 +143,32 @@ if (!function_exists('sendAdminCancelNotification')) {
             return false;
         }
     }
+    if (!function_exists('sendAdminPeymentConfirmationEmail')) {
+        function sendAdminPeymentConfirmationEmail($adminEmail, $data)
+        {
+            try {
+                $email = \Config\Services::email();
+
+                $message = view('emails/admin_payment_confirmation', [
+                    'user_name'  => $data['user_name'],
+                    'booking_id' => $data['booking_id']
+                ]);
+
+                $email->setTo($adminEmail); // email admin
+                $email->setFrom('sewaskuterjogja.com@gmail.com', 'Rental Motor App');
+                $email->setSubject('Konfirmasi Pembayaran - ID: ' . $data['booking_id']);
+                $email->setMessage($message);
+                if ($email->send()) {
+                    log_message('info', 'Email payment confirmation admin terkirim');
+                    return true;
+                } else {
+                    log_message('error', 'Gagal kirim email payment confirmation admin');
+                    return false;
+                }
+            } catch (\Exception $e) {
+                log_message('error', 'Error sendAdminPeymentConfirmationEmail: ' . $e->getMessage());
+                return false;
+            }
+        }
+    }
 }

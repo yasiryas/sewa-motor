@@ -653,7 +653,7 @@ $(document).on("change", ".photo-input", function () {
         return `
         <a class="dropdown-item d-flex align-items-center" href="${data.link ?? '#'}">
             <div class="mr-3">
-                <div class="icon-circle bg-primary">
+                <div class="icon-circle bg-orange">
                     <i class="fas fa-bell text-white"></i>
                 </div>
             </div>
@@ -676,10 +676,8 @@ $(document).on("change", ".photo-input", function () {
             if (!list.length || !badge.length) return;
 
             list.html('');
-
             if (data.length > 0) {
                 badge.text(data.length).removeClass('d-none');
-
                 data.forEach(n => {
                     list.append(notifItemHtml(n));
                 });
@@ -689,7 +687,7 @@ $(document).on("change", ".photo-input", function () {
         if (typeof onMessage !== 'undefined' && typeof messaging !== 'undefined') {
 
             onMessage(messaging, (payload) => {
-                console.log('🔥 Realtime notif:', payload);
+                // console.log('🔥 Realtime notif:', payload);
 
                 const badge = $('#notifBadge');
                 const list  = $('#notifList');
