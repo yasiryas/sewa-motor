@@ -123,7 +123,7 @@ if (!function_exists('sendAdminCancelNotification')) {
 
             $message = view('emails/admin_cancel_booking', [
                 'user_name'  => $data['user_name'],
-                'booking_id' => $data['booking_id']
+                'booking_id' => $data['booking_id'],
             ]);
 
             $email->setTo($adminEmail); // email admin
@@ -151,7 +151,10 @@ if (!function_exists('sendAdminCancelNotification')) {
 
                 $message = view('emails/admin_payment_confirmation', [
                     'user_name'  => $data['user_name'],
-                    'booking_id' => $data['booking_id']
+                    'email_user'  => $data['email_user'],
+                    'booking_id' => $data['booking_id'],
+                    'amount' => $data['amount'],
+                    'payment_proof' => base_url('uploads/payments/' . $data['payment_proof']),
                 ]);
 
                 $email->setTo($adminEmail); // email admin

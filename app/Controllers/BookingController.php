@@ -13,6 +13,7 @@ use App\Models\NotificationModel;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\UserDeviceModel;
 
 
 class BookingController extends BaseController
@@ -21,13 +22,16 @@ class BookingController extends BaseController
     protected $UserModel;
     protected $MotorModel;
     protected $PaymentModel;
-
+    protected $NotificationModel;
+    protected $UserDeviceModel;
     public function __construct()
     {
         $this->BookingModel = new BookingModel();
-        $this->UserModel = new \App\Models\UserModel();
+        $this->UserModel = new UserModel();
         $this->MotorModel = new MotorModel();
-        $this->PaymentModel = new \App\Models\PaymentModel();
+        $this->PaymentModel = new PaymentModel();
+        $this->NotificationModel = new NotificationModel();
+        $this->UserDeviceModel = new UserDeviceModel();
     }
 
     public function index()
@@ -761,5 +765,109 @@ class BookingController extends BaseController
 
         // === 4️⃣ Unduh PDF ===
         $dompdf->stream('Invoice_Booking_' . $booking['id'] . '.pdf', ['Attachment' => true]);
+    }
+
+    public function updateBookingFromDetailUser()
+    {
+        $BookingModel = new \App\Models\BookingModel();
+        $PayementModel = new \App\Models\PaymentModel();
+
+        $id_booking = $this->request->getPost('id_booking');
+        $id_payment = $this->request->getPost('id_payment');
+
+        $booking = $BookingModel->find($id_booking);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking tidak ditemukan');
+        }
+
+        $data = [
+            'payment_method' => $this->request->getPost('payment_method'),
+            'notes' => $this->request->getPost('notes'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        // upload identitiy photo
+        $identityFile = $this->request->getFile('identity_photo');
+        if ($identityFile && $identityFile->isValid()) {
+            $identityPhotoName = 'identity_' . time() . '.' . $identityFile->getClientExtension();
+            $identityFile->move('uploads/identitas/', $identityPhotoName);
+            $data['identity_photo'] = $identityPhotoName;
+        }
+
+        // upload bukti pembayaran
+        $proofFile = $this->request->getFile('payment_proof');
+        if ($proofFile && $proofFile->isValid()) {
+            $paymentProofName = 'payment_proof_' . time() . '.' . $proofFile->getClientExtension();
+            $proofFile->move('uploads/payments/', $paymentProofName);
+            $data['payment_proof'] = $paymentProofName;
+        }
+
+        if ($BookingModel->update($id_booking, $data)) {
+            // update payment table if payment proof is uploaded
+            if (isset($data['payment_proof'])) {
+                $paymentData = [
+                    'payment_method' => $data['payment_method'],
+                    'payment_proof' => $data['payment_proof'],
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ];
+                $PayementModel->update($id_payment, $paymentData);
+            } else {
+                // update payment method only
+                $paymentData = [
+                    'payment_method' => $data['payment_method'],
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ];
+                $PayementModel->update($id_payment, $paymentData);
+            }
+
+            if (isset($data['payment_proof'])) {
+                $user = $this->UserModel->find(session()->get('id'));
+                $admins = $this->UserModel->where('role', 'admin')->findAll();
+
+                helper('email_helper', 'firebase_helper');
+                $tokens = [];
+
+                foreach ($admins as $admin) {
+                    sendAdminPeymentConfirmationEmail(
+                        $admin['email'],
+                        [
+                            'email_user' => $user['email'],
+                            'user_name' => $user['full_name'],
+                            'booking_id' => $booking['id'],
+                            'payment_proof' => $data['payment_proof'],
+                            'amount' => $booking['total_price']
+                        ]
+                    );
+
+                    $this->NotificationModel->insert([
+                        'user_id' => $admin['id'],
+                        'type' => 'payment_confirmation',
+                        'title' => 'Konfirmasi Pembayaran Dikirim',
+                        'message' => 'User ' . $user['full_name'] . ' telah mengirimkan bukti pembayaran untuk booking ID #' . $booking['id'] . '. Silakan lakukan verifikasi.',
+                        'link' => '/dashboard/booking/detail/' . $booking['id'],
+                        'is_read' => 0,
+                        'created_at' => date('Y-m-d H:i:s'),
+                    ]);
+
+                    $adminTokens = $this->UserDeviceModel->where('user_id', $admin['id'])
+                        ->findColumn('fcm_token');
+
+                    if ($adminTokens) {
+                        $tokens = array_merge($tokens, $adminTokens);
+                    }
+                }
+                if (!empty($tokens)) {
+                    sendFCM(
+                        $tokens,
+                        'Konfirmasi Pembayaran Dikirim',
+                        'User ' . $user['full_name'] . ' telah mengirimkan bukti pembayaran untuk booking ID #' . $booking['id'] . '. Silakan lakukan verifikasi.',
+                        '/dashboard/booking/detail/' . $booking['id']
+                    );
+                }
+            }
+            return redirect()->back()->with('success', 'Booking berhasil diperbarui');
+        } else {
+            return redirect()->back()->with('error', 'Gagal memperbarui booking');
+        }
     }
 }
