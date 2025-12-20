@@ -37,6 +37,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>No</th>
+                                            <th>ID Booking</th>
                                             <th>Tanggal Masuk</th>
                                             <th>Nama User</th>
                                             <th>Motor</th>
@@ -52,6 +53,7 @@
                                         <?php foreach ($bookings as $booking): ?>
                                             <tr>
                                                 <td><?= $no++; ?></td>
+                                                <td><?= esc($booking['id']); ?></td>
                                                 <td><?= esc(date('d M Y', strtotime($booking['created_at']))); ?></td>
                                                 <td><?= esc($booking['username']); ?></td>
                                                 <td><?= esc($booking['motor_name']); ?></td>

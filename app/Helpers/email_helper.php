@@ -175,3 +175,38 @@ if (!function_exists('sendAdminCancelNotification')) {
         }
     }
 }
+
+if (!function_exists('sendUserAcceptBookingEmail')) {
+    function sendUserAcceptBookingEmail($userEmail, $data)
+    {
+        try {
+            $email = \Config\Services::email();
+
+            $message = view('emails/user_accept_booking', [
+                'user_name'  => $data['user_name'],
+                'booking_id' => $data['booking_id'],
+                'motor_name' => $data['motor_name'],
+                'start_date' => $data['start_date'],
+                'end_date'   => $data['end_date'],
+                'total_price' => $data['total_price'],
+            ]);
+
+            $email->setTo($userEmail);
+            $email->setFrom('sewaskuterjogja.com@gmail.com', 'Rental Motor App');
+            $email->setSubject('Booking Diterima - ID: ' . $data['booking_id']);
+            $email->setMessage($message);
+
+            if ($email->send()) {
+                log_message('info', 'Email berhasil dikirim ke: ' . $userEmail);
+                return true;
+            } else {
+                log_message('error', 'Gagal mengirim email ke: ' . $userEmail);
+                log_message('debug', 'Email debug: ' . $email->printDebugger(['headers']));
+                return false;
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Error sendUserAcceptBookingEmail: ' . $e->getMessage());
+            return false;
+        }
+    }
+}
