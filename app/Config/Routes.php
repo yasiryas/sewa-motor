@@ -57,6 +57,9 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->post('settings/profile/update', 'SettingController::updateProfile');
     $routes->post('settings/profile/update-password', 'SettingController::updatePassword');
     $routes->get('settings/profile/bussiness', 'SettingController::profileBussiness');
+    $routes->get('logbook/check-in', 'LogbookController::checkIn');
+    $routes->get('logbook/check-out', 'LogbookController::checkOut');
+    $routes->get('logbook', 'LogbookController::index');
 });
 
 // Manajemen brand

@@ -54,6 +54,30 @@
     </li> -->
 
     <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item <?= $title == 'Logbook' ? 'active' : ''; ?>">
+        <a class="nav-link collapsed" href="<?= base_url('dashboard/logbook'); ?>">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Logbook</span>
+        </a>
+        <!-- <div id="collapseUtilities" class="collapse <?php // $title == 'Logbook' ? 'show' : '';
+                                                            ?>" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Logbook Motor:</h6>
+                <a class="collapse-item <?php // $submenu_title == 'Check In' ? 'active' : '';
+                                        ?>" href="<?php // base_url('dashboard/logbook/check-in');
+                                                    ?>">Check In</a>
+                <a class="collapse-item <?php // $submenu_title == 'Check Out' ? 'active' : '';
+                                        ?>" href="<?php // base_url('dashboard/logbook/check-out');
+                                                    ?>">Check Out</a>
+                <a class="collapse-item <?php // $submenu_title == 'History' ? 'active' : '';
+                                        ?>" href="<?php // base_url('dashboard/logbook/history');
+                                                    ?>">History</a>
+            </div>
+        </div>  -->
+    </li>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item <?= $title == 'Inventaris' ? 'active' : ''; ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
