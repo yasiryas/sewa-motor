@@ -16,10 +16,29 @@ class LogbookController extends BaseController
 
     public function index()
     {
+        $type = $this->request->getGet('type');
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+
+        $builder = $this->MotorLogbook;
+        if ($type && in_array($type, ['check-in', 'check-out'])) {
+            $builder->where('type', $type);
+        }
+        if ($startDate && $endDate) {
+            $builder->where('created_at >=', $startDate)
+                ->where('created_at <=', $endDate);
+        }
+
+        $logs = $builder->select('motor_logbooks.*, motors.name as motor, users.username as penyewa')
+            ->join('motors', 'motors.id = motor_logbooks.motor_id')
+            ->join('users', 'users.id = motor_logbooks.user_id')
+            ->findAll();
+        // ->OrderBy('created_at', 'DESC');
+
         $data = [
             'title' => 'Logbook',
             'submenu_title' => 'Logbook',
-            'logbook' => [], // Data FAQ akan diisi nanti jika adanull,
+            'logs' => $logs,
         ];
         return view('dashboard/logbook/logbook', $data);
     }

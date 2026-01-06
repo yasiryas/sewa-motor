@@ -23,7 +23,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <?php
-                        if (empty($checkIn)): ?>
+                        if (empty($logs)): ?>
                             <div class="alert alert-info text-center">
                                 <i class="fas fa-info-circle"></i> Belum ada Record. Silakan tambah record terlebih dahulu.
                             </div>
@@ -33,24 +33,31 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th>#</th>
-                                    <th>Pertanyaan</th>
-                                    <th>Jawaban</th>
+                                    <th>Kode</th>
+                                    <th>Motor</th>
+                                    <th>Petugas Input</th>
+                                    <th>Jenis</th>
+                                    <th>Waktu</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $no = 1;
-                                foreach ($checkIn as $ci): ?>
+                                foreach ($logs as $log): ?>
                                     <tr>
                                         <td><?= $no++; ?></td>
-                                        <td><?= esc($ci['question']); ?></td>
-                                        <td><?= esc($ci['answer']); ?></td>
+                                        <td><?= esc($log['kode']); ?></td>
+                                        <td><?= esc($log['motor']); ?></td>
+                                        <td><?= esc($log['penyewa']); ?></td>
+                                        <td> <span class="badge badge-<?= $log['type'] == 'check-in' ? 'success' : 'warning'; ?>">
+                                                <?= esc($log['type']); ?>
+                                            </span>
+                                        </td>
+                                        <td><?= esc(date("d M Y H:i", strtotime($log['created_at']))); ?></td>
                                         <td>
-                                            <a href="#" class="btn btn-warning btn-sm btn-edit-faq-modal m-1"
-                                                data-update-id-faq="<?= $ci['id']; ?>"
-                                                data-update-question-faq="<?= esc($ci['question']); ?>"
-                                                data-update-answer-faq="<?= esc($ci['answer']); ?>"><i class="fas fa-edit"></i> Edit</a>
-                                            <ca href="#" class="btn btn-danger btn-sm btn-delete-faq-modal m-1" data-delete-id-faq="<?= $ci['id']; ?>" data-delete-question-faq="<?= $ci['question']; ?>" data-target="#deleteFaqModal" data-toggle="modal"><i class="fas fa-trash"></i> Hapus</ca>
+                                            <a href="#" class="btn btn-sm btn-primary m-1"><i class="fas fa-search"></i> Detail</a>
+                                            <a href="#" class="btn btn-sm btn-warning m-1"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="#" class="btn btn-sm btn-danger m-1"><i class="fas fa-trash"></i> Delete</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -59,7 +66,6 @@
                     </div>
                 </div>
 
-                <!-- modal section -->
                 <!-- Modal Add faq -->
                 <div class="modal fade" id="addFaqModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
