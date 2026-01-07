@@ -15,13 +15,53 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800"><?= $title . ' ' . $submenu_title; ?></h1>
-                    <button href="#" class="d-none d-sm-inline-block btn btn-sm btn-secondary btn-add-faq shadow-sm" data-target="#addFaqModal" data-toggle="modal"><i
-                            class="fas fa-plus fa-sm text-white-50"></i> Check In</button>
+                    <h1 class="h3 mb-0 text-gray-800"><?= esc($title) ?></h1>
+                    <div class="align-item-end">
+                        <button href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary btn-check-in shadow-sm" data-target="#addFaqModal" data-toggle="modal"><i
+                                class="fas fa-plus fa-sm text-white-50"></i> Check In</button>
+                        <button class="d-none d-sm-inline-block btn btn-sm btn-warning btn-check-out shadow-sm" data-target="#addFaqModal" data-toggle="modal"><i
+                                class="fas fa-plus fa-sm text-white-50"></i>
+                            Check Out
+                        </button>
+                    </div>
                 </div>
 
                 <div class="card shadow mb-4">
                     <div class="card-body">
+                        <!-- Filter -->
+                        <form method="get" class="mb-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select name="type" class="form-control">
+                                        <option value="">Semua Jenis</option>
+                                        <option value="check-in" <?= request('type') == 'check-in' ? 'selected' : '' ?>>
+                                            Check In
+                                        </option>
+                                        <option value="check-out" <?= request('type') == 'check-out' ? 'selected' : '' ?>>
+                                            Check Out
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <input type="date" name="start_date" class="form-control"
+                                        value="<?= request()->getGet('start_date') ?>">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <input type="date" name="end_date" class="form-control"
+                                        value="<?= request()->getGet('end_date') ?>">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary w-100">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+
                         <?php
                         if (empty($logs)): ?>
                             <div class="alert alert-info text-center">
@@ -66,7 +106,7 @@
                     </div>
                 </div>
 
-                <!-- Modal Add faq -->
+                <!-- Modal Check In -->
                 <div class="modal fade" id="addFaqModal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <form id="faqFormAdd" action="<?= base_url('dashboard/settings/faq/store'); ?>" method="post">
