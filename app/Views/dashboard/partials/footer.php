@@ -94,6 +94,12 @@
  <script src="<?= base_url('dashboard/js/sb-admin-2.min.js'); ?>"></script>
  <script src="<?= base_url('dashboard/vendor/summernote/summernote-bs4.min.js'); ?>"></script>
 
+ <!-- Select2 CSS -->
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+ <!-- Select2 JS -->
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 
  <!-- Page level plugins -->
  <script src="<?= base_url('dashboard/vendor/chart.js/Chart.min.js'); ?>"></script>

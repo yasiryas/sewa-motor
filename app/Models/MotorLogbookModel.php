@@ -43,4 +43,22 @@ class MotorLogbookModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getMotorLogbook($motorId)
+    {
+        return $this->where('motor_id', $motorId)->findAll();
+    }
+
+    private function isMotorAvailable($motorId)
+    {
+        $latestLog = $this->where('motor_id', $motorId)
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        if ($latestLog) {
+            return $latestLog['type'] === 'check-out';
+        }
+
+        return true; // Jika tidak ada log, motor dianggap tersedia
+    }
 }
