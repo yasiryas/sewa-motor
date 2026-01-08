@@ -25,14 +25,16 @@ class LogbookController extends BaseController
             $builder->where('type', $type);
         }
         if ($startDate && $endDate) {
-            $builder->where('created_at >=', $startDate)
-                ->where('created_at <=', $endDate);
+            $builder->where('DATE(motor_logbooks.created_at) >=', $startDate)
+                ->where('DATE(motor_logbooks.created_at) <=', $endDate);
         }
 
-        $logs = $builder->select('motor_logbooks.*, motors.name as motor, users.username as penyewa')
+        $logs = $builder->select('motor_logbooks.*, motor_logbooks.created_at as waktu, motors.name as motor, users.username as penyewa')
             ->join('motors', 'motors.id = motor_logbooks.motor_id')
             ->join('users', 'users.id = motor_logbooks.user_id')
             ->findAll();
+
+        // dd($logs);
         // ->OrderBy('created_at', 'DESC');
 
         $data = [

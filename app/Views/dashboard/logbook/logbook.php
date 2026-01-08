@@ -34,10 +34,10 @@
                                 <div class="col-md-3">
                                     <select name="type" class="form-control">
                                         <option value="">Semua Jenis</option>
-                                        <option value="check-in" <?= request('type') == 'check-in' ? 'selected' : '' ?>>
+                                        <option value="check-in" <?= request()->getGet('type') == 'check-in' ? 'selected' : '' ?>>
                                             Check In
                                         </option>
-                                        <option value="check-out" <?= request('type') == 'check-out' ? 'selected' : '' ?>>
+                                        <option value="check-out" <?= request()->getGet('type') == 'check-out' ? 'selected' : '' ?>>
                                             Check Out
                                         </option>
                                     </select>
@@ -93,7 +93,7 @@
                                                 <?= esc($log['type']); ?>
                                             </span>
                                         </td>
-                                        <td><?= esc(date("d M Y H:i", strtotime($log['created_at']))); ?></td>
+                                        <td><?= esc(date("d M Y H:i", strtotime($log['waktu']))); ?></td>
                                         <td>
                                             <a href="#" class="btn btn-sm btn-primary m-1"><i class="fas fa-search"></i> Detail</a>
                                             <a href="#" class="btn btn-sm btn-warning m-1"><i class="fas fa-edit"></i> Edit</a>
