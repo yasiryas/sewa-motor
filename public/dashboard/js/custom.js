@@ -35,6 +35,10 @@ $(document).ready(function () {
       $('#resetPasswordUserModal').modal('show');
   }
 
+  if (openModal === 'logbookModal') {
+      $('#logbookModal').modal('show');
+  }
+
   if (openModal === 'addBookingModal') {
     $('#addBookingModal').modal('show');
 

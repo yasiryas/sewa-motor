@@ -17,7 +17,7 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800"><?= esc($title) ?></h1>
                     <div class="align-item-end">
-                        <button class="btn btn-sm btn-primary"
+                        <button class="btn btn-sm btn-primary mr-1"
                             data-toggle="modal"
                             data-target="#logbookModal"
                             data-type="check-in">
@@ -142,7 +142,36 @@
                 return;
             }
 
-            // Modal Check In / Check Out
+            /* =============================
+               INIT SELECT2 (SATU KALI)
+            ============================== */
+
+            $('#motor-modal').select2({
+                dropdownParent: $('#logbookModal'),
+                theme: 'bootstrap4',
+                placeholder: "Pilih Motor",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#select-booking').select2({
+                dropdownParent: $('#logbookModal'),
+                theme: 'bootstrap4',
+                placeholder: "Pilih Booking",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#motor-filter').select2({
+                theme: 'bootstrap4',
+                placeholder: "Pilih Motor",
+                allowClear: true,
+                width: '100%'
+            });
+
+            /* =============================
+               MODAL SHOW EVENT
+            ============================== */
             $('#logbookModal').on('show.bs.modal', function(event) {
                 let button = $(event.relatedTarget);
                 let type = button.data('type');
@@ -154,27 +183,27 @@
                     'Check In Motor' :
                     'Check Out Motor'
                 );
-
-                // Init Select2 di modal (WAJIB di sini)
-                $('#motor-modal').select2({
-                    dropdownParent: $('#logbookModal'),
-                    theme: 'bootstrap4',
-                    placeholder: "Pilih Motor",
-                    allowClear: true,
-                    width: '100%'
-                });
             });
 
-            // Select2 filter motor
-            $('#motor-filter').select2({
-                theme: 'bootstrap4',
-                placeholder: "Pilih Motor",
-                allowClear: true,
-                width: '100%'
+            $('#select-booking').on('change', function() {
+                let motorId = $(this).find(':selected').data('motor');
+
+                if (motorId) {
+                    $('#motor-modal')
+                        .val(motorId)
+                        .trigger('change')
+                        .prop('disabled', true);
+                } else {
+                    $('#motor-modal')
+                        .val(null)
+                        .trigger('change')
+                        .prop('disabled', false);
+                }
             });
 
         });
     </script>
+
 
 
 

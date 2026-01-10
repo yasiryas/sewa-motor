@@ -60,6 +60,7 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('logbook/check-in', 'LogbookController::checkIn');
     $routes->get('logbook/check-out', 'LogbookController::checkOut');
     $routes->get('logbook', 'LogbookController::index');
+    $routes->post('logbook/store', 'LogbookController::store');
 });
 
 // Manajemen brand

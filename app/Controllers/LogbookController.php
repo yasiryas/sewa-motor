@@ -41,7 +41,7 @@ class LogbookController extends BaseController
 
         $motors = $this->MotorModel->findAll();
         $bookings = $this->BookingModel
-            ->select('bookings.*, users.username as username, motors.name AS motor_name')
+            ->select('bookings.*, users.username as username, motors.name AS motor_name, motors.number_plate AS number_plate')
             ->join('motors', 'motors.id = bookings.motor_id')
             ->join('users', 'users.id = bookings.user_id')
             ->findAll();
@@ -64,47 +64,80 @@ class LogbookController extends BaseController
         return view('dashboard/logbook/logbook', $data);
     }
 
-    public function checkOut()
+    public function store()
     {
-        $motorId = $this->request->getPost('motor_id');
+        $motorId   = $this->request->getPost('motor_id');
         $bookingId = $this->request->getPost('booking_id');
-        $notes = $this->request->getPost('notes');
+        $type      = $this->request->getPost('type');
+        $notes     = $this->request->getPost('notes');
+        $fuel = $this->request->getPost('fuel');
+        $photo = $this->request->getPost('photo');
 
-        if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
-            return redirect()->back()->with('error', 'Motor Masih digunakan.');
+        $validationRules = [
+            'motor_id' => [
+                'rules' => 'required|integer|is_not_unique[motors.id]',
+                'errors' => [
+                    'is_not_unique' => 'Motor tidak ditemukan.',
+                    'required' => 'Motor harus dipilih.',
+                    'integer' => 'Motor tidak valid.',
+                ]
+            ],
+            'type' => [
+                'rules' => 'required|in_list[check-in,check-out]',
+                'errors' => [
+                    'required' => 'Jenis logbook harus dipilih.',
+                    'in_list' => 'Jenis logbook tidak valid.',
+                ]
+            ],
+            'photo' => [
+                'rules' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]', // Maksimal 2MB
+                'errors' => [
+                    'uploaded' => 'Foto kondisi motor harus diunggah.',
+                    'max_size' => 'Ukuran foto kondisi motor maksimal 2MB.',
+                ]
+            ],
+        ];
+
+        if (!$this->validate($validationRules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->listErrors())->with('modal', 'logbookModal');
+        }
+
+        if (!$motorId || !$type) {
+            return redirect()->back()->with('error', 'Data tidak lengkap.')->withInput()->with('modal', 'logbookModal');
+        }
+
+        // VALIDASI STATUS MOTOR
+        if ($type === 'check-out') {
+            if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
+                return redirect()->back()->with('error', 'Motor masih digunakan.');
+            }
+        }
+
+        if ($type === 'check-in') {
+            if ($this->MotorLogbook->isMotorAvailable($motorId)) {
+                return redirect()->back()->with('error', 'Motor belum di check-out.');
+            }
         }
 
         $this->MotorLogbook->insert([
-            'motor_id' => $motorId,
-            'user_id' => session()->get('user_id'),
-            'booking_id' => $bookingId,
-            'type' => 'check-out',
+            'kode'           => 'LB' . date('ymdHis'),
+            'motor_id'       => $motorId,
+            'user_id'        => session()->get('user_id'),
+            'booking_id'     => $bookingId ?: null,
+            'type'           => $type,
             'condition_note' => $notes,
+            'fuel_level' => $fuel,
+            'photo' => $photo,
         ]);
 
-        return redirect()->back()->with('success', 'Motor berhasil di check-in.');
+        return redirect()->back()->with(
+            'success',
+            $type === 'check-in'
+                ? 'Motor berhasil di Check In.'
+                : 'Motor berhasil di Check Out.'
+        );
     }
 
-    public function checkIn()
-    {
-        $motorId = $this->request->getPost('motor_id');
-        $bookingId = $this->request->getPost('booking_id');
-        $notes = $this->request->getPost('notes');
-
-        if ($this->MotorLogbook->isMotorAvailable($motorId)) {
-            return redirect()->back()->with('error', 'Motor belum di check-out.');
-        }
-
-        $this->MotorLogbook->insert([
-            'motor_id' => $motorId,
-            'user_id' => session()->get('user_id'),
-            'booking_id' => $bookingId,
-            'type' => 'check-in',
-            'condition_note' => $notes,
-        ]);
-
-        return redirect()->back()->with('success', 'Motor berhasil di check-in.');
-    }
 
     public function getMotorStatus($motorId): ResponseInterface
     {
