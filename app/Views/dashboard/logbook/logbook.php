@@ -137,10 +137,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-            if (typeof $ === 'undefined') {
-                console.error('jQuery belum termuat');
-                return;
-            }
 
             /* =============================
                INIT SELECT2 (SATU KALI)
@@ -172,17 +168,43 @@
             /* =============================
                MODAL SHOW EVENT
             ============================== */
-            $('#logbookModal').on('show.bs.modal', function(event) {
-                let button = $(event.relatedTarget);
-                let type = button.data('type');
-
-                $('#logType').val(type);
-
+            function setModalTitle(type) {
                 $('.modal-title').text(
                     type === 'check-in' ?
                     'Check In Motor' :
                     'Check Out Motor'
                 );
+            }
+
+            $('#logbookModal').on('show.bs.modal', function(event) {
+
+                let currentType = $('#logType').val();
+
+                // 🔹 Jika datang dari klik tombol
+                if (!currentType) {
+                    let button = $(event.relatedTarget);
+                    let type = button.data('type');
+
+                    $('#logType').val(type);
+                    setModalTitle(type);
+                }
+                // 🔹 Jika datang dari redirect controller (old input)
+                else {
+                    setModalTitle(currentType);
+                }
+
+                // Init Select2
+                $('#motor-modal').select2({
+                    dropdownParent: $('#logbookModal'),
+                    theme: 'bootstrap4',
+                    width: '100%'
+                });
+
+                $('#select-booking').select2({
+                    dropdownParent: $('#logbookModal'),
+                    theme: 'bootstrap4',
+                    width: '100%'
+                });
             });
 
             $('#select-booking').on('change', function() {

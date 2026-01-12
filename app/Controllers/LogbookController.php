@@ -66,12 +66,15 @@ class LogbookController extends BaseController
 
     public function store()
     {
+        $photoFile = $this->request->getFile('photo');
+
         $motorId   = $this->request->getPost('motor_id');
         $bookingId = $this->request->getPost('booking_id');
         $type      = $this->request->getPost('type');
         $notes     = $this->request->getPost('notes');
         $fuel = $this->request->getPost('fuel');
-        $photo = $this->request->getPost('photo');
+        $user_id  = session()->get('id');
+
 
         $validationRules = [
             'motor_id' => [
@@ -89,45 +92,62 @@ class LogbookController extends BaseController
                     'in_list' => 'Jenis logbook tidak valid.',
                 ]
             ],
-            'photo' => [
-                'rules' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]', // Maksimal 2MB
+            'fuel' => [
+                'rules' => 'required|in_list[full,medium,low]',
                 'errors' => [
-                    'uploaded' => 'Foto kondisi motor harus diunggah.',
-                    'max_size' => 'Ukuran foto kondisi motor maksimal 2MB.',
+                    'required' => 'Fuel level harus dipilih.',
+                    'in_list' => 'Fuel level tidak valid.',
+                ]
+            ],
+            'photo' => [
+                'rules' => 'permit_empty|is_image[photo]|max_size[photo,2048]|mime_in[photo,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'is_image' => 'File yang diunggah harus berupa gambar.',
+                    'max_size' => 'Ukuran gambar maksimal 2MB.',
+                    'mime_in'  => 'Format gambar harus JPG, JPEG, atau PNG.',
                 ]
             ],
         ];
 
         if (!$this->validate($validationRules)) {
-            return redirect()->back()->withInput()->with('error', $this->validator->listErrors())->with('modal', 'logbookModal');
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors())->with('modal', 'logbookModal');
         }
 
         if (!$motorId || !$type) {
-            return redirect()->back()->with('error', 'Data tidak lengkap.')->withInput()->with('modal', 'logbookModal');
+            return redirect()->back()->withInput()->with('errors', 'Data tidak lengkap.')->with('modal', 'logbookModal');
         }
 
         // VALIDASI STATUS MOTOR
-        if ($type === 'check-out') {
-            if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
-                return redirect()->back()->with('error', 'Motor masih digunakan.');
-            }
-        }
+        // if ($type === 'check-out') {
+        //     if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
+        //         return redirect()->back()->with('error', 'Motor masih digunakan.');
+        //     }
+        // }
 
-        if ($type === 'check-in') {
-            if ($this->MotorLogbook->isMotorAvailable($motorId)) {
-                return redirect()->back()->with('error', 'Motor belum di check-out.');
-            }
+        // if ($type === 'check-in') {
+        //     if ($this->MotorLogbook->isMotorAvailable($motorId)) {
+        //         return redirect()->back()->with('error', 'Motor belum di check-out.');
+        //     }
+        // }
+
+        // ==== HANDLE FOTO ====
+        $photoName = null;
+        if ($photoFile && $photoFile->isValid()) {
+            $photoName = $photoFile->getRandomName();
+            $photoFile->move(ROOTPATH . 'public/uploads/logbook', $photoName);
+        } else {
+            $photoName = null;
         }
 
         $this->MotorLogbook->insert([
             'kode'           => 'LB' . date('ymdHis'),
             'motor_id'       => $motorId,
-            'user_id'        => session()->get('user_id'),
+            'user_id'        => $user_id,
             'booking_id'     => $bookingId ?: null,
             'type'           => $type,
             'condition_note' => $notes,
             'fuel_level' => $fuel,
-            'photo' => $photo,
+            'photo' => $photoName,
         ]);
 
         return redirect()->back()->with(
