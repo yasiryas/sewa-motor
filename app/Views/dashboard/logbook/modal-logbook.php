@@ -1,3 +1,4 @@
+<!-- modal check-in check-out  -->
 <div class="modal fade" id="logbookModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         $<?php $validation = session('validation'); ?>
@@ -30,6 +31,7 @@
 
                     <!-- MOTOR -->
                     <div class="form-group">
+                        <input type="hidden" name="motor_id" id="motor_id_hidden" value="<?= old('motor_id'); ?>">
                         <label>Motor <span class="text-danger">*</span></label>
                         <select name="motor_id" class="form-control motor-select <?= session('errors.motor_id') ? 'is-invalid' : '' ?>" id="motor-modal">
                             <option value="">-- Pilih Motor --</option>
@@ -41,6 +43,8 @@
                         </select>
                         <small class="text-danger"><?= session('errors.motor_id' ?? '') ?></small>
                     </div>
+
+
 
                     <div class="form-group">
                         <label for="fuel_level">Fuel Level</label>
@@ -76,5 +80,26 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal detail -->
+<div class="modal fade" id="detailLogbook" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>

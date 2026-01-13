@@ -10,6 +10,7 @@ use App\Models\BookingModel;
 use App\Models\MotorModel;
 
 
+
 class LogbookController extends BaseController
 {
     protected $MotorLogbook;
@@ -64,11 +65,25 @@ class LogbookController extends BaseController
         return view('dashboard/logbook/logbook', $data);
     }
 
+    public function getMotorStatus($motorId): ResponseInterface
+    {
+        $last = $this->MotorLogbook->where('motor_id', $motorId)
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        $status = 'available';
+        if ($last && $last['type'] === 'check-out') {
+            $status = 'in-use';
+        }
+
+        return $this->response->setJSON(['status' => $status]);
+    }
+
     public function store()
     {
         $photoFile = $this->request->getFile('photo');
 
-        $motorId   = $this->request->getPost('motor_id');
+        $motorId   = $this->request->getPost('motor_id') ?? $this->request->getPost('motor_id_hidden');
         $bookingId = $this->request->getPost('booking_id');
         $type      = $this->request->getPost('type');
         $notes     = $this->request->getPost('notes');
@@ -118,17 +133,17 @@ class LogbookController extends BaseController
         }
 
         // VALIDASI STATUS MOTOR
-        // if ($type === 'check-out') {
-        //     if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
-        //         return redirect()->back()->with('error', 'Motor masih digunakan.');
-        //     }
-        // }
+        if ($type === 'check-out') {
+            if ($this->MotorLogbook->isMotorAvailable($motorId)) {
+                return redirect()->back()->with('error', 'Motor sudah di check-out.');
+            }
+        }
 
-        // if ($type === 'check-in') {
-        //     if ($this->MotorLogbook->isMotorAvailable($motorId)) {
-        //         return redirect()->back()->with('error', 'Motor belum di check-out.');
-        //     }
-        // }
+        if ($type === 'check-in') {
+            if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
+                return redirect()->back()->with('error', 'Motor belum di check-out.');
+            }
+        }
 
         // ==== HANDLE FOTO ====
         $photoName = null;
@@ -139,8 +154,10 @@ class LogbookController extends BaseController
             $photoName = null;
         }
 
+        $kode = 'LB' . date('YmdHis');
+
         $this->MotorLogbook->insert([
-            'kode'           => 'LB' . date('ymdHis'),
+            'kode'           => $kode,
             'motor_id'       => $motorId,
             'user_id'        => $user_id,
             'booking_id'     => $bookingId ?: null,
@@ -156,20 +173,5 @@ class LogbookController extends BaseController
                 ? 'Motor berhasil di Check In.'
                 : 'Motor berhasil di Check Out.'
         );
-    }
-
-
-    public function getMotorStatus($motorId): ResponseInterface
-    {
-        $last = $this->MotorLogbook->where('motor_id', $motorId)
-            ->orderBy('created_at', 'DESC')
-            ->first();
-
-        $status = 'available';
-        if ($last && $last['type'] === 'check-out') {
-            $status = 'in-use';
-        }
-
-        return $this->response->setJSON(['status' => $status]);
     }
 }

@@ -114,9 +114,9 @@
                                         </td>
                                         <td><?= esc(date("d M Y H:i", strtotime($log['waktu']))); ?></td>
                                         <td>
-                                            <a href="#" class="btn btn-sm btn-primary m-1"><i class="fas fa-search"></i> Detail</a>
-                                            <a href="#" class="btn btn-sm btn-warning m-1"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="#" class="btn btn-sm btn-danger m-1"><i class="fas fa-trash"></i> Delete</a>
+                                            <a href="#" class="btn btn-sm btn-primary m-1 btn-detail-logbook"><i class="fas fa-search"></i> Detail</a>
+                                            <a href="#" class="btn btn-sm btn-warning m-1 btn-edit-logbook"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="#" class="btn btn-sm btn-danger m-1 btn-delete-logbook"><i class="fas fa-trash"></i> Delete</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -174,23 +174,23 @@
                     'Check In Motor' :
                     'Check Out Motor'
                 );
+
+                $('#logType').val(type);
             }
 
             $('#logbookModal').on('show.bs.modal', function(event) {
 
-                let currentType = $('#logType').val();
+                let button = $(event.relatedTarget);
+                let typeFromButton = button?.data('type');
 
-                // 🔹 Jika datang dari klik tombol
-                if (!currentType) {
-                    let button = $(event.relatedTarget);
-                    let type = button.data('type');
-
-                    $('#logType').val(type);
-                    setModalTitle(type);
-                }
-                // 🔹 Jika datang dari redirect controller (old input)
-                else {
-                    setModalTitle(currentType);
+                if (typeFromButton) {
+                    setModalTitle(typeFromButton);
+                    $('#logType').val(typeFromButton);
+                } else {
+                    let oldType = $('#logType').val();
+                    if (oldType) {
+                        setModalTitle(oldType);
+                    }
                 }
 
                 // Init Select2
@@ -214,12 +214,16 @@
                     $('#motor-modal')
                         .val(motorId)
                         .trigger('change')
-                        .prop('disabled', true);
+
+                    $('#motor_id_hidden').val(motorId);
+                    $('#motor-modal').prop('disabled', true);
                 } else {
                     $('#motor-modal')
                         .val(null)
                         .trigger('change')
                         .prop('disabled', false);
+
+                    $('#motor_id_hidden').val('');
                 }
             });
 

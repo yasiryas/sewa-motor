@@ -12,7 +12,7 @@ class MotorLogbookModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['motor_id', 'user_id', 'booking_id', 'type', 'condition_note', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['kode', 'motor_id', 'user_id', 'booking_id', 'type', 'condition_note', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -49,7 +49,7 @@ class MotorLogbookModel extends Model
         return $this->where('motor_id', $motorId)->findAll();
     }
 
-    private function isMotorAvailable($motorId)
+    public function isMotorAvailable($motorId)
     {
         $latestLog = $this->where('motor_id', $motorId)
             ->orderBy('created_at', 'DESC')
