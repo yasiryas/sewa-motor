@@ -44,8 +44,6 @@
                         <small class="text-danger"><?= session('errors.motor_id' ?? '') ?></small>
                     </div>
 
-
-
                     <div class="form-group">
                         <label for="fuel_level">Fuel Level</label>
                         <select name="fuel" id="fuel" class="form-control <?= session('errors.fuel') ? 'is-invalid' : '' ?>">
