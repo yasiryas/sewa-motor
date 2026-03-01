@@ -252,11 +252,17 @@
                 }
             });
 
+            // Get CSRF token name and hash
+            let csrfName = '<?= csrf_token() ?>';
+            let csrfHash = '<?= csrf_hash() ?>';
+
             // AJAX form submission for Check In/Check Out
             $('#logbookForm').on('submit', function(e) {
                 e.preventDefault();
 
                 let formData = new FormData(this);
+                // Add CSRF token to form data
+                formData.append(csrfName, csrfHash);
 
                 $.ajax({
                     url: $(this).attr('action'),
@@ -323,6 +329,7 @@
                 e.preventDefault();
 
                 let formData = new FormData(this);
+                formData.append(csrfName, csrfHash);
 
                 $.ajax({
                     url: $(this).attr('action'),
