@@ -61,6 +61,9 @@ $routes->group('dashboard', ['filter' => 'auth'], function ($routes) {
     $routes->get('logbook/check-out', 'LogbookController::checkOut');
     $routes->get('logbook', 'LogbookController::index');
     $routes->post('logbook/store', 'LogbookController::store');
+    $routes->get('logbook/show/(:num)', 'LogbookController::show/$1');
+    $routes->post('logbook/update', 'LogbookController::update');
+    $routes->post('logbook/delete', 'LogbookController::delete');
 });
 
 // Manajemen brand

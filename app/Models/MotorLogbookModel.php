@@ -12,7 +12,7 @@ class MotorLogbookModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['kode', 'motor_id', 'user_id', 'booking_id', 'type', 'condition_note', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['kode', 'motor_id', 'user_id', 'booking_id', 'type', 'fuel_level', 'photo', 'condition_note', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

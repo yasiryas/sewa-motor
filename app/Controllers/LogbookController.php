@@ -9,14 +9,13 @@ use App\Models\UserModel;
 use App\Models\BookingModel;
 use App\Models\MotorModel;
 
-
-
 class LogbookController extends BaseController
 {
     protected $MotorLogbook;
     protected $UserModel;
     protected $MotorModel;
     protected $BookingModel;
+
     public function __construct()
     {
         $this->MotorLogbook = new MotorLogbookModel();
@@ -46,7 +45,6 @@ class LogbookController extends BaseController
             ->join('motors', 'motors.id = bookings.motor_id')
             ->join('users', 'users.id = bookings.user_id')
             ->findAll();
-
 
         $logs = $builder->select('motor_logbooks.*, motor_logbooks.created_at as waktu, motors.number_plate as number_plate, motors.name as motor, users.username as penyewa')
             ->join('motors', 'motors.id = motor_logbooks.motor_id')
@@ -82,14 +80,12 @@ class LogbookController extends BaseController
     public function store()
     {
         $photoFile = $this->request->getFile('photo');
-
-        $motorId   = $this->request->getPost('motor_id') ?? $this->request->getPost('motor_id_hidden');
+        $motorId = $this->request->getPost('motor_id') ?? $this->request->getPost('motor_id_hidden');
         $bookingId = $this->request->getPost('booking_id');
-        $type      = $this->request->getPost('type');
-        $notes     = $this->request->getPost('notes');
+        $type = $this->request->getPost('type');
+        $notes = $this->request->getPost('notes');
         $fuel = $this->request->getPost('fuel');
-        $user_id  = session()->get('id');
-
+        $user_id = session()->get('id');
 
         $validationRules = [
             'motor_id' => [
@@ -119,59 +115,180 @@ class LogbookController extends BaseController
                 'errors' => [
                     'is_image' => 'File yang diunggah harus berupa gambar.',
                     'max_size' => 'Ukuran gambar maksimal 2MB.',
-                    'mime_in'  => 'Format gambar harus JPG, JPEG, atau PNG.',
+                    'mime_in' => 'Format gambar harus JPG, JPEG, atau PNG.',
                 ]
             ],
         ];
 
         if (!$this->validate($validationRules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors())->with('modal', 'logbookModal');
+            $errors = $this->validator->getErrors();
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => implode(', ', $errors)
+                ])->setStatusCode(400);
+            }
+            return redirect()->back()->withInput()->with('errors', $errors)->with('modal', 'logbookModal');
         }
 
         if (!$motorId || !$type) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Data tidak lengkap.'
+                ])->setStatusCode(400);
+            }
             return redirect()->back()->withInput()->with('errors', 'Data tidak lengkap.')->with('modal', 'logbookModal');
         }
 
-        // VALIDASI STATUS MOTOR
+        // VALIDASI STATUS MOTOR - fix logic
         if ($type === 'check-out') {
-            if ($this->MotorLogbook->isMotorAvailable($motorId)) {
-                return redirect()->back()->with('error', 'Motor sudah di check-out.');
+            if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
+                if ($this->request->isAJAX()) {
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Motor sedang dalam penggunaan (sudah di check-out).'
+                    ])->setStatusCode(400);
+                }
+                return redirect()->back()->with('error', 'Motor sedang dalam penggunaan (sudah di check-out).');
             }
         }
 
         if ($type === 'check-in') {
-            if (!$this->MotorLogbook->isMotorAvailable($motorId)) {
+            if ($this->MotorLogbook->isMotorAvailable($motorId)) {
+                if ($this->request->isAJAX()) {
+                    return $this->response->setJSON([
+                        'success' => false,
+                        'message' => 'Motor belum di check-out. Silakan lakukan check-out terlebih dahulu.'
+                    ])->setStatusCode(400);
+                }
                 return redirect()->back()->with('error', 'Motor belum di check-out.');
             }
         }
 
-        // ==== HANDLE FOTO ====
+        // HANDLE FOTO
         $photoName = null;
         if ($photoFile && $photoFile->isValid()) {
             $photoName = $photoFile->getRandomName();
             $photoFile->move(ROOTPATH . 'public/uploads/logbook', $photoName);
-        } else {
-            $photoName = null;
         }
 
         $kode = 'LB' . date('YmdHis');
 
         $this->MotorLogbook->insert([
-            'kode'           => $kode,
-            'motor_id'       => $motorId,
-            'user_id'        => $user_id,
-            'booking_id'     => $bookingId ?: null,
-            'type'           => $type,
+            'kode' => $kode,
+            'motor_id' => $motorId,
+            'user_id' => $user_id,
+            'booking_id' => $bookingId ?: null,
+            'type' => $type,
             'condition_note' => $notes,
             'fuel_level' => $fuel,
             'photo' => $photoName,
         ]);
 
-        return redirect()->back()->with(
-            'success',
-            $type === 'check-in'
-                ? 'Motor berhasil di Check In.'
-                : 'Motor berhasil di Check Out.'
-        );
+        $message = $type === 'check-in' ? 'Motor berhasil di Check In.' : 'Motor berhasil di Check Out.';
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => $message
+            ]);
+        }
+
+        return redirect()->back()->with('success', $message);
+    }
+
+    public function show($id)
+    {
+        $log = $this->MotorLogbook->select('motor_logbooks.*, motors.name as motor_name, motors.number_plate, users.username as petugas')
+            ->join('motors', 'motors.id = motor_logbooks.motor_id')
+            ->join('users', 'users.id = motor_logbooks.user_id')
+            ->where('motor_logbooks.id', $id)
+            ->first();
+
+        if (!$log) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Data logbook tidak ditemukan.'
+            ])->setStatusCode(404);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $log
+        ]);
+    }
+
+    public function update()
+    {
+        $id = $this->request->getPost('id');
+        $notes = $this->request->getPost('notes');
+        $fuel = $this->request->getPost('fuel');
+        $photoFile = $this->request->getFile('photo');
+
+        $log = $this->MotorLogbook->find($id);
+        if (!$log) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Data logbook tidak ditemukan.'
+            ])->setStatusCode(404);
+        }
+
+        $updateData = [
+            'condition_note' => $notes,
+            'fuel_level' => $fuel,
+        ];
+
+        // Handle photo update
+        if ($photoFile && $photoFile->isValid()) {
+            // Delete old photo if exists
+            if (!empty($log['photo'])) {
+                $oldPhotoPath = ROOTPATH . 'public/uploads/logbook/' . $log['photo'];
+                if (file_exists($oldPhotoPath)) {
+                    unlink($oldPhotoPath);
+                }
+            }
+
+            $photoName = $photoFile->getRandomName();
+            $photoFile->move(ROOTPATH . 'public/uploads/logbook', $photoName);
+            $updateData['photo'] = $photoName;
+        }
+
+        $this->MotorLogbook->update($id, $updateData);
+
+        // Return JSON response for AJAX
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Logbook berhasil diperbarui.'
+        ]);
+    }
+
+    public function delete()
+    {
+        $id = $this->request->getPost('id');
+
+        $log = $this->MotorLogbook->find($id);
+        if (!$log) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Data logbook tidak ditemukan.'
+            ])->setStatusCode(404);
+        }
+
+        // Delete photo if exists
+        if (!empty($log['photo'])) {
+            $photoPath = ROOTPATH . 'public/uploads/logbook/' . $log['photo'];
+            if (file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+        }
+
+        $this->MotorLogbook->delete($id);
+
+        // Return JSON response for AJAX
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Logbook berhasil dihapus.'
+        ]);
     }
 }

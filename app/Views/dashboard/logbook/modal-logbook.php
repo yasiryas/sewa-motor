@@ -1,8 +1,8 @@
 <!-- modal check-in check-out  -->
 <div class="modal fade" id="logbookModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        $<?php $validation = session('validation'); ?>
-        <form method="post" action="<?= base_url('dashboard/logbook/store') ?>" enctype="multipart/form-data">
+        <?php $validation = session('validation'); ?>
+        <form method="post" action="<?= base_url('dashboard/logbook/store') ?>" enctype="multipart/form-data" id="logbookForm">
             <?= csrf_field() ?>
 
             <input type="hidden" name="type" id="logType" value="<?= old('type'); ?>">
@@ -84,21 +84,109 @@
 </div>
 
 <!-- Modal detail -->
-<div class="modal fade" id="detailLogbook" tabindex="-1">
+<div class="modal fade" id="detailLogbookModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Detail Logbook</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="detail-logbook-content">
+                <p>Loading...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editLogbookModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="<?= base_url('dashboard/logbook/update') ?>" enctype="multipart/form-data" id="editLogbookForm">
+            <?= csrf_field() ?>
+
+            <input type="hidden" name="id" id="edit-logbook-id">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Logbook</h5>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Motor</label>
+                        <select name="motor_id" class="form-control" id="edit-motor" disabled>
+                            <option value="">-- Pilih Motor --</option>
+                            <?php foreach ($motors as $motor): ?>
+                                <option value="<?= $motor['id'] ?>">
+                                    <?= esc($motor['name']) ?> - <?= esc($motor['number_plate']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jenis</label>
+                        <select name="type" class="form-control" id="edit-type" disabled>
+                            <option value="check-in">Check In</option>
+                            <option value="check-out">Check Out</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fuel_level">Fuel Level</label>
+                        <select name="fuel" id="edit-fuel" class="form-control">
+                            <option value="">-- Pilih Fuel Level --</option>
+                            <option value="full">Full</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photo">Foto Kondisi Motor (Kosongkan jika tidak ingin mengubah)</label>
+                        <input type="file" class="form-control-file" accept="image/*" name="photo">
+                        <img src="#" alt="Preview Foto" id="edit-photo-preview" class="img-fluid mt-2" style="max-width:200px; display:none;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Catatan Kondisi</label>
+                        <textarea name="notes" class="form-control" rows="3" id="edit-notes"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal delete -->
+<div class="modal fade" id="deleteLogbookModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hapus Logbook</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Modal body text goes here.</p>
+                <p>Apakah Anda yakin ingin menghapus data logbook ini?</p>
+                <input type="hidden" id="delete-logbook-id">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-logbook">Hapus</button>
             </div>
         </div>
     </div>
