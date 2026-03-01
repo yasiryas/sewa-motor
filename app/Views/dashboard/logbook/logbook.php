@@ -253,16 +253,21 @@
             });
 
             // Get CSRF token name and hash
-            let csrfName = '<?= csrf_token() ?>';
-            let csrfHash = '<?= csrf_hash() ?>';
+            var csrfName = '<?= csrf_token() ?>';
+            var csrfHash = '<?= csrf_hash() ?>';
+
+            // Setup AJAX to always send CSRF token in headers
+            $.ajaxSetup({
+                headers: {
+                    [csrfName]: csrfHash
+                }
+            });
 
             // AJAX form submission for Check In/Check Out
             $('#logbookForm').on('submit', function(e) {
                 e.preventDefault();
 
                 let formData = new FormData(this);
-                // Add CSRF token to form data
-                formData.append(csrfName, csrfHash);
 
                 $.ajax({
                     url: $(this).attr('action'),
@@ -329,7 +334,6 @@
                 e.preventDefault();
 
                 let formData = new FormData(this);
-                formData.append(csrfName, csrfHash);
 
                 $.ajax({
                     url: $(this).attr('action'),
@@ -434,8 +438,7 @@
                     url: '<?= base_url('dashboard/logbook/delete') ?>',
                     type: 'POST',
                     data: {
-                        id: id,
-                        <?= csrf_token() ?>: '<?= csrf_hash() ?>'
+                        id: id
                     },
                     success: function(response) {
                         if (response.success) {
