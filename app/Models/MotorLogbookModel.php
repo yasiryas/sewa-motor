@@ -55,10 +55,23 @@ class MotorLogbookModel extends Model
             ->orderBy('created_at', 'DESC')
             ->first();
 
-        if ($latestLog) {
-            return $latestLog['type'] === 'check-out';
+        // Jika tidak ada log, motor tersedia (belum pernah di-checkout)
+        if (!$latestLog) {
+            return true;
         }
 
-        return true; // Jika tidak ada log, motor dianggap tersedia
+        // Motor tersedia jika log terakhir adalah check-in
+        // Jadi motor TIDAK tersedia jika log terakhir adalah check-out
+        return $latestLog['type'] === 'check-in';
+    }
+
+    /**
+     * Get latest log for a motor
+     */
+    public function getLatestLog($motorId)
+    {
+        return $this->where('motor_id', $motorId)
+            ->orderBy('created_at', 'DESC')
+            ->first();
     }
 }

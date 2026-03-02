@@ -29,6 +29,7 @@ class LogbookController extends BaseController
         $type = $this->request->getGet('type');
         $startDate = $this->request->getGet('start_date');
         $endDate = $this->request->getGet('end_date');
+        $motorId = $this->request->getGet('motor');
 
         $builder = $this->MotorLogbook;
         if ($type && in_array($type, ['check-in', 'check-out'])) {
@@ -37,6 +38,9 @@ class LogbookController extends BaseController
         if ($startDate && $endDate) {
             $builder->where('DATE(motor_logbooks.created_at) >=', $startDate)
                 ->where('DATE(motor_logbooks.created_at) <=', $endDate);
+        }
+        if ($motorId) {
+            $builder->where('motor_logbooks.motor_id', $motorId);
         }
 
         $motors = $this->MotorModel->findAll();
@@ -289,6 +293,41 @@ class LogbookController extends BaseController
         return $this->response->setJSON([
             'success' => true,
             'message' => 'Logbook berhasil dihapus.'
+        ]);
+    }
+
+    /**
+     * Load logbook data via AJAX for table refresh
+     */
+    public function loadData()
+    {
+        $type = $this->request->getGet('type');
+        $startDate = $this->request->getGet('start_date');
+        $endDate = $this->request->getGet('end_date');
+        $motorId = $this->request->getGet('motor');
+
+        $builder = $this->MotorLogbook;
+        if ($type && in_array($type, ['check-in', 'check-out'])) {
+            $builder->where('type', $type);
+        }
+        if ($startDate && $endDate) {
+            $builder->where('DATE(motor_logbooks.created_at) >=', $startDate)
+                ->where('DATE(motor_logbooks.created_at) <=', $endDate);
+        }
+        if ($motorId) {
+            $builder->where('motor_logbooks.motor_id', $motorId);
+        }
+
+        $logs = $builder->select('motor_logbooks.*, motor_logbooks.created_at as waktu, motors.number_plate as number_plate, motors.name as motor, users.username as penyewa')
+            ->join('motors', 'motors.id = motor_logbooks.motor_id')
+            ->join('users', 'users.id = motor_logbooks.user_id')
+            ->join('bookings', 'bookings.id = motor_logbooks.booking_id', 'left')
+            ->orderBy('motor_logbooks.created_at', 'DESC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $logs
         ]);
     }
 }

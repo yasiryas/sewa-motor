@@ -4,9 +4,7 @@
         <?php $validation = session('validation'); ?>
         <form method="post" action="<?= base_url('dashboard/logbook/store') ?>" enctype="multipart/form-data" id="logbookForm">
             <?= csrf_field() ?>
-
             <input type="hidden" name="type" id="logType" value="<?= old('type'); ?>">
-
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Logbook Motor</h5>
@@ -18,7 +16,7 @@
                     <!-- BOOKING (OPSIONAL) -->
                     <div class="form-group">
                         <label>Booking (Opsional)</label>
-                        <select name="booking_id" class="form-control <?= session('errors.booking_id') ? 'is-invalid' : '' ?>" id="select-booking">
+                        <select name="booking_id" class="form-control <?= session('errors.booking_id') ? 'is-invalid' : '' ?>" id="select-booking" data-placeholder="Cari booking...">
                             <option value="">-- Tanpa Booking --</option>
                             <?php foreach ($bookings as $booking): ?>
                                 <option value="<?= $booking['id'] ?>" <?= old('booking_id') == $booking['id'] ? 'selected' : '' ?> data-motor="<?= $booking['motor_id'] ?>">
@@ -26,14 +24,14 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
-
+                        <small class="text-muted"><i>Ketik untuk mencari booking (ID, nama user, atau plat nomor)</i></small>
                     </div>
 
                     <!-- MOTOR -->
                     <div class="form-group">
                         <input type="hidden" name="motor_id" id="motor_id_hidden" value="<?= old('motor_id'); ?>">
                         <label>Motor <span class="text-danger">*</span></label>
-                        <select name="motor_id" class="form-control motor-select <?= session('errors.motor_id') ? 'is-invalid' : '' ?>" id="motor-modal">
+                        <select name="motor_id" class="form-control motor-select <?= session('errors.motor_id') ? 'is-invalid' : '' ?>" id="motor-modal" data-placeholder="Cari motor...">
                             <option value="">-- Pilih Motor --</option>
                             <?php foreach ($motors as $motor): ?>
                                 <option value="<?= $motor['id'] ?>" <?= old('motor_id') == $motor['id'] ? 'selected' : '' ?>>
@@ -41,6 +39,7 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
+                        <small class="text-muted"><i>Ketik untuk mencari motor (nama atau plat nomor)</i></small>
                         <small class="text-danger"><?= session('errors.motor_id' ?? '') ?></small>
                     </div>
 
