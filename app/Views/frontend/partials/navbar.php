@@ -1,9 +1,9 @@
 <?php ?>
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="containerNavbar">
-    <div class="container d-flex justify-content-between align-items-center">
+    <div class="container">
         <!-- Logo -->
         <a class="navbar-brand" href="#">
-            <img src="<?= base_url('img/asset/logo.png'); ?>" alt="Logo" height="40">
+            <img src="<?= base_url('img/asset/logo.png'); ?>" alt="Logo" height="35" class="img-fluid" style="max-width: 120px;">
         </a>
 
         <!-- Toggle untuk mobile -->
@@ -15,18 +15,18 @@
         <!-- Menu + Login -->
         <div class="collapse navbar-collapse justify-content-center text-center" id="navbarNav">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Beranda' ? 'active text-warning' : ''; ?>" href="<?= base_url('/'); ?>">Beranda</a></li>
-                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Produk' ? 'active text-warning' : ''; ?>" href="<?= base_url('produk'); ?>">Produk</a></li>
-                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Tentang Kami' ? 'active text-warning' : ''; ?>" href="<?= base_url('tentang-kami'); ?>">Tentang Kami</a></li>
-                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'FAQ' ? 'active text-warning' : ''; ?>" href="<?= base_url('faq'); ?>">FAQ</a></li>
-                <li class="nav-item mx-2 "><a class="nav-link <?= $title == 'Kontak' ? 'active text-warning' : ''; ?>" href="<?= base_url('kontak'); ?>">Kontak</a></li>
+                <li class="nav-item mx-1 mx-lg-2"><a class="nav-link <?= $title == 'Beranda' ? 'active text-warning' : ''; ?>" href="<?= base_url('/'); ?>">Beranda</a></li>
+                <li class="nav-item mx-1 mx-lg-2"><a class="nav-link <?= $title == 'Produk' ? 'active text-warning' : ''; ?>" href="<?= base_url('produk'); ?>">Produk</a></li>
+                <li class="nav-item mx-1 mx-lg-2"><a class="nav-link <?= $title == 'Tentang Kami' ? 'active text-warning' : ''; ?>" href="<?= base_url('tentang-kami'); ?>">Tentang Kami</a></li>
+                <li class="nav-item mx-1 mx-lg-2"><a class="nav-link <?= $title == 'FAQ' ? 'active text-warning' : ''; ?>" href="<?= base_url('faq'); ?>">FAQ</a></li>
+                <li class="nav-item mx-1 mx-lg-2"><a class="nav-link <?= $title == 'Kontak' ? 'active text-warning' : ''; ?>" href="<?= base_url('kontak'); ?>">Kontak</a></li>
             </ul>
 
             <!-- Tombol Login (desktop & mobile) -->
-            <div class="mt-3 mt-lg-0">
+            <div class="mt-2 mt-lg-0">
                 <?php if (session()->get('isLoggedIn')): ?>
                     <div class="dropdown">
-                        <a class="btn btn-warning dropdown-toggle text-white" href="#" role="button" id="userDropdown"
+                        <a class="btn btn-warning dropdown-toggle text-white btn-sm" href="#" role="button" id="userDropdown"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <?= esc(session()->get('username')); ?>
                         </a>
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 <?php else: ?>
-                    <a href="<?= base_url('login'); ?>" class="btn btn-warning text-white">Login</a>
+                    <a href="<?= base_url('login'); ?>" class="btn btn-warning text-white btn-sm">Login</a>
                 <?php endif; ?>
             </div>
         </div>

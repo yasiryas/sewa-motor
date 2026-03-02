@@ -2,16 +2,16 @@
 <!-- Navbar -->
 <?= $this->include('frontend/partials/navbar'); ?>
 <!-- Hero Section -->
-<section id="hero" class="py-5" style="margin-top:70px;">
-    <div class="container d-flex align-items-center">
-        <div class="row w-60 mx-auto">
-            <div class="col-md-6 text-center">
-                <img src="<?= base_url('img/asset/hero-section.png'); ?>" class="img-fluid" alt="Motor">
+<section id="hero" class="py-4 py-lg-5" style="margin-top:70px;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 text-center order-2 order-lg-1">
+                <img src="<?= base_url('img/asset/hero-section.png'); ?>" class="img-fluid" alt="Motor" style="max-width: 100%; height: auto;">
             </div>
-            <div class="col-md-6 d-flex flex-column justify-content-center">
+            <div class="col-12 col-lg-6 d-flex flex-column justify-content-center text-center text-lg-left order-1 order-lg-2 mb-4 mb-lg-0">
                 <div>
-                    <h2><strong>Jelajahi Setiap Sudut Jogja Tanpa Batas!</strong></h2>
-                    <p>Mulai dari keramaian Malioboro hingga ketenangan alam pedesaan, nikmati kebebasan bergerak dengan armada skuter terawat kami. Bebas macet, bebas khawatir!</p>
+                    <h2 class="font-weight-bold" style="font-size: 1.5rem;"><strong>Jelajahi Setiap Sudut Jogja Tanpa Batas!</strong></h2>
+                    <p class="my-3">Mulai dari keramaian Malioboro hingga ketenangan alam pedesaan, nikmati kebebasan bergerak dengan armada skuter terawat kami. Bebas macet, bebas khawatir!</p>
                 </div>
                 <div>
                     <a href="#produk" class="btn btn-warning text-white">Pesan Sekarang!</a>
@@ -51,22 +51,23 @@
                 </div>
             </div>
         </div>
+    </div>
 </section>
 
 <!-- Featured Product -->
 <section id="produk" class="py-5 text-center">
     <div class="container">
         <h3 class="section-title mb-4">Featured Product</h3>
-        <div class="row">
+        <div class="row justify-content-center">
             <?php foreach ($motors as $motor) : ?>
-                <div class="col-md-3 mb-4 d-flex align-items-stretch">
+                <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                     <div class="card h-100 shadow">
-                        <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" alt="<?= esc($motor['name']); ?>">
+                        <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" alt="<?= esc($motor['name']); ?>" style="height: 150px; object-fit: cover;">
                         <div class="card-body d-flex flex-column">
                             <div class="mt-auto">
-                                <h5 class="card-title"><?= esc($motor['name']); ?></h5>
-                                <p class="card-text mb-4">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> / Day</p>
-                                <a href="<?= base_url('produk/' . $motor['id']); ?>" class="btn btn-warning btn-sm text-white px-4">Booking</a>
+                                <h5 class="card-title" style="font-size: 0.9rem;"><?= esc($motor['name']); ?></h5>
+                                <p class="card-text mb-3" style="font-size: 0.85rem;">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> / Day</p>
+                                <a href="<?= base_url('produk/' . $motor['id']); ?>" class="btn btn-warning btn-sm text-white px-3">Booking</a>
                             </div>
                         </div>
                     </div>
@@ -80,9 +81,9 @@
 
 <!-- Paket Explore -->
 <section class="py-5 text-white text-center" style="background: #d95f2a;">
-    <div class="container m-5">
-        <h4>PAKET EXPLORE JOGJA: Skuter + Rekomendasi Destinasi!</h4>
-        <p>Selain skuter terawat, kami berikan peta digital berisi rute wisata favorit dan rekomendasi kuliner Jogja yang wajib Anda coba. Liburan lebih terencana dan berkesan!</p>
+    <div class="container my-3 my-lg-5">
+        <h4 class="px-2">PAKET EXPLORE JOGJA: Skuter + Rekomendasi Destinasi!</h4>
+        <p class="px-2">Selain skuter terawat, kami berikan peta digital berisi rute wisata favorit dan rekomendasi kuliner Jogja yang wajib Anda coba. Liburan lebih terencana dan berkesan!</p>
         <a href="<?= base_url("produk"); ?>" class="btn btn-light text-orange">Lihat Paket Unggulan Kami!</a>
     </div>
 </section>
@@ -90,10 +91,10 @@
 <!-- Contact Form -->
 <section id="kontak" class="py-5">
     <div class="container text-center">
-        <h4>Masih Ada Pertanyaan?<br> Atau Ingin Langsung Pesan?</h4>
-        <div class="mt-4 col-md-6 mx-auto alert-box" id="alertBox">
+        <h4 class="px-2">Masih Ada Pertanyaan?<br> Atau Ingin Langsung Pesan?</h4>
+        <div class="mt-4 col-12 col-md-6 mx-auto alert-box" id="alertBox">
         </div>
-        <form class="mt-4 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post" id="formSendEmail">
+        <form class="mt-4 col-12 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post" id="formSendEmail">
             <?= csrf_field(); ?>
             <input type="email" class="form-control mb-3" placeholder="Email" name="email" id="email">
             <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp" id="whatsapp">
