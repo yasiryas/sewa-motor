@@ -45,12 +45,20 @@
 
                     <div class="form-group">
                         <label for="fuel_level">Fuel Level</label>
-                        <select name="fuel" id="fuel" class="form-control <?= session('errors.fuel') ? 'is-invalid' : '' ?>">
-                            <option value="">-- Pilih Fuel Level --</option>
-                            <option value="full" <?= old('fuel') == 'full' ? 'selected' : '' ?>>Full</option>
-                            <option value="medium" <?= old('fuel') == 'medium' ? 'selected' : '' ?>>Medium</option>
-                            <option value="low" <?= old('fuel') == 'low' ? 'selected' : '' ?>>Low</option>
-                        </select>
+                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                            <label class="btn btn-outline-success <?= old('fuel') == 'full' ? 'active' : '' ?>">
+                                <input type="radio" name="fuel" id="fuel-full" value="full" <?= old('fuel') == 'full' ? 'checked' : '' ?>>
+                                <i class="fas fa-gas-pump"></i> Full
+                            </label>
+                            <label class="btn btn-outline-warning <?= old('fuel') == 'medium' ? 'active' : '' ?>">
+                                <input type="radio" name="fuel" id="fuel-medium" value="medium" <?= old('fuel') == 'medium' ? 'checked' : '' ?>>
+                                <i class="fas fa-gas-pump"></i> Medium
+                            </label>
+                            <label class="btn btn-outline-danger <?= old('fuel') == 'low' ? 'active' : '' ?>">
+                                <input type="radio" name="fuel" id="fuel-low" value="low" <?= old('fuel') == 'low' ? 'checked' : '' ?>>
+                                <i class="fas fa-gas-pump"></i> Low
+                            </label>
+                        </div>
                         <small class="text-danger"><?= session('errors.fuel' ?? '') ?></small>
                     </div>
 
@@ -137,12 +145,20 @@
 
                     <div class="form-group">
                         <label for="fuel_level">Fuel Level</label>
-                        <select name="fuel" id="edit-fuel" class="form-control">
-                            <option value="">-- Pilih Fuel Level --</option>
-                            <option value="full">Full</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
-                        </select>
+                        <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                            <label class="btn btn-outline-success">
+                                <input type="radio" name="fuel" id="edit-fuel-full" value="full">
+                                <i class="fas fa-gas-pump"></i> Full
+                            </label>
+                            <label class="btn btn-outline-warning">
+                                <input type="radio" name="fuel" id="edit-fuel-medium" value="medium">
+                                <i class="fas fa-gas-pump"></i> Medium
+                            </label>
+                            <label class="btn btn-outline-danger">
+                                <input type="radio" name="fuel" id="edit-fuel-low" value="low">
+                                <i class="fas fa-gas-pump"></i> Low
+                            </label>
+                        </div>
                     </div>
 
                     <div class="form-group">

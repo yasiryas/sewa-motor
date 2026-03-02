@@ -321,8 +321,16 @@
                                 $('#edit-logbook-id').val(data.id);
                                 $('#edit-motor').val(data.motor_id).trigger('change');
                                 $('#edit-type').val(data.type);
-                                $('#edit-fuel').val(data.fuel_level);
                                 $('#edit-notes').val(data.condition_note);
+
+                                // Set fuel level radio buttons
+                                $('#editLogbookModal input[name="fuel"]').each(function() {
+                                    $(this).closest('.btn').removeClass('active');
+                                    $(this).prop('checked', $(this).val() === data.fuel_level);
+                                    if ($(this).val() === data.fuel_level) {
+                                        $(this).closest('.btn').addClass('active');
+                                    }
+                                });
 
                                 if (data.photo) {
                                     $('#edit-photo-preview').attr('src', '<?= base_url('uploads/logbook/') ?>' + '/' + data.photo).show();
@@ -508,7 +516,10 @@
                 $('#edit-logbook-id').val('');
                 $('#edit-motor').val(null).trigger('change');
                 $('#edit-type').val('');
-                $('#edit-fuel').val('');
+                $('#editLogbookModal input[name="fuel"]').each(function() {
+                    $(this).closest('.btn').removeClass('active');
+                    $(this).prop('checked', false);
+                });
                 $('#edit-notes').val('');
                 $('#edit-photo-preview').hide().attr('src', '#');
             });
@@ -558,7 +569,7 @@
                 }
 
                 // Ensure fuel is selected
-                let fuelValue = $('#fuel').val();
+                let fuelValue = $('input[name="fuel"]:checked').val();
                 if (!fuelValue) {
                     showToast('error', 'Fuel Level belum dipilih.');
                     return;
