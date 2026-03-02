@@ -62,12 +62,12 @@
             <?php foreach ($motors as $motor) : ?>
                 <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                     <div class="card h-100 shadow">
-                        <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" alt="<?= esc($motor['name']); ?>" style="height: 150px; object-fit: cover;">
+                        <img src="<?= base_url('uploads/motors/' . $motor['photo']); ?>" class="card-img-top" alt="<?= esc($motor['name']); ?>" style="height: 200px; object-fit: cover;">
                         <div class="card-body d-flex flex-column">
                             <div class="mt-auto">
-                                <h5 class="card-title" style="font-size: 0.9rem;"><?= esc($motor['name']); ?></h5>
-                                <p class="card-text mb-3" style="font-size: 0.85rem;">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> / Day</p>
-                                <a href="<?= base_url('produk/' . $motor['id']); ?>" class="btn btn-warning btn-sm text-white px-3">Booking</a>
+                                <h5 class="card-title" style="font-size: 1rem;"><?= esc($motor['name']); ?></h5>
+                                <p class="card-text mb-3" style="font-size: 0.95rem;">Rp. <?= number_format($motor['price_per_day'], 0, ',', '.'); ?> / Day</p>
+                                <a href="<?= base_url('produk/' . $motor['id']); ?>" class="btn btn-warning btn-sm text-white px-4">Booking</a>
                             </div>
                         </div>
                     </div>
