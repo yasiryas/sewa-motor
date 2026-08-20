@@ -44,9 +44,7 @@ $(document).ready(function () {
     });
 
     // ===== Handle form kirim email dengan AJAX =====
-    let csrfName = '<?= csrf_token() ?>';
-    let csrfHash = '<?= csrf_hash() ?>';
-
+    // Token CSRF ikut terkirim via hidden input csrf_field() di dalam form
     $('#formSendEmail').on('submit', function (e) {
         e.preventDefault();
 
@@ -54,8 +52,6 @@ $(document).ready(function () {
         let btn = $('#btnSendEmail');
         let alertBox = $('.alert-box');
         let formData = form.serializeArray();
-
-        formData.push({ name: csrfName, value: csrfHash });
 
         btn.prop('disabled', true).html(`<span class="spinner-border spinner-border-sm"></span> Mengirim...`);
 
@@ -67,11 +63,6 @@ $(document).ready(function () {
             success: function (response) {
                 alertBox.html(`<div class="alert alert-success">${response.message}</div>`);
                 form[0].reset();
-
-                if (response.csrfName && response.csrfHash) {
-                    csrfName = response.csrfName;
-                    csrfHash = response.csrfHash;
-                }
             },
             error: function (xhr) {
                 let errorMsg = 'Terjadi kesalahan. Silakan coba lagi.';
@@ -87,6 +78,10 @@ $(document).ready(function () {
     });
 
     // ===== AJAX Search Produk =====
+    $('#btnSearchProduct').on('click', function () {
+        $('#searchProductAll').trigger('keyup');
+    });
+
     $('#searchProductAll').on('keyup', function () {
         let query = $(this).val().trim();
         let productContainer = $('#productContainer');
@@ -207,133 +202,6 @@ $(document).ready(function () {
         }
     });
 
-    // ===== Detail transaksi di modal =====
-    $('.btn-detail-transaction').on('click', function () {
-    let transactionId = $(this).data('id');
-
-    // Reset tampilan modal
-    $('#detailPhotoMotor').attr('src', '');
-    $('#detailNamaMotor').text('Memuat...');
-    $('#detailTanggalSewa').html('');
-    $('#detailTanggalTransaksi').html('');
-    $('#detailKeterangan').html('');
-    $('#detailBukti').attr('src', '').hide();
-    $('#downloadInvoiceBtn').hide();
-
-    $('#detailModal').modal('show');
-
-    $.ajax({
-        url: BASE_URL + 'booking/detail-booking/' + transactionId,
-        type: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            let data = response.booking;
-
-            // Isi data utama motor
-            $('#detailPhotoMotor').attr('src', BASE_URL + 'uploads/motors/' + data.photo);
-            $('#detailNamaMotor').text(`${data.motor_name} (${data.brand_name})`);
-
-            // Hitung durasi sewa
-            let start = new Date(data.rental_start_date);
-            let end = new Date(data.rental_end_date);
-            let diffDays = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
-
-            // Format tanggal
-            $('#detailTanggalSewa').html(
-                `<i class="bi bi-calendar-event text-primary"></i>
-                <strong>${formatLongDate(data.rental_start_date)}</strong> -
-                <strong>${formatLongDate(data.rental_end_date)}</strong>`
-            );
-
-            $('#detailTanggalTransaksi').html(
-                `<i class="bi bi-clock-history text-secondary"></i>
-                <small class="text-muted">Transaksi: ${formatLongDate(data.created_at)}</small>`
-            );
-
-            // Format Rupiah
-            const formatRupiah = (num) => "Rp " + Number(num).toLocaleString("id-ID");
-
-            // Badge status
-            let statusBadge = '';
-            if (data.status === 'pending') {
-                statusBadge = `<span class="badge badge-danger p-2">
-                    <i class="bi bi-hourglass-split"></i> Pending
-                </span>`;
-            } else if (data.status === 'complete') {
-                statusBadge = `<span class="badge badge-primary p-2">
-                    <i class="bi bi-check-circle"></i> Complete
-                </span>`;
-            } else if (data.status === 'on process') {
-                statusBadge = `<span class="badge badge-info p-2">
-                    <i class="bi bi-arrow-repeat"></i> Diproses
-                </span>`;
-            } else {
-                statusBadge = `<span class="badge badge-secondary p-2">${data.status}</span>`;
-            }
-
-            // Nota Biaya
-            let notaHTML = `
-                <div class="border rounded p-3 bg-light mt-3">
-                    <h6 class="font-weight-bold mb-3"><i class="bi bi-receipt"></i> Rincian Biaya</h6>
-                    <table class="table table-sm mb-0">
-                        <tr>
-                            <td>Harga per Hari</td>
-                            <td class="text-right">${formatRupiah(data.price_per_day)}</td>
-                        </tr>
-                        <tr>
-                            <td>Lama Sewa</td>
-                            <td class="text-right">${diffDays} Hari</td>
-                        </tr>
-                        <tr class="font-weight-bold">
-                            <td>Total Bayar</td>
-                            <td class="text-right text-success">${formatRupiah(data.total_price)}</td>
-                        </tr>
-                    </table>
-                </div>
-            `;
-
-            // Tampilkan status + nota
-            $('#detailKeterangan').html(`
-                <div class="mt-3">
-                    <i class="bi bi-info-circle"></i> Status: ${statusBadge}
-                </div>
-                ${notaHTML}
-            `);
-
-            // Bukti pembayaran
-            if (data.bukti) {
-                $('#detailBukti')
-                    .attr('src', BASE_URL + 'uploads/transactions/' + data.bukti)
-                    .addClass('img-fluid mt-3 rounded shadow-sm')
-                    .show();
-
-                $('#detailKeterangan').append(`
-                    <div class="mt-3">
-                        <h6><i class="bi bi-image"></i> Bukti Pembayaran</h6>
-                        <p class="text-muted small">Terima kasih, bukti pembayaran telah diupload.</p>
-                    </div>
-                `);
-            } else {
-                $('#detailBukti').hide();
-                $('#detailKeterangan').append(`
-                    <div class="mt-3 alert alert-warning py-2">
-                        <i class="bi bi-exclamation-triangle"></i> Bukti pembayaran belum diupload.
-                    </div>
-                `);
-            }
-
-            // Tombol download invoice
-            $('#downloadInvoiceBtn')
-                .attr('href', BASE_URL + 'booking/invoice/' + data.id)
-                .show();
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            alert('Terjadi kesalahan saat memuat detail transaksi.');
-        }
-    });
-    });
-
     // ===== Metode pembayaran =====
 function setPaymentMethod(method) {
         // Reset
@@ -364,8 +232,6 @@ function setPaymentMethod(method) {
         setPaymentMethod('cash');
     });
 
-    // setPaymentMethod('<?= $selectedMethod ?>');
-
     // ===== Preview gambar KTP saat upload =====
 
     // preview gambar motor saat tambah dan edit
@@ -386,6 +252,9 @@ function setPaymentMethod(method) {
     function validateImageInput(inputId, maxSizeMB = 1) {
         const input = document.getElementById(inputId);
         const errorMsg = document.getElementById('error_' + inputId);
+
+        // Input tidak ada di halaman ini (script.js dipakai banyak halaman)
+        if (!input || !errorMsg) return;
 
         input.addEventListener('change', function () {
 
@@ -413,7 +282,6 @@ function setPaymentMethod(method) {
                 this.value = "";
                 return;
             }
-            console.log("File valid:", file.name);
         });
     }
 

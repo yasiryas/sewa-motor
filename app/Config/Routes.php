@@ -13,7 +13,6 @@ $routes->get('kontak', 'FrontController::kontak');
 $routes->get('produk/(:num)', 'FrontController::detailProduk/$1');
 $routes->get('motors', 'MotorController::index');
 $routes->get('motors/(:num)', 'MotorController::show/$1');
-$routes->get('booking', 'BookingController::view');
 $routes->post('booking', 'BookingController::store');
 $routes->get('booking/success', 'BookingController::success');
 $routes->get('login', 'AuthController::login');
@@ -23,7 +22,6 @@ $routes->post('register/process', 'AuthController::registerProcess');
 $routes->get('logout', 'AuthController::logout');
 $routes->get('product/search', 'FrontController::searchAjaxProduk');
 $routes->get('product/filterByBrand/(:num)', 'FrontController::filterByBrand/$1');
-$routes->get('check-time', 'FrontController::checkTime');
 $routes->get('profile', 'UserController::profile', ['filter' => 'auth']);
 $routes->post('profile/update', 'UserController::updateProfile', ['filter' => 'auth']);
 $routes->post('profile/change-password', 'UserController::changePassword', ['filter' => 'auth']);
@@ -105,7 +103,6 @@ $routes->group('dashboard/user', ['filter' => 'auth'], function ($routes) {
 $routes->group('dashboard/booking/', ['filter' => 'auth'], function ($routes) {
     $routes->post('storeUser', 'UserController::storeUserInBooking');
     $routes->post('adminStore', 'BookingController::adminStore');
-    $routes->post('update', 'MotorController::update');
     $routes->post('deleteAdmin', 'BookingController::deleteAdmin');
     $routes->get('detail/(:num)', 'BookingController::detail/$1');
     $routes->post('updateStatus/(:num)', 'BookingController::updateStatus/$1');
@@ -130,11 +127,6 @@ $routes->group('booking', ['filter' => 'auth'], function ($routes) {
     $routes->get('cancel-user/(:num)', 'BookingController::cancelBookingUser/$1');
 });
 
-
-$routes->get('home', 'FrontendController::index');
-$routes->get('about', 'FrontendController::about');
-$routes->get('contact', 'FrontendController::contact');
-$routes->get('services', 'FrontendController::services');
 
 // Notification routes
 $routes->group('admin', ['filter' => 'auth'], function ($routes) {

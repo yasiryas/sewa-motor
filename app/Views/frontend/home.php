@@ -102,9 +102,9 @@
         </div>
         <form class="mt-4 col-12 col-md-6 mx-auto" action="<?= base_url('send-email'); ?>" method="post" id="formSendEmail">
             <?= csrf_field(); ?>
-            <input type="email" class="form-control mb-3" placeholder="Email" name="email" id="email">
-            <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp" id="whatsapp">
-            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan" name="pesan" id="pesan"></textarea>
+            <input type="email" class="form-control mb-3" placeholder="Email" name="email" id="email" required>
+            <input type="text" class="form-control mb-3" placeholder="WhatsApp" name="whatsapp" id="whatsapp" required>
+            <textarea class="form-control mb-3" style="height:150px" placeholder="Pesan" name="pesan" id="pesan" required></textarea>
             <button type="submit" class="btn btn-warning text-white" id="btnSendEmail">Kirim Penawaran!</button>
         </form>
     </div>

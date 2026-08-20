@@ -109,10 +109,6 @@
  <script src="<?= base_url('dashboard/js/custom.js'); ?>"></script>
 
  <!-- Page level custom scripts -->
- <script src="<?php //base_url('dashboard/js/demo/chart-area-demo.js');
-                ?>"></script>
- <script src="<?php //base_url('dashboard/js/demo/chart-bar-demo.js');
-                ?>"></script>
  <script src="<?= base_url('dashboard/js/chart-dashboard.js'); ?>"></script>
 
  </html>

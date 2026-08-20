@@ -49,7 +49,10 @@ class MotorController extends BaseController
     public function show($id)
     {
         //
-        $motor = $this->MotorModel->find($id);
+        $motor = $this->MotorModel
+            ->select('motors.*, brands.brand as brand')
+            ->join('brands', 'brands.id = motors.id_brand')
+            ->find($id);
         if (!$motor) {
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Motor not found');
         }

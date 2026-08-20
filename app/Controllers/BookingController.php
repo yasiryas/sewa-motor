@@ -121,10 +121,10 @@ class BookingController extends BaseController
             'days' => $days
         ];
 
-        sendBookingEmail($user['email'], $user['name'], $bookingData);
+        sendBookingEmail($user['email'], $user['full_name'], $bookingData);
 
         $adminData = [
-            'user_name' => $user['name'],
+            'user_name' => $user['full_name'],
             'booking_id' => $bookingModel->getInsertID(),
             'motor_name' => $motor['name'],
             'start_date' => $startDate,
@@ -308,7 +308,7 @@ class BookingController extends BaseController
         $user = $this->UserModel->find(session()->get('id'));
 
         $bookingData = [
-            'user_name' => $user['name'],
+            'user_name' => $user['full_name'],
             'booking_id' => $bookingID,
             'motor_name' => $motor['name'],
             'start_date' => $start_date,
@@ -317,10 +317,10 @@ class BookingController extends BaseController
             'days' => $days,
         ];
 
-        $emailResult = sendBookingEmail($user['email'], $user['name'], $bookingData);
+        $emailResult = sendBookingEmail($user['email'], $user['full_name'], $bookingData);
 
         $adminData = [
-            'user_name' => $user['name'],
+            'user_name' => $user['full_name'],
             'booking_id' => $bookingID,
             'motor_name' => $motor['name'],
             'start_date' => $start_date,

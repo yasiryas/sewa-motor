@@ -48,14 +48,14 @@ class EmailController extends BaseController
             session()->setFlashdata('success', 'Terima kasih! Pesan Anda telah terkirim.');
             return redirect()->back();
         } else {
-            $errorMessaage = $email->printDebugger(['headers']);
+            log_message('error', 'Gagal kirim email kontak website: ' . $email->printDebugger(['headers']));
             if ($this->request->isAJAX()) {
                 return $this->response->setJSON([
                     'success' => 'false',
-                    'message' => 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti. ' . $errorMessaage
+                    'message' => 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.'
                 ]);
             }
-            return redirect()->back()->withInput()->with('error', 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti. ' . $errorMessaage);
+            return redirect()->back()->withInput()->with('error', 'Maaf, terjadi kesalahan saat mengirim pesan. Silakan coba lagi nanti.');
         }
     }
 }

@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title><?= $title ?? 'Login'; ?></title>
-    <link rel="icon" href="<?php echo base_url('/'); ?>img/asset/icon.webp" type="image/gif">
+    <link rel="icon" href="<?php echo base_url('/'); ?>img/asset/Icon.webp" type="image/webp">
 
 
     <!-- Custom fonts for this template-->

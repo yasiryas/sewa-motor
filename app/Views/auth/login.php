@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="form-group position-relative">
                                         <input type="password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Password" name="password" value="<?= old('password'); ?>">
+                                            id="exampleInputPassword" placeholder="Password" name="password">
                                         <span class="toggle-password position-absolute"
                                             style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;">
                                             <i class="fas fa-eye"></i>
@@ -57,9 +57,6 @@
                                     </button>
                                 </form>
                                 <hr>
-                                <div class="text-center">
-                                    <a class="text-orange" href="forgot-password.html">Forgot Password?</a>
-                                </div>
                                 <div class="text-center">
                                     <a class="text-orange" href="<?= base_url('register'); ?>">Create an Account!</a>
                                 </div>

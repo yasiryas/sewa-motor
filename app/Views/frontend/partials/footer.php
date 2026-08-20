@@ -13,21 +13,21 @@
             <div class="col-md-2 mb-4 mb-md-0">
                 <h6 class="font-weight-bold">Menu</h6>
                 <ul class="list-unstyled">
-                    <li><a href="#hero" class="footer">Beranda</a></li>
-                    <li><a href="#produk" class="footer">Produk</a></li>
-                    <li><a href="#tentang" class="footer">Tentang Kami</a></li>
-                    <li><a href="#faq" class="footer">FAQ</a></li>
-                    <li><a href="#kontak" class="footer">Kontak</a></li>
+                    <li><a href="<?= base_url('/'); ?>" class="footer">Beranda</a></li>
+                    <li><a href="<?= base_url('produk'); ?>" class="footer">Produk</a></li>
+                    <li><a href="<?= base_url('tentang-kami'); ?>" class="footer">Tentang Kami</a></li>
+                    <li><a href="<?= base_url('faq'); ?>" class="footer">FAQ</a></li>
+                    <li><a href="<?= base_url('kontak'); ?>" class="footer">Kontak</a></li>
                 </ul>
             </div>
 
             <!-- Sosial Media -->
             <div class="col-md-4 text-center text-md-left">
                 <h6 class="font-weight-bold">Ikuti Kami</h6>
-                <a href="#" class="text-dark mr-2"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/instagram.png'); ?>" alt="Instagram"></a>
-                <a href="#" class="text-dark mr-2"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/facebook.png'); ?>" alt="Instagram"></a>
-                <a href="#" class="text-dark mr-2"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/tiktok.png'); ?>" alt="Instagram"></a>
-                <a href="#" class="text-dark mr-2"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/x.png'); ?>" alt="Instagram"></a>
+                <a href="#" class="text-dark mr-2" aria-label="Instagram"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/instagram.png'); ?>" alt="Instagram"></a>
+                <a href="#" class="text-dark mr-2" aria-label="Facebook"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/facebook.png'); ?>" alt="Facebook"></a>
+                <a href="#" class="text-dark mr-2" aria-label="TikTok"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/tiktok.png'); ?>" alt="TikTok"></a>
+                <a href="#" class="text-dark mr-2" aria-label="X"><img class="img-fluid" style="height: 40px;" src="<?= base_url('img/asset/social/x.png'); ?>" alt="X"></a>
 
             </div>
 
@@ -51,7 +51,7 @@
 <script src="<?= base_url('dashboard/vendor/datatables/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?= base_url('dashboard/vendor/datatables/dataTables.bootstrap4.min.js'); ?>"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url('dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
 <script src="<?= base_url('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'); ?>"></script>
 <script src="<?= base_url('front/js/script.js'); ?>"></script>
 </body>

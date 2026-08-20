@@ -40,8 +40,14 @@
                                                     <span class="badge bg-warning  text-white">Pending</span>
                                                 <?php elseif ($booking['status'] == 'confirmed'): ?>
                                                     <span class="badge bg-primary  text-white">Confirmed</span>
+                                                <?php elseif ($booking['status'] == 'on process'): ?>
+                                                    <span class="badge bg-info  text-white">On Process</span>
+                                                <?php elseif ($booking['status'] == 'complete'): ?>
+                                                    <span class="badge bg-success  text-white">Complete</span>
                                                 <?php elseif ($booking['status'] == 'canceled'): ?>
                                                     <span class="badge bg-danger  text-white">Canceled</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-secondary  text-white"><?= esc(ucfirst($booking['status'])); ?></span>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
@@ -60,44 +66,6 @@
         </div>
     </div>
 </section>
-
-<!-- modal view transaction -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail Transaksi</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card mb-3 border-0 shadow-none">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img id="detailPhotoMotor" src="..." class="card-img" alt="...">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 id="detailNamaMotor" class="card-title">Card title</h5>
-                                <p id="detailTanggalSewa" class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <p id="detailTanggalTransaksi" class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
-                    <p>Note: Data transaksi yang dihapus tidak dapat dikembalikan.</p>
-                    <p id="detailKeterangan" class="card-text"></p>
-                    <img id="detailBukti" src="" alt="">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-sm btn-success" href="<?= base_url('booking/invoice'); ?>">Download Invoice</a>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <?= $this->include('frontend/partials/footer'); ?>

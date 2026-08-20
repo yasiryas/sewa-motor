@@ -12,13 +12,11 @@ class AuthController extends BaseController
         //
     }
 
-    /*************  ✨ Windsurf Command ⭐  *************/
     /**
      * Display login page
      *
      * @return mixed
      */
-    /*******  cc778546-b54b-4a72-ba71-d419b160c522  *******/
     public function login()
     {
         return view('auth/login');

@@ -82,7 +82,6 @@ class Filters extends BaseFilters
                 'dashboard/report/user/get-data',
                 'dashboard/report/booking/get-data',
                 'admin/save-fcm-token',
-                'notification/save-token',
                 'admin/notifications/mark-read',
             ]],
             'invalidchars',

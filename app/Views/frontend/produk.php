@@ -23,7 +23,7 @@
             <div class="row justify-content-center">
                 <?php foreach ($brands as $brand) : ?>
                     <div class="col-md-3 mb-4">
-                        <a href="javascript:void(0);" class="text-decoration-none brand-filter" data-brand-id="<?= $brand['id']; ?>">
+                        <a href="javascript:void(0);" role="button" class="text-decoration-none brand-filter" data-brand-id="<?= $brand['id']; ?>" aria-label="Filter brand <?= esc($brand['brand']); ?>">
                             <div class=" card border-0 shadow-sm text-white brand-card ">
                                 <img src="<?= base_url('uploads/brands/' . $brand['featured_image']); ?>"
                                     class="card-img brand-img"
@@ -45,14 +45,14 @@
 </section>
 <!-- Daftar Produk -->
 <!-- Featured Product -->
-<section id="produk" class="py-5 text-center">
+<section id="daftar-produk" class="py-5 text-center">
     <div class="container">
         <h3 class="section-title mb-4">Daftar Produk</h3>
-        <form action="<?= base_url('produk'); ?>" method="get" class="d-flex justify-content-center mb-3">
+        <form action="<?= base_url('produk'); ?>" method="get" class="d-flex justify-content-center mb-3" onsubmit="return false;">
             <div class="input-group w-50">
-                <input type="text" id="searchProductAll" name="search" class="form-control w-50 rounded-left" placeholder="Cari produk favoritmu">
+                <input type="text" id="searchProductAll" name="search" class="form-control w-50 rounded-left" placeholder="Cari produk favoritmu" aria-label="Cari produk">
                 <div class="input-group-append">
-                    <a href="#" class="btn btn-warning rounded-right text-white px-4"><i class="fa fa-search"></i></a>
+                    <button type="button" id="btnSearchProduct" class="btn btn-warning rounded-right text-white px-4" aria-label="Cari"><i class="fa fa-search"></i></button>
                 </div>
             </div>
         </form>
@@ -72,7 +72,7 @@
                 </div>
             <?php endforeach; ?>
         </div>
-        <a href="#" class="btn btn-outline-warning mt-3">Lihat yang lain →</a>
+        <a href="#daftar-produk" class="btn btn-outline-warning mt-3">Lihat yang lain →</a>
     </div>
 </section>
 

@@ -27,11 +27,9 @@
          <li class="nav-item dropdown no-arrow d-sm-none">
              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                 <i class="fas fa-search fa-fw"></i>
-             </a>
-             <?php echo "Dropdown - Messages"
-                ?>
-             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                  <i class="fas fa-search fa-fw"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                  aria-labelledby="searchDropdown">
                  <form class="form-inline mr-auto w-100 navbar-search">
                      <div class="input-group">
@@ -62,13 +60,9 @@
                  <h6 class="dropdown-header bg-orange">
                      Alerts Center
                  </h6>
-                 <!-- Container notif -->
-                 <div id="notifList"></div>
-                 <a class="dropdown-item text-center small text-gray-500"
-                     href="<?= base_url('admin/notifications'); ?>">
-                     Show All Alerts
-                 </a>
-             </div>
+                  <!-- Container notif -->
+                  <div id="notifList"></div>
+              </div>
          </li>
 
 
@@ -83,8 +77,8 @@
              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= session()->get('username'); ?></span>
-                 <img class="img-profile rounded-circle"
-                     src="<?= base_url('img/user/default.png'); ?>">
+                  <img class="img-profile rounded-circle" alt="Foto profil"
+                      src="<?= base_url('img/user/default.png'); ?>">
              </a>
              <!-- Dropdown - User Information -->
              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

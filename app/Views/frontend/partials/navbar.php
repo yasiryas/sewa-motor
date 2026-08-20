@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="containerNavbar">
     <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="<?= base_url('/'); ?>">
             <img src="<?= base_url('img/asset/logo.png'); ?>" alt="Logo" height="35" class="img-fluid" style="max-width: 120px;">
         </a>
 
