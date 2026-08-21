@@ -1,68 +1,246 @@
-# CodeIgniter 4 Application Starter
+# Sewa Skuter Jogja — Aplikasi Rental Motor Online
 
-## What is CodeIgniter?
+Aplikasi web rental motor/skuter berbasis **CodeIgniter 4** dengan dua sisi:
+**website publik** untuk pelanggan (katalog, booking, pembayaran) dan **dashboard admin**
+untuk mengelola transaksi, inventaris motor, logbook operasional, hingga laporan Excel.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Daftar Isi
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- [Fitur](#fitur)
+- [Teknologi](#teknologi)
+- [Persyaratan Sistem](#persyaratan-sistem)
+- [Instalasi](#instalasi)
+- [Akun Default](#akun-default)
+- [Alur Kerja Bisnis](#alur-kerja-bisnis)
+- [Menu Dashboard](#menu-dashboard)
+- [Konfigurasi Tambahan](#konfigurasi-tambahan)
+- [Struktur Direktori Penting](#struktur-direktori-penting)
+- [Rute Utama](#rute-utama)
+- [Lisensi](#lisensi)
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+---
 
-## Installation & updates
+## Fitur
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### Website Publik (Customer)
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+| Fitur | Keterangan |
+|---|---|
+| Katalog produk | Daftar motor dengan foto, harga per hari, filter per brand, dan pencarian real-time (AJAX) |
+| Detail motor | Halaman detail lengkap dengan form pilih tanggal sewa |
+| Booking online | Perhitungan total harga otomatis (harga/hari × jumlah hari), wajib login |
+| Pesanan saya | Daftar booking milik user beserta statusnya |
+| Pembayaran | Pilih metode transfer bank / COD, unggah kartu identitas (KTP/SIM) dan bukti transfer |
+| Invoice PDF | Unduh invoice booking dalam format PDF (Dompdf) |
+| Halaman informasi | Beranda, Tentang Kami, FAQ (dinamis dari dashboard), Kontak (form email) |
 
-## Setup
+### Dashboard Admin
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+| Modul | Fungsi |
+|---|---|
+| Dashboard | Statistik ringkas: booking pending, total motor, total penyewa, pendapatan bulan ini, grafik 6 bulan terakhir, motor terpopuler |
+| Booking/Transaksi | Verifikasi identitas & bukti bayar, ubah status (setujui/batalkan), tambah booking walk-in, hapus data |
+| Penyewa (Users) | Kelola akun customer: tambah, edit, hapus, reset password |
+| Inventaris | Master data **Brand → Tipe → Motor** (foto, plat nomor, harga per hari, status ketersediaan) |
+| Logbook | Check-out/check-in motor: foto kondisi, level bahan bakar (full/medium/low), catatan kondisi |
+| Report | Laporan Booking / Motor / Users dengan filter periode + ekspor Excel (PhpSpreadsheet) |
+| Settings | Profil & password admin, kelola FAQ website |
+| Notifikasi | Notifikasi real-time di topbar (database + Firebase Cloud Messaging) dan email otomatis |
+| Dokumentasi | Panduan alur kerja bisnis & cara penggunaan tiap modul langsung di dalam aplikasi |
 
-## Important Change with index.php
+---
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## Teknologi
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- **Framework**: [CodeIgniter 4](https://codeigniter.com/user_guide/) (^4.0)
+- **Bahasa**: PHP ^8.1, JavaScript (jQuery), HTML/CSS (Bootstrap 4 - SB Admin 2)
+- **Database**: MySQL/MariaDB
+- **Library utama**:
+  - `dompdf/dompdf` — generate invoice PDF
+  - `phpoffice/phpspreadsheet` — ekspor laporan Excel
+  - `pusher/pusher-php-server` — (opsional) realtime
+- **Lainnya**: DataTables, Select2, Summernote, Chart.js, Bootstrap Datepicker, Firebase JS SDK (notifikasi FCM)
 
-**Please** read the user guide for a better explanation of how CI4 works!
+## Persyaratan Sistem
 
-## Repository Management
+- PHP **8.1+** dengan ekstensi: `intl`, `mbstring`, `json`, `mysqlnd`, `gd` (untuk gambar), `curl`
+- Composer
+- MySQL 5.7+ / MariaDB 10.3+
+- Web server: Laragon/XAMPP (lokal) atau Nginx/Apache (produksi, arahkan document root ke `public/`)
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+---
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+## Instalasi
 
-## Server Requirements
+### 1. Clone & install dependensi
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+```bash
+git clone https://github.com/yasiryas/sewa-motor.git
+cd sewa-motor
+composer install
+```
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+### 2. Setup environment
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+Salin file `env` menjadi `.env`, lalu sesuaikan:
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+```bash
+cp env .env   # Windows: copy env .env
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+```ini
+CI_ENVIRONMENT = development        # ganti 'production' saat deploy
+
+app.baseURL = 'http://sewa-motor.test/'   # sesuaikan domain lokal Anda
+
+database.default.hostname = localhost
+database.default.database = sewa_motor
+database.default.username = root
+database.default.password =
+database.default.DBDriver = MySQLi
+database.default.port = 3306
+```
+
+> Buat database `sewa_motor` (atau nama lain sesuai konfigurasi) terlebih dahulu.
+
+### 3. Migrasi database & seed data awal
+
+```bash
+php spark migrate
+php spark db:seed UserSeeder
+php spark db:seed BrandSeeder
+php spark db:seed TypeSeeder
+php spark db:seed MotorSeeder
+```
+
+### 4. Izin folder (Linux/macOS)
+
+Pastikan folder `writable/` dan `public/uploads/` dapat ditulis web server:
+
+```bash
+chmod -R 775 writable public/uploads
+```
+
+### 5. Jalankan
+
+```bash
+php spark serve
+```
+
+Buka `http://localhost:8080`. Jika memakai Laragon, otomatis tersedia di
+`http://sewa-motor.test` (virtual host ke folder `public/`).
+
+---
+
+## Akun Default
+
+Dibuat oleh `UserSeeder` — **wajib diganti setelah instalasi produksi**:
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@mail.com` | `admin123` |
+| User (penyewa) | `user@mail.com` | `user123` |
+
+---
+
+## Alur Kerja Bisnis
+
+Ringkasan alur (panduan lengkap tersedia di menu **Dashboard → Dokumentasi**):
+
+1. **Pemesanan** — customer memilih motor, menentukan tanggal sewa & kembali, membuat booking (status `pending`).
+2. **Berkas & pembayaran** — customer mengunggah identitas + bukti transfer (atau pilih COD) lewat halaman *Pesanan Saya*.
+3. **Verifikasi admin** — admin mengecek berkas di menu Booking/Transaksi, lalu menyetujui (`confirmed`) atau membatalkan (`canceled`). Email notifikasi terkirim otomatis.
+4. **Operasional** — motor di-*check out* saat diserahkan dan di-*check in* saat kembali, lengkap dengan foto kondisi & level bahan bakar.
+5. **Pelaporan** — rekap transaksi/motor/users diekspor ke Excel per periode.
+
+Status yang dipakai:
+
+- **Booking**: `pending` → `confirmed` / `canceled`
+- **Pembayaran**: `pending` → `completed` / `canceled`
+- **Motor**: `available` / `rented` / `maintenance` / `unavailable`
+
+---
+
+## Menu Dashboard
+
+Setelah login sebagai admin (`/dashboard/index`):
+
+```
+Dashboard          → statistik & grafik
+Booking/Transaksi  → verifikasi & kelola booking
+Penyewa (Users)    → manajemen akun customer
+Logbook            → check-in / check-out motor
+Inventaris         → Brand, Tipe, Motor
+Report             → Booking, Motor, Users (+ ekspor Excel)
+Settings           → Profile, FAQ
+Dokumentasi        → panduan penggunaan internal
+```
+
+---
+
+## Konfigurasi Tambahan
+
+### Email (SMTP)
+
+Konfigurasi email dibaca dari `app/Config/Email.php` / `.env` (prefix `email.`).
+Digunakan untuk notifikasi booking, konfirmasi pembayaran, dan form kontak website
+(`POST /send-email`). Pastikan SMTP aktif agar fitur notifikasi berfungsi.
+
+### Firebase Cloud Messaging (opsional)
+
+Notifikasi push browser menggunakan Firebase:
+
+1. Buat proyek di [Firebase Console](https://console.firebase.google.com).
+2. Isi konfigurasi di `public/dashboard/js/firebase.js`.
+3. Service worker tersedia di `public/dashboard/firebase-messaging-sw.js`.
+
+Tanpa Firebase, aplikasi tetap berjalan — notifikasi tetap masuk via database & email.
+
+---
+
+## Struktur Direktori Penting
+
+```
+sewa-motor/
+├── app/
+│   ├── Config/Routes.php      # semua rute aplikasi
+│   ├── Controllers/           # FrontController (publik), BookingController, dst.
+│   ├── Models/                # BookingModel, MotorModel, PaymentModel, dst.
+│   ├── Views/
+│   │   ├── frontend/          # halaman publik + partials (header/navbar/footer)
+│   │   ├── dashboard/         # halaman admin + partials (sidebar/topbar/footer)
+│   │   ├── auth/              # login & register
+│   │   └── emails/            # template email HTML
+│   ├── Database/
+│   │   ├── Migrations/        # skema tabel (users, motors, bookings, payments, dst.)
+│   │   └── Seeds/             # data awal (user, brand, type, motor)
+│   └── Helpers/email_helper.php
+├── public/
+│   ├── uploads/               # file upload (motors, brands, payments, identitas, logbook)
+│   ├── front/                 # aset frontend (css/js)
+│   └── dashboard/             # aset SB Admin 2 + vendor
+└── writable/                  # cache, logs, session
+```
+
+## Rute Utama
+
+| Rute | Keterangan |
+|---|---|
+| `/` | Beranda |
+| `/produk`, `/produk/(:id)` | Katalog & detail motor |
+| `/tentang-kami`, `/faq`, `/kontak` | Halaman informasi |
+| `/login`, `/register` | Autentikasi |
+| `/booking/pesanan` | Daftar pesanan user (auth) |
+| `/dashboard/index` | Dashboard admin (auth + role admin) |
+| `/dashboard/documentation` | Panduan penggunaan di dalam aplikasi |
+| `POST /send-email` | Form kontak |
+
+Daftar lengkap: `php spark routes`.
+
+---
+
+## Lisensi
+
+Proyek ini dirilis under [MIT License](LICENSE).
