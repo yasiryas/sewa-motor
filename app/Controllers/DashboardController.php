@@ -157,4 +157,20 @@ class DashboardController extends BaseController
         ];
         return view('dashboard/settings/profile', $data);
     }
+
+    public function documentation()
+    {
+        if (!session()->get('id')) {
+            return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
+        }
+
+        if (session()->get('role') != 'admin') {
+            return redirect()->to('/')->with('error', 'Akses ditolak.');
+        }
+
+        return view('dashboard/documentation', [
+            'title' => 'Dokumentasi',
+            'submenu_title' => '',
+        ]);
+    }
 }
