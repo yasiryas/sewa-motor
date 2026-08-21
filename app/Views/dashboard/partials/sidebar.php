@@ -128,6 +128,12 @@
         </div>
     </li>
 
+    <li class="nav-item <?= $title == 'Dokumentasi' ? 'active' : ''; ?>">
+        <a class="nav-link" href="<?= base_url('dashboard/documentation'); ?>">
+            <i class="fas fa-fw fa-book-open"></i>
+            <span>Dokumentasi</span></a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     <li class="nav-item">

@@ -93,9 +93,10 @@ class MotorController extends BaseController
         if (session()->get('role') != 'admin') {
             return redirect()->to('/')->with('error', 'Akses ditolak.');
         }
-        $data['motors'] = $this->MotorModel->findAll();
-        $data['title'] = 'Report';
-        $data['submenu_title'] = 'Report Motor';
+        $data = [
+            'title' => 'Report',
+            'submenu_title' => 'Report Motor',
+        ];
         return view('dashboard/motor-report', $data);
     }
 

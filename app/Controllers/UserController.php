@@ -47,7 +47,7 @@ class UserController extends BaseController
         if (session()->get('role') != 'admin') {
             return redirect()->to('/')->with('error', 'Akses ditolak.');
         }
-        $data['users'] = $this->userModel->where('role', 'customer')->findAll();
+        // Data tabel dimuat via AJAX (dashboard/report/user/get-data)
         $data['title'] = 'Report';
         $data['submenu_title'] = 'Report Users';
         return view('dashboard/user-report', $data);

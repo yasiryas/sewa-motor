@@ -91,29 +91,28 @@ class BookingController extends BaseController
 
         // insert to database
         $bookingModel = new BookingModel();
-        $bookingModel->insert([
+        $bookingId = $bookingModel->insert([
             'user_id' => session()->get('id'),
             'motor_id' => $motorId,
             'rental_start_date' => $startDate,
             'rental_end_date' => $endDate,
             'total_price' => $totalPrice,
             'status' => 'pending',
-        ]);
+        ], true);
 
         // insert to payment
         $paymentModel = new \App\Models\PaymentModel();
         $paymentModel->insert([
+            'booking_id' => $bookingId,
             'user_id' => session()->get('id'),
-            'motor_id' => $motorId,
-            'rental_start_date' => $startDate,
-            'rental_end_date' => $endDate,
-            'total_price' => $totalPrice,
+            'amount' => $totalPrice,
+            'payment_date' => date('Y-m-d H:i:s'),
             'status' => 'pending',
         ]);
 
         $user = $this->UserModel->find(session()->get('id'));
         $bookingData = [
-            'booking_id' => $bookingModel->getInsertID(),
+            'booking_id' => $bookingId,
             'motor_name' => $motor['name'],
             'start_date' => $startDate,
             'end_date' => $endDate,
@@ -125,7 +124,7 @@ class BookingController extends BaseController
 
         $adminData = [
             'user_name' => $user['full_name'],
-            'booking_id' => $bookingModel->getInsertID(),
+            'booking_id' => $bookingId,
             'motor_name' => $motor['name'],
             'start_date' => $startDate,
             'end_date' => $endDate,
@@ -174,7 +173,6 @@ class BookingController extends BaseController
                 ->join('motors', 'motors.id = bookings.motor_id')
                 ->orderBy('bookings.created_at', 'DESC')
                 ->findAll(),
-            'payments' => $this->PaymentModel->findAll(),
         ];
         return view('dashboard/booking', $data);
     }
@@ -185,7 +183,6 @@ class BookingController extends BaseController
             'title' => 'Report',
             'submenu_title' => 'Report Booking',
             'user' => (new \App\Models\UserModel())->find(session()->get('id')),
-            'bookings' => $this->BookingModel->findAll(),
         ];
         return view('dashboard/booking-report', $data);
     }
@@ -457,13 +454,7 @@ class BookingController extends BaseController
         sendAdminNotification($adminData);
         $deviceModel = new \App\Models\UserDeviceModel();
         $adminIds = $this->UserModel->where('role', 'admin')->findColumn('id');
-        $tokens = [];
-        foreach ($adminIds as $adminId) {
-            $adminTokens =  $deviceModel->where('user_id', $adminId)->findColumn('fcm_token');
-            if ($adminTokens) {
-                $tokens = array_merge($tokens, $adminTokens);
-            }
-        }
+        $tokens = $adminIds ? ($deviceModel->whereIn('user_id', $adminIds)->findColumn('fcm_token') ?? []) : [];
 
         sendFCM(
             $tokens,
@@ -473,15 +464,17 @@ class BookingController extends BaseController
         );
 
         $notificationModel = new \App\Models\NotificationModel();
-        foreach ($adminIds as $adminId) {
-            $notificationModel->insert([
-                'user_id' => $adminId,
-                'type' => 'booking',
-                'title' => 'Booking Baru',
-                'message' => 'User ' . $user['username'] . ' membuat booking',
-                'link' => base_url('/dashboard/booking'),
-                'is_read' => 0
-            ]);
+        if (!empty($adminIds)) {
+            $notificationModel->insertBatch(array_map(function ($adminId) use ($user) {
+                return [
+                    'user_id' => $adminId,
+                    'type' => 'booking',
+                    'title' => 'Booking Baru',
+                    'message' => 'User ' . $user['username'] . ' membuat booking',
+                    'link' => base_url('/dashboard/booking'),
+                    'is_read' => 0
+                ];
+            }, $adminIds));
         }
 
 
@@ -644,15 +637,16 @@ class BookingController extends BaseController
         $user = $this->UserModel->find(session()->get('id'));
 
         // ambil semua admin
-        $adminIds = $this->UserModel
+        $adminRows = $this->UserModel
             ->where('role', 'admin')
             ->findAll();
+        $adminIds = array_column($adminRows, 'id');
 
         //send email to admin
         helper('email_helper');
-        foreach ($adminIds as $adminId) {
+        foreach ($adminRows as $admin) {
             sendAdminCancelNotification(
-                $adminId['email'],
+                $admin['email'],
                 [
                     'user_name'  => $user['username'],
                     'booking_id' => $id
@@ -660,19 +654,11 @@ class BookingController extends BaseController
             );
         }
 
-        // FCM Admin
+        // FCM Admin (satu query untuk semua token)
         $deviceModel = new \App\Models\UserDeviceModel();
-        $tokens = [];
-
-        foreach ($adminIds as $adminId) {
-            $adminTokens = $deviceModel
-                ->where('user_id', $adminId['id'])
-                ->findColumn('fcm_token');
-
-            if ($adminTokens) {
-                $tokens = array_merge($tokens, $adminTokens);
-            }
-        }
+        $tokens = !empty($adminIds)
+            ? ($deviceModel->whereIn('user_id', $adminIds)->findColumn('fcm_token') ?? [])
+            : [];
 
         if (!empty($tokens)) {
             sendFCM(
@@ -683,18 +669,19 @@ class BookingController extends BaseController
             );
         }
 
-        // Notif database
+        // Notif database (batch insert)
         $notificationModel = new \App\Models\NotificationModel();
-
-        foreach ($adminIds as $adminId) {
-            $notificationModel->insert([
-                'user_id' => $adminId['id'],
-                'type'    => 'cancel',
-                'title'   => 'Booking Dibatalkan',
-                'message' => 'User ' . $user['username'] . ' membatalkan booking',
-                'link'    => base_url('admin/bookings'),
-                'is_read' => 0
-            ]);
+        if (!empty($adminIds)) {
+            $notificationModel->insertBatch(array_map(function ($adminId) use ($user, $id) {
+                return [
+                    'user_id' => $adminId,
+                    'type'    => 'cancel',
+                    'title'   => 'Booking Dibatalkan',
+                    'message' => 'User ' . $user['username'] . ' membatalkan booking',
+                    'link'    => base_url('admin/bookings'),
+                    'is_read' => 0
+                ];
+            }, $adminIds));
         }
 
         return redirect()->back()->with('success', 'Booking berhasil dibatalkan.');
@@ -803,29 +790,22 @@ class BookingController extends BaseController
         }
 
         if ($BookingModel->update($id_booking, $data)) {
-            // update payment table if payment proof is uploaded
+            // update payment table (method selalu, bukti hanya jika diupload)
+            $paymentData = [
+                'payment_method' => $data['payment_method'],
+                'updated_at' => date('Y-m-d H:i:s'),
+            ];
             if (isset($data['payment_proof'])) {
-                $paymentData = [
-                    'payment_method' => $data['payment_method'],
-                    'payment_proof' => $data['payment_proof'],
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ];
-                $PayementModel->update($id_payment, $paymentData);
-            } else {
-                // update payment method only
-                $paymentData = [
-                    'payment_method' => $data['payment_method'],
-                    'updated_at' => date('Y-m-d H:i:s'),
-                ];
-                $PayementModel->update($id_payment, $paymentData);
+                $paymentData['payment_proof'] = $data['payment_proof'];
             }
+            $PayementModel->update($id_payment, $paymentData);
 
             if (isset($data['payment_proof'])) {
                 $user = $this->UserModel->find(session()->get('id'));
                 $admins = $this->UserModel->where('role', 'admin')->findAll();
+                $adminIds = array_column($admins, 'id');
 
                 helper('email_helper', 'firebase_helper');
-                $tokens = [];
 
                 foreach ($admins as $admin) {
                     sendAdminPeymentConfirmationEmail(
@@ -838,24 +818,27 @@ class BookingController extends BaseController
                             'amount' => $booking['total_price']
                         ]
                     );
+                }
 
-                    $this->NotificationModel->insert([
-                        'user_id' => $admin['id'],
+                // Notif database (batch insert)
+                $notificationData = array_map(function ($adminId) use ($user, $booking) {
+                    return [
+                        'user_id' => $adminId,
                         'type' => 'payment_confirmation',
                         'title' => 'Konfirmasi Pembayaran Dikirim',
                         'message' => 'User ' . $user['full_name'] . ' telah mengirimkan bukti pembayaran untuk booking ID #' . $booking['id'] . '. Silakan lakukan verifikasi.',
                         'link' => '/dashboard/booking/detail/' . $booking['id'],
                         'is_read' => 0,
                         'created_at' => date('Y-m-d H:i:s'),
-                    ]);
+                    ];
+                }, $adminIds);
+                $this->NotificationModel->insertBatch($notificationData);
 
-                    $adminTokens = $this->UserDeviceModel->where('user_id', $admin['id'])
-                        ->findColumn('fcm_token');
+                // FCM Admin (satu query untuk semua token)
+                $tokens = !empty($adminIds)
+                    ? ($this->UserDeviceModel->whereIn('user_id', $adminIds)->findColumn('fcm_token') ?? [])
+                    : [];
 
-                    if ($adminTokens) {
-                        $tokens = array_merge($tokens, $adminTokens);
-                    }
-                }
                 if (!empty($tokens)) {
                     sendFCM(
                         $tokens,

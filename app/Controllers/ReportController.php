@@ -346,12 +346,9 @@ class ReportController extends BaseController
 
     public function reportUsers()
     {
-        $userModel = new UserModel();
-
         $data = [
             'title' => 'Report',
             'submenu_title' => 'Report Users',
-            'users' => $userModel->findAll()
         ];
         return view('dashboard/user-report', $data);
     }

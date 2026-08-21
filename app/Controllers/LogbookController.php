@@ -44,10 +44,13 @@ class LogbookController extends BaseController
         }
 
         $motors = $this->MotorModel->findAll();
+        // Dropdown booking hanya butuh booking aktif (bukan canceled) + kolom minimal
         $bookings = $this->BookingModel
-            ->select('bookings.*, users.username as username, motors.name AS motor_name, motors.number_plate AS number_plate')
+            ->select('bookings.id, bookings.motor_id, users.username, motors.number_plate')
             ->join('motors', 'motors.id = bookings.motor_id')
             ->join('users', 'users.id = bookings.user_id')
+            ->where('bookings.status !=', 'canceled')
+            ->orderBy('bookings.created_at', 'DESC')
             ->findAll();
 
         $logs = $builder->select('motor_logbooks.*, motor_logbooks.created_at as waktu, motors.number_plate as number_plate, motors.name as motor, users.username as penyewa')
