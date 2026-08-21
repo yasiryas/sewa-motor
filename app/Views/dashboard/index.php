@@ -16,11 +16,10 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Refras</a>
-                </div> -->
+                    <small class="text-gray-500"><i class="fas fa-sync-alt mr-1"></i>Sinkron: <span id="lastSync">-</span></small>
+                </div>
 
                 <!-- Content Row -->
                 <div class="row">
@@ -33,7 +32,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                             Pending Requests</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $pending_requests; ?></div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="statPendingRequests"><?= $pending_requests; ?></div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -53,7 +52,7 @@
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?= $total_users; ?></div>
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="statTotalUsers"><?= $total_users; ?></div>
                                             </div>
                                             <div class="col">
                                                 <!-- <div class="progress progress-sm mr-2">
@@ -80,7 +79,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Motors</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $total_motors; ?></div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="statTotalMotors"><?= $total_motors; ?></div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-motorcycle fa-2x text-gray-300"></i>
@@ -99,7 +98,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Earnings (Monthly)</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. <?= number_format($monthly_revenue, 0, ',', '.'); ?></div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="statMonthlyRevenue">Rp. <?= number_format($monthly_revenue, 0, ',', '.'); ?></div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-money-check fa-2x text-gray-300"></i>

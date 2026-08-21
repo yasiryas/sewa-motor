@@ -23,15 +23,24 @@ class DashboardController extends BaseController
             return redirect()->to('/')->with('error', 'Akses ditolak.');
         }
 
+        $data = [
+            'title' => 'Dashboard',
+            'submenu_title' => '',
+        ] + $this->getSummaryStats();
+        return view('dashboard/index', $data);
+    }
+
+    /**
+     * Ringkasan statistik dashboard, dipakai halaman index dan endpoint AJAX polling.
+     */
+    private function getSummaryStats(): array
+    {
         $bookingModel = new BookingModel();
         $motorModel = new MotorModel();
         $userModel = new UserModel();
         $paymentModel = new PaymentModel();
 
-
-        $data = [
-            'title' => 'Dashboard',
-            'submenu_title' => '',
+        return [
             'pending_requests' => $bookingModel->where('status', 'pending')->countAllResults(),
             'total_motors' => $motorModel->countAllResults(),
             'total_users' => $userModel->where('role', 'user')->countAllResults(),
@@ -40,7 +49,22 @@ class DashboardController extends BaseController
                 ->selectSum('amount')
                 ->first()['amount'] ?? 0,
         ];
-        return view('dashboard/index', $data);
+    }
+
+    /**
+     * Endpoint AJAX untuk polling realtime kartu statistik dashboard.
+     */
+    public function stats()
+    {
+        if (!session()->get('id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'unauthorized']);
+        }
+
+        if (session()->get('role') != 'admin') {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'forbidden']);
+        }
+
+        return $this->response->setJSON($this->getSummaryStats());
     }
 
     public function getMonthlyBookings()

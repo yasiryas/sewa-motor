@@ -48,9 +48,84 @@ class BookingController extends BaseController
         return view('booking/index', $data);
     }
 
+    /**
+     * Insert booking + payment secara atomik untuk mencegah race condition
+     * double-booking: baris motor dikunci (SELECT ... FOR UPDATE) sehingga
+     * request paralel untuk motor yang sama diserialisasi, lalu ketersediaan
+     * dicek ULANG di dalam transaksi sebelum insert.
+     *
+     * @return array ['booking_id' => int] atau ['error' => string]
+     */
+    private function insertBookingSafely($userId, $motorId, $startDate, $endDate, $totalPrice, ?string $paymentMethod = null): array
+    {
+        $db = \Config\Database::connect();
+        $db->transBegin();
+
+        // Kunci baris motor: request lain yang mau booking motor ini akan menunggu
+        $lockedMotor = $db->query('SELECT id FROM motors WHERE id = ? FOR UPDATE', [$motorId])->getRow();
+
+        if (!$lockedMotor) {
+            $db->transRollback();
+            return ['error' => 'Motor tidak ditemukan.'];
+        }
+
+        // Cek ulang overlap DI DALAM kunci — data booking tidak bisa berubah sekarang
+        try {
+            $availability = $this->MotorModel->isMotorAvailable($motorId, $startDate, $endDate);
+        } catch (\Exception $e) {
+            $db->transRollback();
+            log_message('error', 'Cek ketersediaan gagal: ' . $e->getMessage());
+            return ['error' => 'Terjadi kesalahan saat memeriksa ketersediaan motor.'];
+        }
+
+        if (!$availability['available']) {
+            $db->transRollback();
+            return [
+                'error' => is_array($availability['message'])
+                    ? 'Motor sudah dibooking pada tanggal tersebut.'
+                    : $availability['message']
+            ];
+        }
+
+        $bookingId = $this->BookingModel->insert([
+            'user_id' => $userId,
+            'motor_id' => $motorId,
+            'rental_start_date' => $startDate,
+            'rental_end_date' => $endDate,
+            'total_price' => $totalPrice,
+            'status' => 'pending',
+        ], true);
+
+        if (!$bookingId) {
+            $db->transRollback();
+            return ['error' => 'Gagal menyimpan booking. Silakan coba lagi.'];
+        }
+
+        $paymentData = [
+            'booking_id' => $bookingId,
+            'user_id' => $userId,
+            'amount' => $totalPrice,
+            'payment_date' => date('Y-m-d H:i:s'),
+            'status' => 'pending',
+        ];
+        if ($paymentMethod !== null) {
+            $paymentData['payment_method'] = $paymentMethod;
+        }
+        $this->PaymentModel->insert($paymentData);
+
+        if ($db->transStatus() === false) {
+            $db->transRollback();
+            return ['error' => 'Gagal menyimpan booking. Silakan coba lagi.'];
+        }
+
+        $db->transCommit();
+
+        return ['booking_id' => $bookingId];
+    }
+
     public function store()
     {
-
+        
         if (!session()->get('id')) {
             return redirect()->to('login')->with('error', 'Anda harus login terlebih dahulu.');
         }
@@ -76,12 +151,6 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Tanggal selesai tidak boleh sebelum tanggal mulai');
         }
 
-        $availability = $this->MotorModel->isMotorAvailable($motorId, $startDate, $endDate);
-
-        if (!$availability['available']) {
-            return redirect()->back()->with('error', $availability['message']);
-        }
-
         // calculate total price
         $start = new \DateTime($startDate);
         $end = new \DateTime($endDate);
@@ -89,26 +158,14 @@ class BookingController extends BaseController
         $days = $interval->days + 1; // include start day
         $totalPrice = $days * $motor['price_per_day'];
 
-        // insert to database
-        $bookingModel = new BookingModel();
-        $bookingId = $bookingModel->insert([
-            'user_id' => session()->get('id'),
-            'motor_id' => $motorId,
-            'rental_start_date' => $startDate,
-            'rental_end_date' => $endDate,
-            'total_price' => $totalPrice,
-            'status' => 'pending',
-        ], true);
+        // insert booking + payment secara atomik (anti race condition)
+        $result = $this->insertBookingSafely(session()->get('id'), $motorId, $startDate, $endDate, $totalPrice);
 
-        // insert to payment
-        $paymentModel = new \App\Models\PaymentModel();
-        $paymentModel->insert([
-            'booking_id' => $bookingId,
-            'user_id' => session()->get('id'),
-            'amount' => $totalPrice,
-            'payment_date' => date('Y-m-d H:i:s'),
-            'status' => 'pending',
-        ]);
+        if (isset($result['error'])) {
+            return redirect()->back()->with('error', $result['error']);
+        }
+
+        $bookingId = $result['booking_id'];
 
         $user = $this->UserModel->find(session()->get('id'));
         $bookingData = [
@@ -256,22 +313,6 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Tanggal mulai tidak boleh sebelum hari ini')->withInput()->with('modal', 'addBookingModal');
         }
 
-        $availability = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
-
-        if (!$availability['available']) {
-            return redirect()->back()->with('error', $availability['message'])->withInput()->with('modal', 'addBookingModal');
-        }
-
-        $conflict = $this->BookingModel->where('motor_id', $motor_id)
-            ->where('status !=', 'canceled')
-            ->where('rental_start_date <=', $end_date)
-            ->where('rental_end_date >=', $start_date)
-            ->first();
-
-        if ($conflict) {
-            return redirect()->back()->with('error', 'Motor sudah dibooking pada tanggal tersebut.')->withInput()->with('modal', 'addBookingModal');
-        }
-
         // calculate total price
         $start = new \DateTime($start_date);
         $end = new \DateTime($end_date);
@@ -279,27 +320,14 @@ class BookingController extends BaseController
         $days = $interval->days + 1; // include start day
         $total_price = $days * $motor['price_per_day'];
 
-        $bookingModel = new BookingModel();
-        $paymentModel = new PaymentModel();
-        // insert to database
-        $bookingID = $bookingModel->insert([
-            'user_id' => $user_id,
-            'motor_id' => $motor_id,
-            'rental_start_date' => $start_date,
-            'rental_end_date' => $end_date,
-            'total_price' => $total_price,
-            'status' => 'pending',
-        ]);
+        // insert booking + payment secara atomik (anti race condition)
+        $result = $this->insertBookingSafely($user_id, $motor_id, $start_date, $end_date, $total_price, $payment_method);
 
-        $paymentModel->insert([
-            'booking_id' => $bookingID,
-            'user_id' => $user_id,
-            'amount' => $total_price,
-            'payment_date' => date('Y-m-d H:i:s'),
-            'payment_method' => $payment_method,
-            'status' => 'pending',
-            'payment_proof' => null,
-        ]);
+        if (isset($result['error'])) {
+            return redirect()->back()->with('error', $result['error'])->withInput()->with('modal', 'addBookingModal');
+        }
+
+        $bookingID = $result['booking_id'];
 
         // Get user data for email
         $user = $this->UserModel->find(session()->get('id'));
@@ -377,19 +405,6 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Motor tidak ditemukan.')->with('modal', 'addBookingModal')->withInput();
         }
 
-        try {
-            //cek motor available
-            $availability = $this->MotorModel->isMotorAvailable($motor_id, $start_date, $end_date);
-
-            if (!$availability['available']) {
-                $errorMessage = is_array($availability['message']) ? 'Motor tidak tersedia pada tanggal yang dipilih.' : $availability['message'];
-
-                return redirect()->back()->with('error', $errorMessage)->with('modal', 'addBookingModal')->withInput();
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memeriksa ketersediaan motor: ' . $e->getMessage())->with('modal', 'addBookingModal')->withInput();
-        }
-
         // calculate total price
         $start = new \DateTime($start_date);
         $end = new \DateTime($end_date);
@@ -397,27 +412,14 @@ class BookingController extends BaseController
         $days = $interval->days + 1; // include start day
         $total_price = $days * $motor['price_per_day']; // include start day
 
-        $bookingModel = new BookingModel();
-        $paymentModel = new PaymentModel();
-        // insert to database
-        $bookingID = $bookingModel->insert([
-            'user_id' => $user_id,
-            'motor_id' => $motor_id,
-            'rental_start_date' => $start_date,
-            'rental_end_date' => $end_date,
-            'total_price' => $total_price,
-            'status' => 'pending',
-        ]);
+        // insert booking + payment secara atomik (anti race condition)
+        $result = $this->insertBookingSafely($user_id, $motor_id, $start_date, $end_date, $total_price, 'cash');
 
-        $paymentModel->insert([
-            'booking_id' => $bookingID,
-            'user_id' => $user_id,
-            'amount' => $total_price,
-            'payment_date' => date('Y-m-d H:i:s'),
-            'payment_method' => 'cash',
-            'status' => 'pending',
-            'payment_proof' => null,
-        ]);
+        if (isset($result['error'])) {
+            return redirect()->back()->with('error', $result['error'])->with('modal', 'addBookingModal')->withInput();
+        }
+
+        $bookingID = $result['booking_id'];
 
         // Get user data for email
         helper('email_helper');

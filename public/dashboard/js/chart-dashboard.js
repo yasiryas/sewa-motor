@@ -28,28 +28,63 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   return s.join(dec);
 }
 
+// ===================================================
+// Realtime polling (AJAX pool)
+// Kartu statistik & progress status di-refresh tiap 15 detik,
+// grafik (booking bulanan & top motor) tiap 60 detik.
+// ===================================================
+var STAT_REFRESH_MS = 15000;
+var CHART_REFRESH_MS = 60000;
 
+var monthlyChart = null;
+var topMotorsChart = null;
+
+function markSynced() {
+  var el = document.getElementById("lastSync");
+  if (el) el.textContent = new Date().toLocaleTimeString('id-ID');
+}
+
+// ===================================================
+// Kartu statistik (pending, users, motors, revenue)
+// ===================================================
+function loadStats() {
+  fetch(BASE_URL + '/dashboard/stats')
+    .then(function (res) { if (!res.ok) throw res; return res.json(); })
+    .then(function (data) {
+      var pending = document.getElementById("statPendingRequests");
+      var users = document.getElementById("statTotalUsers");
+      var motors = document.getElementById("statTotalMotors");
+      var revenue = document.getElementById("statMonthlyRevenue");
+
+      if (pending) pending.textContent = data.pending_requests;
+      if (users) users.textContent = data.total_users;
+      if (motors) motors.textContent = data.total_motors;
+      if (revenue) revenue.textContent = 'Rp. ' + number_format(data.monthly_revenue, 0, ',', '.');
+
+      markSynced();
+    })
+    .catch(function () { /* biarkan nilai lama saat request gagal */ });
+}
 
 // ===================================================
 // 1️⃣ LINE CHART — Monthly Booking (6 Bulan Terakhir)
 // ===================================================
-const areaCanvas = document.getElementById("myAreaChart");
+function loadMonthlyBookings() {
+  var areaCanvas = document.getElementById("myAreaChart");
+  if (!areaCanvas) return;
 
-if (areaCanvas) {
   fetch(BASE_URL + '/dashboard/monthly-bookings')
-    .then(response => response.json())
-    .then(data => {
-
-      // Convert objek → array label
-      const labels = Object.keys(data).map(m => {
-        const date = new Date(m + "-01");
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      var labels = Object.keys(data).map(function (m) {
+        var date = new Date(m + "-01");
         return date.toLocaleString('default', { month: 'short', year: '2-digit' });
       });
+      var monthlyData = Object.values(data);
 
-      // Ambil angkanya
-      const monthlyData = Object.values(data);
+      if (monthlyChart) monthlyChart.destroy();
 
-      new Chart(areaCanvas, {
+      monthlyChart = new Chart(areaCanvas, {
         type: 'line',
         data: {
           labels: labels,
@@ -72,13 +107,11 @@ if (areaCanvas) {
         options: {
           maintainAspectRatio: false,
           scales: {
-            xAxes: [{
-              gridLines: { display: false }
-            }],
+            xAxes: [{ gridLines: { display: false } }],
             yAxes: [{
               ticks: {
                 beginAtZero: true,
-                callback: value => number_format(value)
+                callback: function (value) { return number_format(value); }
               }
             }]
           },
@@ -88,65 +121,77 @@ if (areaCanvas) {
     });
 }
 
-
-
 // ===================================================
-// 2️⃣ PIE CHART — Top 5 Motor Dengan Booking Terbanyak
+// 2️⃣ DOUGHNUT CHART — Top 5 Motor Dengan Booking Terbanyak
 // ===================================================
-fetch(BASE_URL + "/dashboard/top-motors")
-  .then(res => res.json())
-  .then(data => {
+function loadTopMotors() {
+  var ctx = document.getElementById("motorPieChart");
+  if (!ctx) return;
 
-    const labels = data.labels;   // <-- sudah benar
-    const total = data.values;    // <-- sudah benar
+  fetch(BASE_URL + "/dashboard/top-motors")
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (topMotorsChart) topMotorsChart.destroy();
 
-    const ctx = document.getElementById("motorPieChart");
-
-    new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: labels,
-        datasets: [{
-          data: total,
-          backgroundColor: [
-            "#4e73df",
-            "#1cc88a",
-            "#36b9cc",
-            "#f6c23e",
-            "#e74a3b"
-          ],
-          hoverBackgroundColor: [
-            "#2e59d9",
-            "#17a673",
-            "#2c9faf",
-            "#dda20a",
-            "#be2617"
-          ]
-        }]
-      },
-      options: {
+      topMotorsChart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: data.labels,
+          datasets: [{
+            data: data.values,
+            backgroundColor: [
+              "#4e73df",
+              "#1cc88a",
+              "#36b9cc",
+              "#f6c23e",
+              "#e74a3b"
+            ],
+            hoverBackgroundColor: [
+              "#2e59d9",
+              "#17a673",
+              "#2c9faf",
+              "#dda20a",
+              "#be2617"
+            ]
+          }]
+        },
+        options: {
           maintainAspectRatio: false,
           cutoutPercentage: 80,
           legend: { position: 'bottom' }
-      }
+        }
+      });
     });
-  });
+}
 
-  // =============================
-// BAR CHART - STATUS BOOKING
-// =============================
-fetch(BASE_URL + "/dashboard/booking-status")
-    .then(res => res.json())
-    .then(res => {
+// ===================================================
+// 3️⃣ PROGRESS BAR — Status Booking Bulan Ini
+// ===================================================
+function loadBookingStatus() {
+  var completedPercent = document.getElementById("completedPercent");
+  if (!completedPercent) return;
 
-        document.getElementById("completedPercent").textContent = res.completed + "%";
-        document.getElementById("pendingPercent").textContent   = res.pending + "%";
-        document.getElementById("canceledPercent").textContent  = res.canceled + "%";
+  fetch(BASE_URL + "/dashboard/booking-status")
+    .then(function (res) { return res.json(); })
+    .then(function (res) {
+      completedPercent.textContent = res.completed + "%";
+      document.getElementById("pendingPercent").textContent = res.pending + "%";
+      document.getElementById("canceledPercent").textContent = res.canceled + "%";
 
-        document.getElementById("completedBar").style.width = res.completed + "%";
-        document.getElementById("pendingBar").style.width   = res.pending + "%";
-        document.getElementById("canceledBar").style.width  = res.canceled + "%";
+      document.getElementById("completedBar").style.width = res.completed + "%";
+      document.getElementById("pendingBar").style.width = res.pending + "%";
+      document.getElementById("canceledBar").style.width = res.canceled + "%";
     });
+}
 
+// Muat pertama kali
+loadStats();
+loadMonthlyBookings();
+loadTopMotors();
+loadBookingStatus();
 
-
+// AJAX pool: polling berkala agar dashboard realtime
+setInterval(loadStats, STAT_REFRESH_MS);
+setInterval(loadBookingStatus, STAT_REFRESH_MS);
+setInterval(loadMonthlyBookings, CHART_REFRESH_MS);
+setInterval(loadTopMotors, CHART_REFRESH_MS);
